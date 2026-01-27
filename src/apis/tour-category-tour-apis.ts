@@ -1,0 +1,64 @@
+import {
+  ICreateTourCategoryTour,
+  ITourCategoryTourResponse,
+  IUpdateTourCategoryTour
+} from "@/interfaces/tour-category-tour-interface";
+import { api } from "./_base";
+
+// Note: These endpoints need to be implemented in the backend
+
+export async function createTourCategoryTourApi(data: ICreateTourCategoryTour) {
+  return api<ITourCategoryTourResponse>('/admin/tour-category-tours', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function getTourCategoryTourByIdApi(id: string) {
+  return api<ITourCategoryTourResponse>(`/admin/tour-category-tours/${id}`, {
+    method: 'GET',
+  });
+}
+
+export async function getTourCategoryToursByTourIdApi(tourId: string) {
+  return api<ITourCategoryTourResponse[]>(`/admin/tour-category-tours/tour/${tourId}`, {
+    method: 'GET',
+  });
+}
+
+export async function getTourCategoryToursByTourCategoryIdApi(tourCategoryId: string) {
+  return api<ITourCategoryTourResponse[]>(`/admin/tour-category-tours/category/${tourCategoryId}`, {
+    method: 'GET',
+  });
+}
+
+export async function getAllTourCategoryToursApi() {
+  return api<ITourCategoryTourResponse[]>('/admin/tour-category-tours', {
+    method: 'GET',
+  });
+}
+
+export async function updateTourCategoryTourApi(id: string, data: IUpdateTourCategoryTour) {
+  return api<ITourCategoryTourResponse>(`/admin/tour-category-tours/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function deleteTourCategoryTourApi(id: string) {
+  return api<void>(`/admin/tour-category-tours/${id}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function deleteTourCategoryToursByTourIdApi(tourId: string) {
+  return api<void>(`/admin/tour-category-tours/tour/${tourId}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function deleteTourCategoryToursByTourCategoryIdApi(tourCategoryId: string) {
+  return api<void>(`/admin/tour-category-tours/category/${tourCategoryId}`, {
+    method: 'DELETE',
+  });
+}

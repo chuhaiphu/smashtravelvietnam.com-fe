@@ -1,0 +1,137 @@
+@use '@/app/mixins' as *;
+
+.navRoot {
+  padding: 0;
+
+  .rightSectionIconWrapper {
+    @include flex-center;
+    width: 2rem;
+
+    >* {
+      color: white;
+    }
+
+    .rightSectionIcon {
+      color: white;
+    }
+  }
+
+}
+
+// =============================================
+// Parent Nav Items
+// =============================================
+.parentNavItem {
+  margin: 0.75rem 0 0.5rem 0;
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.375rem;
+
+  &.actived {
+    background-color: transparent;
+
+    .rightSectionIconWrapper {
+      >* {
+        color: var(--vinaup-yellow);
+      }
+    }
+  }
+
+  &:hover {
+    background-color: transparent;
+  }
+
+  .parentNavBody {
+    text-align: right;
+  }
+
+  .parentNavLabel {
+    color: white;
+    font-size: 1.1rem;
+  }
+
+  .parentNavSection {
+    margin-left: 0rem;
+
+    &:last-of-type {
+      transform: none;
+    }
+  }
+
+  // Parent item opened state
+  &.opened {
+    .parentNavSection:first-of-type {
+      transform: rotateX(180deg);
+    }
+  }
+}
+
+.parentNavItemNoChildren {
+  &.actived {
+    background-color: transparent;
+
+    .rightSectionIconWrapper {
+      >* {
+        color: var(--vinaup-yellow);
+      }
+    }
+
+    .parentNavLabel {
+      color: var(--vinaup-yellow);
+    }
+  }
+}
+
+// =============================================
+// Children Nav Group
+// =============================================
+.childrenNavGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+// =============================================
+// Child Nav Items
+// =============================================
+.childrenNavItem {
+  padding: 0.25rem 0.375rem 0.375rem 0.375rem;
+  border-radius: 0.5rem;
+
+  &:first-of-type {
+    padding-top: 0;
+  }
+
+  &:last-of-type {
+    padding-bottom: 1rem;
+  }
+
+  &:hover {
+    background-color: transparent;
+  }
+
+  .childrenNavBody {
+    text-align: right;
+  }
+
+  .childrenNavLabel {
+    color: white;
+    font-size: 1.1rem;
+  }
+
+  .childrenNavSection {
+    margin-left: 0rem;
+  }
+
+  &.actived {
+    background-color: transparent;
+
+    .childrenNavLabel {
+      color: var(--vinaup-yellow);
+    }
+
+    .rightSectionIcon {
+      color: var(--vinaup-yellow);
+      opacity: 100%;
+    }
+  }
+}

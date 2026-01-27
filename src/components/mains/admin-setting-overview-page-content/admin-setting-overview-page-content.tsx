@@ -1,0 +1,11 @@
+import { getAppConfigAction } from '@/actions/app-config-action';
+import AdminSettingOverviewPageContentContainer from "./admin-setting-overview-page-content-container/admin-setting-overview-page-content-container";
+
+export default async function AdminSettingOverviewPageContent() {
+  const appConfigResponse = await getAppConfigAction();
+  const appConfig = appConfigResponse.data;
+
+  return (
+    <AdminSettingOverviewPageContentContainer appConfig={appConfig} />
+  );
+}

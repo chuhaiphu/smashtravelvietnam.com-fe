@@ -1,0 +1,66 @@
+'use client';
+import { ICreateMedia, IMedia, MediaUpload, type UploadResult } from '@vinaup/media-ui';
+import { uploadImageAction } from '@/actions/upload-action';
+import { createManyMediaAction } from '@/actions/media-action';
+import { notifications } from '@mantine/notifications';
+
+export default function MediaImageUploadSection() {
+
+  const handleUpload = async (files: File[]): Promise<UploadResult[]> => {
+    const uploadPromises = files.map(async (file): Promise<UploadResult | null> => {
+      const uploadResponse = await uploadImageAction(file, 'media');
+      if (uploadResponse.success && uploadResponse.data) {
+        return {
+          url: uploadResponse.data,
+          name: file.name
+        };
+      }
+      // do not throw Exception because Promise.all will reject the others upload
+      return null;
+    })
+    const results = await Promise.all(uploadPromises);
+    // eliminate null result
+    const successResults = results.filter((result): result is UploadResult => result !== null)
+    if (successResults.length === 0 && files.length > 0) {
+      throw new Error("Tất cả các file đều upload thất bại.");
+    }
+    return successResults;
+  }
+
+  const handleSave = async (data: ICreateMedia[]): Promise<IMedia[]> => {
+    const response = await createManyMediaAction(data);
+    if (!response.success || !response.data) {
+      throw new Error(response.error || "Lỗi khi lưu vào cơ sở dữ liệu");
+    }
+    return response.data as unknown as IMedia[];
+  }
+
+  const handleUploadSuccess = (media: IMedia[]) => {
+    notifications.show({
+      title: 'Upload thành công',
+      message: `Đã upload thành công ${media.length} ảnh`,
+      color: 'green',
+    });
+  };
+
+  const handleUploadError = (error: Error) => {
+    notifications.show({
+      title: 'Upload thất bại',
+      message: error.message || 'Đã có lỗi xảy ra',
+      color: 'red',
+    });
+  };
+
+  return (
+    <MediaUpload
+      folder="media"
+      multiple={true}
+      maxSize={2 * 1024 * 1024} // 2MB
+      acceptedTypes={['image/png', 'image/jpeg', 'image/jpg', 'image/webp']}
+      onUpload={handleUpload}
+      onSave={handleSave}
+      onUploadSuccess={handleUploadSuccess}
+      onUploadError={handleUploadError}
+    />
+  )
+}

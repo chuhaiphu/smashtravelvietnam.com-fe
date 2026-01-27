@@ -9,6 +9,7 @@ import {
   getTourCategoryByIdApi,
   getTourCategoryByEndpointApi,
   getAllTourCategoriesAdminApi,
+  getAvailableSortOrdersApi,
   updateTourCategoryApi,
   deleteTourCategoryApi,
 } from '@/apis/tour-category-apis';
@@ -48,23 +49,9 @@ export async function getAllTourCategoriesAction(): Promise<ActionResponse<ITour
 export async function getAvailableSortOrdersAction(
   parentId: string
 ): Promise<ActionResponse<number[]>> {
-  // Note: This functionality may need to be added to the backend
-  // For now, calculate from existing categories
-  const result = await executeApi(
-    async () => getAllTourCategoriesAdminApi()
+  return executeApi(
+    async () => getAvailableSortOrdersApi(parentId)
   );
-  if (result.success && result.data) {
-    const siblingCategories = result.data.filter(cat => cat.parent?.id === parentId);
-    const usedOrders = siblingCategories.map(cat => cat.sortOrder);
-    const availableOrders: number[] = [];
-    for (let i = 1; i <= 100; i++) {
-      if (!usedOrders.includes(i)) {
-        availableOrders.push(i);
-      }
-    }
-    return { success: true, data: availableOrders };
-  }
-  return { success: true, data: Array.from({ length: 100 }, (_, i) => i + 1) };
 }
 
 export async function updateTourCategoryAction(

@@ -4,8 +4,6 @@ import {
 } from "@/interfaces/tour-category-custom-tour-request-interface";
 import { api } from "./_base";
 
-// Note: These endpoints need to be implemented in the backend
-
 export async function createTourCategoryCustomTourRequestApi(data: ICreateTourCategoryCustomTourRequest) {
   return api<ITourCategoryCustomTourRequestResponse>('/admin/tour-category-custom-tour-requests', {
     method: 'POST',

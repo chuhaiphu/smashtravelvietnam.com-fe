@@ -5,8 +5,6 @@ import {
 } from "@/interfaces/blog-category-blog-interface";
 import { api } from "./_base";
 
-// Note: These endpoints need to be implemented in the backend
-
 export async function createBlogCategoryBlogApi(data: ICreateBlogCategoryBlog) {
   return api<IBlogCategoryBlogResponse>('/admin/blog-category-blogs', {
     method: 'POST',

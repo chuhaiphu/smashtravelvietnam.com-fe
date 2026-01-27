@@ -24,6 +24,12 @@ export async function getAllMenusAdminApi() {
   });
 }
 
+export async function getAvailableSortOrdersApi(parentId: string) {
+  return api<number[]>(`/menus/admin/available-sort-orders/${parentId}`, {
+    method: 'GET',
+  });
+}
+
 export async function getMenuByIdApi(id: string) {
   return api<IMenuResponse>(`/menus/admin/${id}`, {
     method: 'GET',

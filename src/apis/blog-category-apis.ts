@@ -30,6 +30,12 @@ export async function getAllBlogCategoriesAdminApi() {
   });
 }
 
+export async function getAvailableSortOrdersApi(parentId: string) {
+  return api<number[]>(`/blog-categories/admin/available-sort-orders/${parentId}`, {
+    method: 'GET',
+  });
+}
+
 export async function getBlogCategoryByIdApi(id: string) {
   return api<IBlogCategoryResponse>(`/blog-categories/admin/${id}`, {
     method: 'GET',

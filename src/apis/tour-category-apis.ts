@@ -30,6 +30,12 @@ export async function getAllTourCategoriesAdminApi() {
   });
 }
 
+export async function getAvailableSortOrdersApi(parentId: string) {
+  return api<number[]>(`/tour-categories/admin/available-sort-orders/${parentId}`, {
+    method: 'GET',
+  });
+}
+
 export async function getTourCategoryByIdApi(id: string) {
   return api<ITourCategoryResponse>(`/tour-categories/admin/${id}`, {
     method: 'GET',

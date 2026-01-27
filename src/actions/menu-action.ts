@@ -8,6 +8,7 @@ import {
   createMenuApi,
   getMenuByIdApi,
   getAllMenusAdminApi,
+  getAvailableSortOrdersApi,
   updateMenuApi,
   deleteMenuApi,
 } from '@/apis/menu-apis';
@@ -39,23 +40,9 @@ export async function getAllMenusAction(): Promise<ActionResponse<IMenuResponse[
 export async function getAvailableSortOrdersAction(
   parentId: string
 ): Promise<ActionResponse<number[]>> {
-  // Note: This functionality may need to be added to the backend
-  // For now, calculate from existing menus
-  const result = await executeApi(
-    async () => getAllMenusAdminApi()
+  return executeApi(
+    async () => getAvailableSortOrdersApi(parentId)
   );
-  if (result.success && result.data) {
-    const siblingMenus = result.data.filter(menu => menu.parent?.id === parentId);
-    const usedOrders = siblingMenus.map(menu => menu.sortOrder);
-    const availableOrders: number[] = [];
-    for (let i = 1; i <= 100; i++) {
-      if (!usedOrders.includes(i)) {
-        availableOrders.push(i);
-      }
-    }
-    return { success: true, data: availableOrders };
-  }
-  return { success: true, data: Array.from({ length: 100 }, (_, i) => i + 1) };
 }
 
 export async function updateMenuAction(

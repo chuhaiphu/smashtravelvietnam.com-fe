@@ -35,8 +35,9 @@ export async function api<T>(
   };
 
   try {
+    console.log('url', url);
     const response = await fetch(url, config);
-
+    console.log('response', response);
     // Get set-cookie header from backend response to Next.js server
     // Parse cookie and set it back to browser storage
     // --- Site Notes ---
@@ -67,6 +68,6 @@ export async function api<T>(
     if (error instanceof ApiError) {
       throw error;
     }
-    throw new ApiError("Unexpected server error", "UNKNOWN", 520);
+    throw new ApiError(error instanceof Error ? error.message : 'Unexpected error occurred', "UNKNOWN", 520);
   }
 }

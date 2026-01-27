@@ -119,6 +119,7 @@ export default function TourDetailBookingPageContent({ tourData }: TourDetailBoo
                     input: classes.formInput,
                     label: classes.formLabel,
                   }}
+                  type="email"
                   label="Your Email"
                   placeholder="Enter your email"
                   size="md"

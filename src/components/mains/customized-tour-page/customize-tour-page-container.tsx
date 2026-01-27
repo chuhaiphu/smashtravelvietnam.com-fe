@@ -295,6 +295,7 @@ export default function CustomizedTourPageContainer({ tourCategoriesData }: Cust
                   }}
                   label="Your Email"
                   placeholder="Enter your email"
+                  type="email"
                   size="md"
                   required
                   withAsterisk

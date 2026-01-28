@@ -159,7 +159,6 @@ export default function AdminBlogCategoryDetailPageContentContainer({
 
   const handleRemoveVideoThumbnail = async () => {
     setVideoThumbnailLoading(true);
-    const oldUrl = videoThumbnailUrl;
     setVideoThumbnailUrl('');
     await updateBlogCategoryAction(currentBlogCategory.id, { videoThumbnailUrl: '' });
     setVideoThumbnailLoading(false);
@@ -186,7 +185,6 @@ export default function AdminBlogCategoryDetailPageContentContainer({
 
   const handleRemoveMainImage = async () => {
     setMainImageLoading(true);
-    const oldUrl = mainImageUrl;
     setMainImageUrl('');
     await updateBlogCategoryAction(currentBlogCategory.id, { mainImageUrl: '' });
     setMainImageLoading(false);

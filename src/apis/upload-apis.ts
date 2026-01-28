@@ -15,18 +15,6 @@ export async function uploadFileApi(file: File, folder?: string) {
   });
 }
 
-export async function uploadMultipleFilesApi(files: File[], folder?: string) {
-  const formData = new FormData();
-  files.forEach(file => {
-    formData.append('files', file);
-  });
-  const queryString = folder ? `?folder=${encodeURIComponent(folder)}` : '';
-  return api<UploadResponse[]>(`/admin/upload/multiple${queryString}`, {
-    method: 'POST',
-    body: formData,
-  });
-}
-
 export async function deleteUploadedFileApi(relativePath: string) {
   return api<void>(`/admin/upload`, {
     method: 'DELETE',

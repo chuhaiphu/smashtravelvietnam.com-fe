@@ -7,20 +7,18 @@ import { notifications } from '@mantine/notifications';
 export default function MediaImageUploadSection() {
 
   const handleUpload = async (files: File[]): Promise<UploadResult[]> => {
-    const uploadPromises = files.map(async (file): Promise<UploadResult | null> => {
+    const successResults: UploadResult[] = [];
+  
+    for (const file of files) {
       const uploadResponse = await uploadImageAction(file, 'media');
       if (uploadResponse.success && uploadResponse.data) {
-        return {
+        successResults.push({
           url: uploadResponse.data,
           name: file.name
-        };
+        });
       }
-      // do not throw Exception because Promise.all will reject the others upload
-      return null;
-    })
-    const results = await Promise.all(uploadPromises);
-    // eliminate null result
-    const successResults = results.filter((result): result is UploadResult => result !== null)
+    }
+    
     if (successResults.length === 0 && files.length > 0) {
       throw new Error("Tất cả các file đều upload thất bại.");
     }

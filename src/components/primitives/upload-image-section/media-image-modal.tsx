@@ -30,18 +30,19 @@ export default function MediaImageModal({
   }, []);
 
   const handleUpload = async (files: File[]): Promise<UploadResult[]> => {
-    const uploadPromises = files.map(async (file): Promise<UploadResult | null> => {
+    const successResults: UploadResult[] = [];
+    
+    // Upload tuần tự để đảm bảo tên file unique
+    for (const file of files) {
       const uploadResponse = await uploadImageAction(file, 'media');
       if (uploadResponse.success && uploadResponse.data) {
-        return {
+        successResults.push({
           url: uploadResponse.data,
           name: file.name
-        };
+        });
       }
-      return null;
-    });
-    const results = await Promise.all(uploadPromises);
-    const successResults = results.filter((result): result is UploadResult => result !== null)
+    }
+    
     if (successResults.length === 0 && files.length > 0) {
       throw new Error("Tất cả các file đều upload thất bại.");
     }

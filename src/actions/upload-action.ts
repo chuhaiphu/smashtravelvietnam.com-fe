@@ -4,7 +4,6 @@ import { ActionResponse } from '@/interfaces/_base-interface';
 import { executeApi } from '@/actions/_base';
 import {
   uploadFileApi,
-  uploadMultipleFilesApi,
   deleteUploadedFileApi,
 } from '@/apis/upload-apis';
 
@@ -27,31 +26,6 @@ export async function uploadImageAction(
     success: true,
     data: result.data.url,
   };
-}
-
-export async function uploadMultipleImagesAction(
-  files: File[],
-  folder: string
-): Promise<ActionResponse<string[]>> {
-
-  const result = await executeApi(
-    async () => uploadMultipleFilesApi(files, folder)
-  );
-
-  if (!result.success || !result.data) {
-    return {
-      success: false,
-      error: result.error || 'Upload failed',
-    };
-  }
-  // Extract URLs from response
-  const urls = result.data.map(item => item.url);
-
-  return {
-    success: true,
-    data: urls,
-  };
-
 }
 
 

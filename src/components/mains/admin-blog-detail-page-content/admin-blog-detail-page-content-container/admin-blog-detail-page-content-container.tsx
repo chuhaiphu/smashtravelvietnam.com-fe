@@ -81,8 +81,7 @@ export default function AdminBlogDetailPageContentContainer({
   const handleAddNewBlog = async () => {
     setIsCreating(true);
     const newTitle = '';
-    const endpoint = await generateUniqueEndpoint(newTitle, 'landing');
-
+    const endpoint = await generateUniqueEndpoint(newTitle, 'blog');
     const response = await createBlogAction({
       title: newTitle,
       endpoint: endpoint,
@@ -203,7 +202,7 @@ export default function AdminBlogDetailPageContentContainer({
   };
 
   const handleUpdateTitle = useDebouncedCallback(async (newTitle: string) => {
-    const endpoint = await generateUniqueEndpoint(newTitle, 'landing', currentBlogData.id);
+    const endpoint = await generateUniqueEndpoint(newTitle, 'blog', currentBlogData.id);
 
     await updateBlogAction(
       currentBlogData.id,

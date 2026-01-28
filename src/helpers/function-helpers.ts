@@ -3,6 +3,7 @@ import { getTourByEndpointAction } from '../actions/tour-action';
 import { getTourCategoryByEndpointAction } from '../actions/tour-category-action';
 import { getPageByEndpointAction } from '../actions/page-action';
 import { getBlogCategoryByEndpointAction } from '@/actions/blog-category-action';
+import { getBlogByEndpointAction } from '@/actions/blog-action';
 import { ParsedCookie } from './classes';
 
 export const stripHtmlAndTruncate = (html: string, maxLength: number) => {
@@ -28,7 +29,7 @@ export const sanitizeEndpoint = (input: string): string => {
     .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
 }
 
-export const generateUniqueEndpoint = async (title: string, model: 'tour' | 'landing', currentModelId?: string): Promise<string> => {
+export const generateUniqueEndpoint = async (title: string, model: 'tour' | 'blog' | 'landing', currentModelId?: string): Promise<string> => {
   let slugifiedTitle = '';
   if (!title || title.trim().length === 0) {
     slugifiedTitle = 'no-title';
@@ -56,6 +57,18 @@ export const generateUniqueEndpoint = async (title: string, model: 'tour' | 'lan
         existingTour.data.id !== currentModelId;
 
       if (tourConflict) {
+        const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+        endpoint = `${baseEndpoint}-${randomSuffix}`;
+      } else {
+        isUnique = true;
+      }
+    } else if (model === 'blog') {
+      // For blog model: only check Blog table
+      const existingBlog = await getBlogByEndpointAction(endpoint);
+      const blogConflict = existingBlog.success && existingBlog.data &&
+        existingBlog.data.id !== currentModelId;
+
+      if (blogConflict) {
         const randomSuffix = Math.floor(1000 + Math.random() * 9000);
         endpoint = `${baseEndpoint}-${randomSuffix}`;
       } else {

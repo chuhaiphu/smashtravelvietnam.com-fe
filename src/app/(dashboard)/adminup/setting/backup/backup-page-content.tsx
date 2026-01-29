@@ -35,7 +35,7 @@ export default function BackupPageContent({
   // Use dynamic redirect URI based on current origin, fallback to server-provided value
   const redirectUri =
     typeof window !== 'undefined'
-      ? `${window.location.origin}/admin/setting/backup`
+      ? `${window.location.origin}/adminup/setting/backup`
       : serverRedirectUri;
 
   // Parse access_token from URL hash after Google redirects back

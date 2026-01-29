@@ -55,7 +55,7 @@ export async function submitCustomerContactAction(formData: FormData): Promise<A
 
     // Note: Email notifications should be handled by the backend
 
-    revalidatePath('/admin', 'layout');
+    revalidatePath('/adminup', 'layout');
     return { success: true };
   } catch (error) {
     return {
@@ -69,6 +69,6 @@ export async function deleteCustomerContactAction(id: string): Promise<ActionRes
   const result = await executeApi(
     async () => deleteCustomerContactApi(id)
   );
-  revalidatePath('/admin', 'layout');
+  revalidatePath('/adminup', 'layout');
   return result;
 }

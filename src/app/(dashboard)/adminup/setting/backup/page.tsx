@@ -7,7 +7,7 @@ export default function BackupPage() {
     'https://www.googleapis.com/auth/drive.file';
   const redirectUri =
     process.env.GOOGLE_OAUTH_REDIRECT_URI ||
-    `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/admin/setting/backup`;
+    `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/adminup/setting/backup`;
 
   return (
     <BackupPageContent

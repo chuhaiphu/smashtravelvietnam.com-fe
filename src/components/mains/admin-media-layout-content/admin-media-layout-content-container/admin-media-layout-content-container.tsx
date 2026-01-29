@@ -14,8 +14,8 @@ export default function AdminMediaLayoutContentContainer({ children }: AdminMedi
   const pathname = usePathname();
 
   const getActiveTab = () => {
-    if (pathname === '/admin/media/upload') return 'upload';
-    if (pathname.includes('/admin/media/images')) return 'images';
+    if (pathname === '/adminup/media/upload') return 'upload';
+    if (pathname.includes('/adminup/media/images')) return 'images';
     return 'upload';
   };
 
@@ -23,7 +23,7 @@ export default function AdminMediaLayoutContentContainer({ children }: AdminMedi
 
   const handleTabChange = (value: string | null) => {
     if (!value) return;
-    const basePath = '/admin/media';
+    const basePath = '/adminup/media';
     router.push(`${basePath}/${value}` as Route);
   };
 

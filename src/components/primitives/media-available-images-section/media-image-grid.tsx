@@ -19,7 +19,7 @@ export default function MediaImageGrid({ images }: MediaImageGridProps) {
   const selectedImageId = isDetailPage ? pathSegments[4] : null;
   console.log(selectedImageId)
   const handleImageClick = (imageId: string) => {
-    router.push(`/admin/media/images/${imageId}` as Route);
+    router.push(`/adminup/media/images/${imageId}` as Route);
   };
 
   return (

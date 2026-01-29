@@ -10,7 +10,7 @@ export default async function AdminLayoutContent({ children }: AdminLayoutConten
   const result = await getMeAction();
 
   if (!result.success || !result.data) {
-    redirect('/login');
+    redirect('/login?invalid=1')
   }
 
   return (

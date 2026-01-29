@@ -27,7 +27,7 @@ export async function saveSmtpConfigAction(
   const result = await executeApi(
     async () => updateSmtpConfigApi(input)
   );
-  revalidatePath('/admin/settings', 'page');
+  revalidatePath('/adminup/settings', 'page');
   return result;
 }
 
@@ -38,7 +38,7 @@ export async function updateSmtpConfigAction(
   const result = await executeApi(
     async () => updateSmtpConfigApi(input)
   );
-  revalidatePath('/admin/settings', 'page');
+  revalidatePath('/adminup/settings', 'page');
   return result;
 }
 

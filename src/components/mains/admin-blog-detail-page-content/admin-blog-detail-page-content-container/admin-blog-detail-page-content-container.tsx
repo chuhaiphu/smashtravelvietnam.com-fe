@@ -100,7 +100,7 @@ export default function AdminBlogDetailPageContentContainer({
     }
     const blogId = response.data.id;
     setIsCreating(false);
-    router.push(`/admin/blog/${blogId}` as Route);
+    router.push(`/adminup/blog/${blogId}` as Route);
     notifications.show({
       title: 'New blog created',
       message: 'New blog has been successfully created',
@@ -329,7 +329,7 @@ export default function AdminBlogDetailPageContentContainer({
     try {
       const result = await deleteBlogAction(currentBlogData.id);
       if (result.success) {
-        router.replace('/admin/blog');
+        router.replace('/adminup/blog');
         notifications.show({
           message: 'Blog has been successfully deleted',
           color: 'green',
@@ -737,7 +737,7 @@ export default function AdminBlogDetailPageContentContainer({
                     {isSaving ? 'Saving...' : 'Saved'}
                   </Text>
                   <Button
-                    onClick={() => { router.push('/admin/blog') }}
+                    onClick={() => { router.push('/adminup/blog') }}
                     variant="filled" color="blue" size="xs" bg={'#01426e'}
                   >
                     Exit

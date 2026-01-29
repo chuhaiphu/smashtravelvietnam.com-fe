@@ -41,7 +41,7 @@ export default function AdminMediaImageDetailSection({
           color: 'green',
           position: 'top-right',
         });
-        router.push('/admin/media/images');
+        router.push('/adminup/media/images');
       } else {
         throw new Error(result.error || 'Failed to delete image');
       }

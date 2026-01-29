@@ -18,7 +18,7 @@ export async function createMediaAction(
   const result = await executeApi(
     async () => createMediaApi(input)
   );
-  revalidatePath('/admin/media');
+  revalidatePath('/adminup/media');
   return result;
 }
 
@@ -35,7 +35,7 @@ export async function createManyMediaAction(
         results.push(result.data);
       }
     }
-    revalidatePath('/admin/media');
+    revalidatePath('/adminup/media');
     return { success: true, data: results };
   } catch (error) {
     return {
@@ -66,7 +66,7 @@ export async function updateMediaAction(
   const result = await executeApi(
     async () => updateMediaApi(id, input)
   );
-  revalidatePath('/admin/media');
+  revalidatePath('/adminup/media');
   return result;
 }
 
@@ -98,13 +98,13 @@ export async function deleteMediaAction(
     if (relativePath) {
       deleteLocalImageAction(relativePath);
     }
-    revalidatePath('/admin/media');
-    revalidatePath('/admin/media/images');
+    revalidatePath('/adminup/media');
+    revalidatePath('/adminup/media/images');
     return { success: true, data: { url: mediaResult.data.url } };
   }
 
-  revalidatePath('/admin/media');
-  revalidatePath('/admin/media/images');
+  revalidatePath('/adminup/media');
+  revalidatePath('/adminup/media/images');
   return { success: result.success, data: null, error: result.error };
 }
 

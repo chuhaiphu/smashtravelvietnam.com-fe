@@ -49,7 +49,7 @@ export default function AdminBlogPageContentContainer({
 
     const blogId = response.data.id;
     setIsCreating(false);
-    router.push(`/admin/blog/${blogId}` as Route);
+    router.push(`/adminup/blog/${blogId}` as Route);
   };
 
   return (

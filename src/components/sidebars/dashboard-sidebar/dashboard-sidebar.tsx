@@ -17,7 +17,7 @@ export default function DashboardSidebar() {
     {
       key: 'admin',
       label: 'Admin Home',
-      path: '/admin',
+      path: '/adminup',
       rightSection: <HomeIcon size={20} />,
       rightSectionActive: <HomeIcon size={20} stroke="var(--vinaup-yellow)" />,
       isRoot: true,
@@ -25,36 +25,36 @@ export default function DashboardSidebar() {
     {
       key: 'tour',
       label: 'Tour',
-      path: '/admin/tour',
+      path: '/adminup/tour',
       defaultOpened: true,
       childrens: [
         {
           key: 'all-tours',
           label: 'All Tours',
-          path: '/admin/tour',
+          path: '/adminup/tour',
         },
         {
           key: 'tour-categories',
           label: 'Tour Categories',
-          path: '/admin/tour-category'
+          path: '/adminup/tour-category'
         },
       ]
     },
     {
       key: 'blog',
       label: 'Blog',
-      path: '/admin/blog',
+      path: '/adminup/blog',
       defaultOpened: true,
       childrens: [
         {
           key: 'all-blogs',
           label: 'All Blogs',
-          path: '/admin/blog',
+          path: '/adminup/blog',
         },
         {
           key: 'blog-categories',
           label: 'Blog Categories',
-          path: '/admin/blog-category'
+          path: '/adminup/blog-category'
         },
       ]
     },
@@ -63,37 +63,37 @@ export default function DashboardSidebar() {
       label: 'Pages',
       rightSection: <GoDot size={24} />,
       rightSectionActive: <GoDotFill color="var(--vinaup-yellow)" size={24} />,
-      path: '/admin/page',
+      path: '/adminup/page',
     },
     {
       key: 'setting',
       label: 'Settings',
       rightSection: <GoDot size={24} />,
       rightSectionActive: <GoDotFill color="var(--vinaup-yellow)" size={24} />,
-      path: '/admin/setting'
+      path: '/adminup/setting'
     },
     {
       key: 'control-panel',
       label: 'Control Panel',
-      path: '/admin/menu',
+      path: '/adminup/menu',
       defaultOpened: true,
       childrens: [
         {
           key: 'menu',
           label: 'Menu',
-          path: '/admin/menu',
+          path: '/adminup/menu',
         },
         {
           key: 'media',
           label: 'Media',
-          path: '/admin/media'
+          path: '/adminup/media'
         }
       ]
     },
     {
       key: 'section-ui',
       label: 'Section UI',
-      path: '/admin/section-ui',
+      path: '/adminup/section-ui',
       rightSection: <GoDot size={24} />,
       rightSectionActive: <GoDotFill color="var(--vinaup-yellow)" size={24} />,
     }

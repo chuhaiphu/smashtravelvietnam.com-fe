@@ -43,6 +43,6 @@ export async function updateUserPasswordAction(
   const result = await executeApi(
     async () => updatePasswordApi(input)
   );
-  revalidatePath('/admin/user/[id]', 'page');
+  revalidatePath('/adminup/user/[id]', 'page');
   return result;
 }

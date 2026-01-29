@@ -28,7 +28,7 @@ export default function SectionUINav({ types }: SectionUINavProps) {
             bd={'1px solid #c7c7c7'}
             bdrs={'sm'}
             p={'8px'}
-            onClick={() => { router.push(`/admin/section-ui/${type}` as Route); }}
+            onClick={() => { router.push(`/adminup/section-ui/${type}` as Route); }}
           >
             <Group>
               <Text fw={isActiveItem(type) ? 'bold' : 'normal'} tt="capitalize">{type}</Text>

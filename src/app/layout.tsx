@@ -19,6 +19,7 @@ export const metadata: Metadata = {
     default: 'Smash Travel Vietnam',
     template: '%s | Smash Travel Vietnam',
   },
+  description: 'Discover Vietnam with Smash & Travel Vietnam (STV) - specialized travel tours, pickleball adventures, and customized packages across 33+ destinations. Book your Vietnam adventure today!',
   applicationName: 'Smash Travel Vietnam',
   openGraph: {
     siteName: 'Smash Travel Vietnam',

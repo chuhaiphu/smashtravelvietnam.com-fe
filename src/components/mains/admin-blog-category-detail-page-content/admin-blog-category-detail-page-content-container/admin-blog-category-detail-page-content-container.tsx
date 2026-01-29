@@ -210,7 +210,7 @@ export default function AdminBlogCategoryDetailPageContentContainer({
     try {
       const result = await deleteBlogCategoryAction(currentBlogCategory.id);
       if (result.success) {
-        router.replace('/admin/blog-category');
+        router.replace('/adminup/blog-category');
         notifications.show({
           message: 'Blog category has been successfully deleted',
           color: 'green',
@@ -339,7 +339,7 @@ export default function AdminBlogCategoryDetailPageContentContainer({
                     {isSaving ? 'Saving...' : 'Saved'}
                   </Text>
                   <Button
-                    onClick={() => { router.push('/admin/blog-category') }}
+                    onClick={() => { router.push('/adminup/blog-category') }}
                     variant="filled" color="blue" size="xs" bg={'#01426e'}
                   >
                     Exit

@@ -16,7 +16,7 @@ export function UserSection({ userData }: { userData: IUserResponse }) {
   };
 
   const handleUserDetail = () => {
-    router.push(`/admin/user/${userData.id}`);
+    router.push(`/adminup/user/${userData.id}`);
   };
 
   // Get first letter of email for avatar

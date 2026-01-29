@@ -37,7 +37,7 @@ export default function AdminMenuLayoutContentContainer({
 
     const menuId = response.data.id;
     setIsCreating(false);
-    router.push(`/admin/menu/${menuId}` as Route);
+    router.push(`/adminup/menu/${menuId}` as Route);
   };
 
   return (

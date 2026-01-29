@@ -17,7 +17,7 @@ import { Route } from 'next';
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/admin';
+  const callbackUrl = searchParams.get('callbackUrl') || '/adminup';
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

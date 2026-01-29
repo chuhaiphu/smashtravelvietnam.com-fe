@@ -47,7 +47,7 @@ export default function TourCategoryNav({ tourCategoriesData }: TourCategoryNavP
           bdrs={'sm'}
           p={'8px'}
           ml={depth * 16}
-          onClick={() => { router.push(`/admin/tour-category/${tourCategory.id}` as Route); }}
+          onClick={() => { router.push(`/adminup/tour-category/${tourCategory.id}` as Route); }}
         >
           <Group key={tourCategory.id}>
             <Text fw={isActiveTourCategory(tourCategory.id) ? 'bold' : 'normal'}>{tourCategory.title}</Text>

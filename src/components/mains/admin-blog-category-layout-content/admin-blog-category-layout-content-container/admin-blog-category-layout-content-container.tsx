@@ -39,7 +39,7 @@ export default function AdminBlogCategoryLayoutContentContainer({
 
     const categoryId = response.data.id;
     setIsCreating(false);
-    router.push(`/admin/blog-category/${categoryId}` as Route);
+    router.push(`/adminup/blog-category/${categoryId}` as Route);
   };
 
   return (

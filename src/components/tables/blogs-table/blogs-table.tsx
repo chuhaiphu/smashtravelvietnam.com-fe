@@ -153,7 +153,7 @@ export default function BlogsTable({
           </ActionIcon>
           <ActionIcon
             variant="transparent"
-            onClick={() => router.push(`/admin/blog/${entity.id}`)}
+            onClick={() => router.push(`/adminup/blog/${entity.id}`)}
           >
             <TbEdit size={24} color="#01426e" />
           </ActionIcon>

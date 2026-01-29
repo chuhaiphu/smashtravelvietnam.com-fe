@@ -212,7 +212,7 @@ export default function AdminTourCategoryDetailPageContentContainer({
     try {
       const result = await deleteTourCategoryAction(currentTourCategory.id);
       if (result.success) {
-        router.replace('/admin/tour-category');
+        router.replace('/adminup/tour-category');
         notifications.show({
           message: 'Tour category has been successfully deleted',
           color: 'green',
@@ -341,7 +341,7 @@ export default function AdminTourCategoryDetailPageContentContainer({
                     {isSaving ? 'Saving...' : 'Saved'}
                   </Text>
                   <Button
-                    onClick={() => { router.push('/admin/tour-category') }}
+                    onClick={() => { router.push('/adminup/tour-category') }}
                     variant="filled" color="blue" size="xs" bg={'#01426e'}
                   >
                     Exit

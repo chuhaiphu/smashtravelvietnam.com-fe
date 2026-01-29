@@ -49,7 +49,7 @@ export default function AdminPagePageContentContainer({
 
     const pageId = response.data.id;
     setIsCreating(false);
-    router.push(`/admin/page/${pageId}` as Route);
+    router.push(`/adminup/page/${pageId}` as Route);
   };
 
   return (

@@ -68,7 +68,7 @@ export async function submitBookingAction(formData: FormData): Promise<ActionRes
       return result as ActionResponse<void>;
     }
 
-    revalidatePath('/admin', 'layout');
+    revalidatePath('/adminup', 'layout');
     return { success: true };
   } catch (error) {
     return {
@@ -82,6 +82,6 @@ export async function deleteBookingAction(id: string): Promise<ActionResponse<vo
   const result = await executeApi(
     async () => deleteBookingApi(id)
   );
-  revalidatePath('/admin', 'layout');
+  revalidatePath('/adminup', 'layout');
   return result;
 }

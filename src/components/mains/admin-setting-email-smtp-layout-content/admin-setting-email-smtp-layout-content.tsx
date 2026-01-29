@@ -14,8 +14,8 @@ export default function AdminSettingEmailSmtpLayoutContent({ children }: AdminSe
   const pathname = usePathname();
 
   const getActiveTab = () => {
-    if (pathname === '/admin/setting/email-smtp/email-template') return 'email-template';
-    if (pathname === '/admin/setting/email-smtp/smtp') return 'smtp';
+    if (pathname === '/adminup/setting/email-smtp/email-template') return 'email-template';
+    if (pathname === '/adminup/setting/email-smtp/smtp') return 'smtp';
     return 'smtp';
   };
 
@@ -23,7 +23,7 @@ export default function AdminSettingEmailSmtpLayoutContent({ children }: AdminSe
 
   const handleTabChange = (value: string | null) => {
     if (!value) return;
-    const basePath = '/admin/setting/email-smtp';
+    const basePath = '/adminup/setting/email-smtp';
     router.push(`${basePath}/${value}` as Route);
   };
   return (

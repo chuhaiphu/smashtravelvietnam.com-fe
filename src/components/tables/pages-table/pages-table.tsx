@@ -148,7 +148,7 @@ export default function PagesTable({
           </ActionIcon>
           <ActionIcon
             variant="transparent"
-            onClick={() => router.push(`/admin/page/${entity.id}`)}
+            onClick={() => router.push(`/adminup/page/${entity.id}`)}
           >
             <TbEdit size={24} color="#01426e" />
           </ActionIcon>

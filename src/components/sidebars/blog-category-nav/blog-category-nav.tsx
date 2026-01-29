@@ -47,7 +47,7 @@ export default function BlogCategoryNav({ blogCategoriesData }: BlogCategoryNavP
           bdrs={'sm'}
           p={'8px'}
           ml={depth * 16}
-          onClick={() => { router.push(`/admin/blog-category/${blogCategory.id}` as Route); }}
+          onClick={() => { router.push(`/adminup/blog-category/${blogCategory.id}` as Route); }}
         >
           <Group key={blogCategory.id}>
             <Text fw={isActiveBlogCategory(blogCategory.id) ? 'bold' : 'normal'}>{blogCategory.title}</Text>

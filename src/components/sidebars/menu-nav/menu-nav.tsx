@@ -47,7 +47,7 @@ export default function MenuNav({ menusData }: MenuNavProps) {
           bdrs={'sm'}
           p={'8px'}
           ml={depth * 16}
-          onClick={() => { router.push(`/admin/menu/${menu.id}` as Route); }}
+          onClick={() => { router.push(`/adminup/menu/${menu.id}` as Route); }}
         >
           <Group key={menu.id}>
             <Text fw={isActiveMenu(menu.id) ? 'bold' : 'normal'}>{menu.title}</Text>

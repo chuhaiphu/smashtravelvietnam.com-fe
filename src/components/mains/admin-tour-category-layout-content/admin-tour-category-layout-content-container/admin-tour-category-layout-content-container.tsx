@@ -40,7 +40,7 @@ export default function AdminTourCategoryLayoutContentContainer({
 
     const categoryId = response.data.id;
     setIsCreating(false);
-    router.push(`/admin/tour-category/${categoryId}` as Route);
+    router.push(`/adminup/tour-category/${categoryId}` as Route);
   };
 
   return (

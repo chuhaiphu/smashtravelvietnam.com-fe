@@ -90,7 +90,7 @@ export default function AdminPageDetailPageContentContainer({
     }
     const pageId = response.data.id;
     setIsCreating(false);
-    router.push(`/admin/page/${pageId}` as Route);
+    router.push(`/adminup/page/${pageId}` as Route);
     notifications.show({
       title: 'New page created',
       message: 'New page has been successfully created',
@@ -331,7 +331,7 @@ export default function AdminPageDetailPageContentContainer({
     try {
       const result = await deletePageAction(currentPageData.id);
       if (result.success) {
-        router.replace('/admin/page' as Route);
+        router.replace('/adminup/page' as Route);
         notifications.show({
           message: 'Page has been successfully deleted',
           color: 'green',
@@ -585,7 +585,7 @@ export default function AdminPageDetailPageContentContainer({
                     {isSaving ? 'Saving...' : 'Saved'}
                   </Text>
                   <Button
-                    onClick={() => { router.push('/admin/page' as Route) }}
+                    onClick={() => { router.push('/adminup/page' as Route) }}
                     variant="filled" color="blue" size="xs" bg={'#01426e'}
                   >
                     Exit

@@ -14,8 +14,8 @@ The backup feature allows you to backup deployment files to your personal Google
    - Prod: `https://smashtravelvietnam.com`
    - ⚠️ Only enter the root domain, no path, no trailing slash.
 7. Add `Authorized redirect URI`:
-   - Dev: `http://localhost:3000/admin/setting/backup`
-   - Prod: `https://smashtravelvietnam.com/admin/setting/backup`
+   - Dev: `http://localhost:3000/adminup/setting/backup`
+   - Prod: `https://smashtravelvietnam.com/adminup/setting/backup`
 
 Copy the **Client ID**.
 
@@ -25,7 +25,7 @@ In `.env`:
 
 ```env
 NEXT_PUBLIC_GOOGLE_OAUTH_CLIENT_ID=your_client_id.apps.googleusercontent.com
-NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI=http://localhost:3000/admin/setting/backup
+NEXT_PUBLIC_GOOGLE_OAUTH_REDIRECT_URI=http://localhost:3000/adminup/setting/backup
 NEXT_PUBLIC_GOOGLE_OAUTH_SCOPE=https://www.googleapis.com/auth/drive.file
 ```
 
@@ -36,7 +36,7 @@ NEXT_PUBLIC_GOOGLE_OAUTH_SCOPE=https://www.googleapis.com/auth/drive.file
 1. Log in to the Admin page.
 2. Go to **Settings → Backup** (or from **Settings → Overview**, click the **Backup & Deploy Guide** button).
 3. On the backup page, click **"Login with Google"**:
-   - You will be redirected to `/admin/setting/backup`.
+   - You will be redirected to `/adminup/setting/backup`.
 4. Click **"Login with Google"**, select the correct Gmail account, and accept the Drive scope.
 5. After redirecting back, the system automatically retrieves the `access_token`.
 6. Enter the **Folder ID** of the Google Drive folder where you want to save the backup:

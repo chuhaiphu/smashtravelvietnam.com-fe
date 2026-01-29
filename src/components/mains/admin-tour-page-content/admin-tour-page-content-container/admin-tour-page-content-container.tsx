@@ -49,7 +49,7 @@ export default function AdminTourPageContentContainer({
 
     const tourId = response.data.id;
     setIsCreating(false);
-    router.push(`/admin/tour/${tourId}` as Route);
+    router.push(`/adminup/tour/${tourId}` as Route);
   };
 
   return (

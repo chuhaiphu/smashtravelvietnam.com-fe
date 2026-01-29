@@ -85,7 +85,7 @@ export async function submitCustomTourRequestAction(formData: FormData): Promise
       }
     }
 
-    revalidatePath('/admin', 'layout');
+    revalidatePath('/adminup', 'layout');
     return { success: true };
   } catch (error) {
     return {
@@ -99,6 +99,6 @@ export async function deleteCustomTourRequestAction(id: string): Promise<ActionR
   const result = await executeApi(
     async () => deleteCustomTourRequestApi(id)
   );
-  revalidatePath('/admin', 'layout');
+  revalidatePath('/adminup', 'layout');
   return result;
 }

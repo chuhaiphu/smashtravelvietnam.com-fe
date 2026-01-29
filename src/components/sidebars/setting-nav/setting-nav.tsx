@@ -11,10 +11,10 @@ type SettingNavItem = {
 };
 
 const SETTING_NAV_ITEMS: SettingNavItem[] = [
-  { label: 'Overview', path: '/admin/setting/overview' },
-  { label: 'SEO', path: '/admin/setting/seo' },
-  { label: 'Email SMTP', path: '/admin/setting/email-smtp' }
-  // { label: 'Backup', path: '/admin/setting/backup' },
+  { label: 'Overview', path: '/adminup/setting/overview' },
+  { label: 'SEO', path: '/adminup/setting/seo' },
+  { label: 'Email SMTP', path: '/adminup/setting/email-smtp' }
+  // { label: 'Backup', path: '/adminup/setting/backup' },
 ];
 
 export default function SettingNav() {

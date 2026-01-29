@@ -198,7 +198,7 @@ export default function AdminMenuDetailPageContentContainer({
     try {
       const result = await deleteMenuAction(currentMenu.id);
       if (result.success) {
-        router.replace('/admin/menu');
+        router.replace('/adminup/menu');
         notifications.show({
           message: 'Menu has been successfully deleted',
           color: 'green',
@@ -350,7 +350,7 @@ export default function AdminMenuDetailPageContentContainer({
                     {isSaving ? 'Saving...' : 'Saved'}
                   </Text>
                   <Button
-                    onClick={() => { router.push('/admin/menu') }}
+                    onClick={() => { router.push('/adminup/menu') }}
                     variant="filled" color="blue" size="xs" bg={'#01426e'}
                   >
                     Exit

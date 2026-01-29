@@ -153,7 +153,7 @@ export default function ToursTable({
           </ActionIcon>
           <ActionIcon
             variant="transparent"
-            onClick={() => router.push(`/admin/tour/${entity.id}`)}
+            onClick={() => router.push(`/adminup/tour/${entity.id}`)}
           >
             <TbEdit size={24} color="#01426e" />
           </ActionIcon>

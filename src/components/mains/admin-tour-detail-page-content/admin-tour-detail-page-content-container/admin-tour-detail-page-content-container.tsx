@@ -110,7 +110,7 @@ export default function AdminTourDetailPageContentContainer({
     }
     const tourId = response.data.id;
     setIsCreating(false);
-    router.push(`/admin/tour/${tourId}` as Route);
+    router.push(`/adminup/tour/${tourId}` as Route);
     notifications.show({
       title: 'New tour created',
       message: 'New tour has been successfully created',
@@ -428,7 +428,7 @@ export default function AdminTourDetailPageContentContainer({
     try {
       const result = await deleteTourAction(currentTourData.id);
       if (result.success) {
-        router.replace('/admin/tour');
+        router.replace('/adminup/tour');
         notifications.show({
           message: 'Tour has been successfully deleted',
           color: 'green',
@@ -867,7 +867,7 @@ export default function AdminTourDetailPageContentContainer({
                     {isSaving ? 'Saving...' : 'Saved'}
                   </Text>
                   <Button
-                    onClick={() => { router.push('/admin/tour') }}
+                    onClick={() => { router.push('/adminup/tour') }}
                     variant="filled" color="blue" size="xs" bg={'#01426e'}
                   >
                     Exit

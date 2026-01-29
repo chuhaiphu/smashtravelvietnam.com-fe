@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 
 export default async function SettingsPage() {
-  redirect('/admin/setting/overview');
+  redirect('/adminup/setting/overview');
 }
 

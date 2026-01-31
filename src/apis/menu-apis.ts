@@ -18,6 +18,12 @@ export async function createMenuApi(data: ICreateMenu) {
   });
 }
 
+export async function getAllPublicMenusApi() {
+  return api<IMenuResponse[]>('/menus/list', {
+    method: 'GET',
+  });
+}
+
 export async function getAllMenusAdminApi() {
   return api<IMenuResponse[]>('/menus/admin/list', {
     method: 'GET',

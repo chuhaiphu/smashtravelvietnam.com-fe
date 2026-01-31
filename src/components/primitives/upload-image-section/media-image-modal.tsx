@@ -32,7 +32,7 @@ export default function MediaImageModal({
   const handleUpload = async (files: File[]): Promise<UploadResult[]> => {
     const successResults: UploadResult[] = [];
     
-    // Upload tuần tự để đảm bảo tên file unique
+    // Upload sequentially to ensure unique file names
     for (const file of files) {
       const uploadResponse = await uploadImageAction(file, 'media');
       if (uploadResponse.success && uploadResponse.data) {
@@ -44,7 +44,7 @@ export default function MediaImageModal({
     }
     
     if (successResults.length === 0 && files.length > 0) {
-      throw new Error("Tất cả các file đều upload thất bại.");
+      throw new Error("All files failed to upload.");
     }
     return successResults;
   }
@@ -52,7 +52,7 @@ export default function MediaImageModal({
   const handleSave = async (data: ICreateMedia[]): Promise<IMedia[]> => {
     const response = await createManyMediaAction(data);
     if (!response.success || !response.data) {
-      throw new Error(response.error || "Lỗi khi lưu vào cơ sở dữ liệu");
+      throw new Error(response.error || "There was an error saving to the database");
     }
     return response.data as unknown as IMedia[];
   }
@@ -60,16 +60,16 @@ export default function MediaImageModal({
   const handleUploadSuccess = (media: IMedia[]) => {
     setAvailableImages(prev => [...prev, ...media]);
     notifications.show({
-      title: 'Upload thành công',
-      message: `Đã upload thành công ${media.length} ảnh`,
+      title: 'Upload success',
+      message: `Upload success ${media.length} images`,
       color: 'green',
     });
   }
 
   const handleUploadError = (error: Error) => {
     notifications.show({
-      title: 'Upload thất bại',
-      message: error.message || 'Đã có lỗi xảy ra',
+      title: 'Upload failed',
+      message: error.message || 'There was an error',
       color: 'red',
     });
   }

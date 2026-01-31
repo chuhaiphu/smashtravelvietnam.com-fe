@@ -20,7 +20,7 @@ export default function MediaImageUploadSection() {
     }
     
     if (successResults.length === 0 && files.length > 0) {
-      throw new Error("Tất cả các file đều upload thất bại.");
+      throw new Error("All files failed to upload.");
     }
     return successResults;
   }
@@ -35,16 +35,16 @@ export default function MediaImageUploadSection() {
 
   const handleUploadSuccess = (media: IMedia[]) => {
     notifications.show({
-      title: 'Upload thành công',
-      message: `Đã upload thành công ${media.length} ảnh`,
+      title: 'Upload success',
+      message: `Upload success ${media.length} images`,
       color: 'green',
     });
   };
 
   const handleUploadError = (error: Error) => {
     notifications.show({
-      title: 'Upload thất bại',
-      message: error.message || 'Đã có lỗi xảy ra',
+      title: 'Upload failed',
+      message: error.message || 'There was an error',
       color: 'red',
     });
   };

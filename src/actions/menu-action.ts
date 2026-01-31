@@ -11,6 +11,7 @@ import {
   getAvailableSortOrdersApi,
   updateMenuApi,
   deleteMenuApi,
+  getAllPublicMenusApi,
 } from '@/apis/menu-apis';
 
 export async function createMenuAction(
@@ -34,6 +35,12 @@ export async function getMenuByIdAction(
 export async function getAllMenusAction(): Promise<ActionResponse<IMenuResponse[]>> {
   return executeApi(
     async () => getAllMenusAdminApi()
+  );
+}
+
+export async function getAllPublicMenusAction(): Promise<ActionResponse<IMenuResponse[]>> {
+  return executeApi(
+    async () => getAllPublicMenusApi()
   );
 }
 

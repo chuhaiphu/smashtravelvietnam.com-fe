@@ -17,7 +17,6 @@ interface LandingBlogCategoryProps {
 export default async function LandingBlogCategory({ category, queryParams }: LandingBlogCategoryProps) {
   // Get all blogs in this category
   const blogCategoryBlogsResponse = await getBlogCategoryBlogsByBlogCategoryIdAction(category.id);
-
   // Extract blogs and filter only public ones
   const blogs: IBlogResponse[] = blogCategoryBlogsResponse.success && blogCategoryBlogsResponse.data
     ? blogCategoryBlogsResponse.data

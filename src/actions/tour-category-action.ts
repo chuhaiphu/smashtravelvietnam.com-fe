@@ -9,6 +9,7 @@ import {
   getTourCategoryByIdApi,
   getTourCategoryByEndpointApi,
   getAllTourCategoriesAdminApi,
+  getAllPublicTourCategoriesApi,
   getAvailableSortOrdersApi,
   updateTourCategoryApi,
   deleteTourCategoryApi,
@@ -43,6 +44,12 @@ export async function getTourCategoryByEndpointAction(
 export async function getAllTourCategoriesAction(): Promise<ActionResponse<ITourCategoryResponse[]>> {
   return executeApi(
     async () => getAllTourCategoriesAdminApi()
+  );
+}
+
+export async function getAllTourCategoriesPublicAction(): Promise<ActionResponse<ITourCategoryResponse[]>> {
+  return executeApi(
+    async () => getAllPublicTourCategoriesApi()
   );
 }
 

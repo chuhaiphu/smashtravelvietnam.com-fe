@@ -1,11 +1,11 @@
-import { getAllMenusAction } from "@/actions/menu-action";
-import { getAllTourCategoriesAction } from "@/actions/tour-category-action";
+import { getAllPublicMenusAction } from "@/actions/menu-action";
+import { getAllTourCategoriesPublicAction } from "@/actions/tour-category-action";
 import LandingDrawerContainer from "./landing-drawer-container";
 
 export default async function LandingDrawer() {
   const [menusResponse, tourCategoriesResponse] = await Promise.all([
-    getAllMenusAction(),
-    getAllTourCategoriesAction(),
+    getAllPublicMenusAction(),
+    getAllTourCategoriesPublicAction(),
   ]);
 
   return (

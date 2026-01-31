@@ -66,11 +66,11 @@ export default function DashboardSidebar() {
       path: '/adminup/page',
     },
     {
-      key: 'setting',
-      label: 'Settings',
+      key: 'section-ui',
+      label: 'Section UI',
+      path: '/adminup/section-ui',
       rightSection: <GoDot size={24} />,
       rightSectionActive: <GoDotFill color="var(--vinaup-yellow)" size={24} />,
-      path: '/adminup/setting'
     },
     {
       key: 'control-panel',
@@ -91,11 +91,11 @@ export default function DashboardSidebar() {
       ]
     },
     {
-      key: 'section-ui',
-      label: 'Section UI',
-      path: '/adminup/section-ui',
+      key: 'setting',
+      label: 'Settings',
       rightSection: <GoDot size={24} />,
       rightSectionActive: <GoDotFill color="var(--vinaup-yellow)" size={24} />,
+      path: '/adminup/setting'
     }
   ];
 

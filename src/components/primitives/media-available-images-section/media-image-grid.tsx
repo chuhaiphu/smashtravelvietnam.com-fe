@@ -24,6 +24,7 @@ export default function MediaImageGrid({ images }: MediaImageGridProps) {
 
   return (
     <MediaGrid
+      itemsPerPage={16}
       images={images as unknown as IMedia[]}
       selectedImageId={selectedImageId}
       onImageClick={handleImageClick}

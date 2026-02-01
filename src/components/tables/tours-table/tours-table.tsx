@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import { ActionIcon, Button, Group, Modal, Popover, Stack } from '@mantine/core';
+import { ActionIcon, Button, Group, Modal, Pagination, Popover, Stack } from '@mantine/core';
 import { TbEdit } from 'react-icons/tb';
 import { SlOptionsVertical } from 'react-icons/sl';
 import { MdOutlineCalendarMonth } from 'react-icons/md';
@@ -21,15 +21,23 @@ interface ToursTableProps {
   toursData: ITourResponse[];
 }
 
+const ITEMS_PER_PAGE = 20;
+
 export default function ToursTable({
   toursData,
 }: ToursTableProps) {
   const router = useRouter();
+  const [page, setPage] = useState(1);
   const [datePickerOpened, setDatePickerOpened] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | string | null>(null);
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedTourId, setSelectedTourId] = useState<string | null>(null);
+
+  const totalPages = Math.ceil(toursData.length / ITEMS_PER_PAGE) || 1;
+  useEffect(() => {
+    setPage((p) => (p > totalPages ? totalPages : p));
+  }, [toursData.length, totalPages]);
 
   const handleDeleteTour = async () => {
     if (!selectedTourId) return;
@@ -163,24 +171,36 @@ export default function ToursTable({
   ];
 
 
+  const paginatedData = toursData.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+
   return (
     <>
-      <EntitiesTable<ITourResponse>
-        data={toursData}
-        loading={false}
-        columns={columns}
-        classNames={{
-          wrapper: classes.tableWrapper,
-          table: {
-            table: classes.table,
-            thead: classes.thead,
-            tbody: classes.tbody,
-            tr: classes.tr,
-            th: classes.th,
-            td: classes.td,
-          },
-        }}
-      />
+      <Stack gap="md">
+        <EntitiesTable<ITourResponse>
+          data={paginatedData}
+          loading={false}
+          columns={columns}
+          classNames={{
+            wrapper: classes.tableWrapper,
+            table: {
+              table: classes.table,
+              thead: classes.thead,
+              tbody: classes.tbody,
+              tr: classes.tr,
+              th: classes.th,
+              td: classes.td,
+            },
+          }}
+        />
+        <Group justify="center">
+          <Pagination
+            value={page}
+            onChange={setPage}
+            total={totalPages}
+            size="sm"
+          />
+        </Group>
+      </Stack>
       <Modal
         opened={deleteModalOpened}
         onClose={() => setDeleteModalOpened(false)}

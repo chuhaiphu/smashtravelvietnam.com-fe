@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
-import { ActionIcon, Button, Group, Modal, Popover, Stack } from '@mantine/core';
+import { ActionIcon, Button, Group, Modal, Pagination, Popover, Stack } from '@mantine/core';
 import { TbEdit } from 'react-icons/tb';
 import { SlOptionsVertical } from 'react-icons/sl';
 import { MdOutlineCalendarMonth } from 'react-icons/md';
@@ -21,15 +21,23 @@ interface BlogsTableProps {
   blogsData: IBlogResponse[];
 }
 
+const ITEMS_PER_PAGE = 20;
+
 export default function BlogsTable({
   blogsData,
 }: BlogsTableProps) {
   const router = useRouter();
+  const [page, setPage] = useState(1);
   const [datePickerOpened, setDatePickerOpened] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | string | null>(null);
   const [deleteModalOpened, setDeleteModalOpened] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedBlogId, setSelectedBlogId] = useState<string | null>(null);
+
+  const totalPages = Math.ceil(blogsData.length / ITEMS_PER_PAGE) || 1;
+  useEffect(() => {
+    setPage((p) => (p > totalPages ? totalPages : p));
+  }, [blogsData.length, totalPages]);
 
   const handleDeleteBlog = async () => {
     if (!selectedBlogId) return;
@@ -119,6 +127,7 @@ export default function BlogsTable({
       cellAlign: 'left',
       header: 'Author',
       render: ({ entity }) => {
+
         return <>{entity?.createdBy?.name}</>;
       },
     },
@@ -163,24 +172,36 @@ export default function BlogsTable({
   ];
 
 
+  const paginatedData = blogsData.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+
   return (
     <>
-      <EntitiesTable<IBlogResponse>
-        data={blogsData}
-        loading={false}
-        columns={columns}
-        classNames={{
-          wrapper: classes.tableWrapper,
-          table: {
-            table: classes.table,
-            thead: classes.thead,
-            tbody: classes.tbody,
-            tr: classes.tr,
-            th: classes.th,
-            td: classes.td,
-          },
-        }}
-      />
+      <Stack gap="md">
+        <EntitiesTable<IBlogResponse>
+          data={paginatedData}
+          loading={false}
+          columns={columns}
+          classNames={{
+            wrapper: classes.tableWrapper,
+            table: {
+              table: classes.table,
+              thead: classes.thead,
+              tbody: classes.tbody,
+              tr: classes.tr,
+              th: classes.th,
+              td: classes.td,
+            },
+          }}
+        />
+        <Group justify="center">
+          <Pagination
+            value={page}
+            onChange={setPage}
+            total={totalPages}
+            size="sm"
+          />
+        </Group>
+      </Stack>
       <Modal
         opened={deleteModalOpened}
         onClose={() => setDeleteModalOpened(false)}

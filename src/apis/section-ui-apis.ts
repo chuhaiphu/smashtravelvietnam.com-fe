@@ -13,103 +13,104 @@ import { api } from "./_base";
 // ==================== SECTION UI CREDENTIALS ROUTES ====================
 
 export async function createSectionUICredentialsApi(data: ICreateSectionUICredentials) {
-  return api<ISectionUICredentialsResponse>('/admin/section-ui/credentials', {
+  return api<ISectionUICredentialsResponse>('/section-ui/admin/credentials', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
 export async function getAllSectionUICredentialsApi() {
-  return api<ISectionUICredentialsResponse[]>('/admin/section-ui/credentials', {
+  return api<ISectionUICredentialsResponse[]>('/section-ui/admin/credentials', {
     method: 'GET',
   });
 }
 
 export async function getDistinctSectionUICredentialsTypesApi() {
-  return api<string[]>('/admin/section-ui/credentials/types/distinct', {
+  return api<string[]>('/section-ui/admin/credentials/types/distinct', {
     method: 'GET',
   });
 }
 
 export async function getSectionUICredentialsByCodeApi(code: string) {
-  return api<ISectionUICredentialsResponse>(`/admin/section-ui/credentials/code/${code}`, {
+  return api<ISectionUICredentialsResponse>(`/section-ui/admin/credentials/code/${code}`, {
     method: 'GET',
   });
 }
 
 export async function getSectionUICredentialsByTypeApi(type: string) {
-  return api<ISectionUICredentialsResponse[]>(`/admin/section-ui/credentials/type/${type}`, {
+  return api<ISectionUICredentialsResponse[]>(`/section-ui/admin/credentials/type/${type}`, {
     method: 'GET',
   });
 }
 
 export async function getSectionUICredentialsByIdApi(id: string) {
-  return api<ISectionUICredentialsResponse>(`/admin/section-ui/credentials/${id}`, {
+  return api<ISectionUICredentialsResponse>(`/section-ui/admin/credentials/${id}`, {
     method: 'GET',
   });
 }
 
 export async function updateSectionUICredentialsApi(id: string, data: IUpdateSectionUICredentials) {
-  return api<ISectionUICredentialsResponse>(`/admin/section-ui/credentials/${id}`, {
+  return api<ISectionUICredentialsResponse>(`/section-ui/admin/credentials/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data),
   });
 }
 
 export async function deleteSectionUICredentialsApi(id: string) {
-  return api<void>(`/admin/section-ui/credentials/${id}`, {
+  return api<void>(`/section-ui/admin/credentials/${id}`, {
     method: 'DELETE',
   });
 }
 
 // ==================== DYNAMIC SECTION UI ROUTES ====================
+  // Public GETs: /section-ui/sections; Admin mutate: /section-ui/admin/sections
 
 export async function createSectionUIApi(data: ICreateDynamicSectionUI) {
-  return api<IDynamicSectionUIResponse>('/admin/section-ui/sections', {
+  return api<IDynamicSectionUIResponse>('/section-ui/admin/sections', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
 export async function getAllSectionUIsApi() {
-  return api<IDynamicSectionUIResponse[]>('/admin/section-ui/sections', {
+  return api<IDynamicSectionUIResponse[]>('/section-ui/sections', {
     method: 'GET',
   });
 }
 
 export async function getUsedSectionUIPositionsApi() {
-  return api<number[]>('/admin/section-ui/sections/positions/used', {
+  return api<number[]>('/section-ui/sections/positions/used', {
     method: 'GET',
   });
 }
 
 export async function getSectionUIByPositionApi(position: number) {
-  return api<IDynamicSectionUIResponse>(`/admin/section-ui/sections/position/${position}`, {
+  return api<IDynamicSectionUIResponse>(`/section-ui/sections/position/${position}`, {
     method: 'GET',
   });
 }
 
 export async function getSectionUIsByTypeApi(type: string) {
-  return api<IDynamicSectionUIResponse[]>(`/admin/section-ui/sections/type/${type}`, {
+  return api<IDynamicSectionUIResponse[]>(`/section-ui/sections/type/${type}`, {
     method: 'GET',
   });
 }
 
 export async function getSectionUIByIdApi(id: string) {
-  return api<IDynamicSectionUIResponse>(`/admin/section-ui/sections/${id}`, {
+  return api<IDynamicSectionUIResponse>(`/section-ui/sections/${id}`, {
     method: 'GET',
   });
 }
 
 export async function updateSectionUIApi(id: string, data: IUpdateDynamicSectionUI) {
-  return api<IDynamicSectionUIResponse>(`/admin/section-ui/sections/${id}`, {
+  return api<IDynamicSectionUIResponse>(`/section-ui/admin/sections/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data),
   });
 }
 
 export async function deleteSectionUIApi(id: string) {
-  return api<void>(`/admin/section-ui/sections/${id}`, {
+  return api<void>(`/section-ui/admin/sections/${id}`, {
     method: 'DELETE',
   });
 }

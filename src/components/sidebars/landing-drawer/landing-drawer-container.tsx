@@ -58,7 +58,7 @@ export default function LandingDrawerContainer({
     return "/";
   };
 
-  const renderMenuItem = (menu: IMenuResponse, depth: number = 0): React.ReactNode => {
+  const renderMenuItem = (menu: IMenuResponse, depth: number = 0, isRootChildren: boolean): React.ReactNode => {
     const url = getMenuUrl(menu);
     const hasChildren = menu.children && menu.children.length > 0;
     const isCustomUrl = menu.targetType === "custom-url" && menu.customUrl && menu.customUrl !== "";
@@ -76,7 +76,7 @@ export default function LandingDrawerContainer({
             }}
             className={`${classes.menuLink} ${classes.menuItem}`}
           >
-            <span className={!hasChildren ? classes.menuLabel : classes.menuLabelParent}>
+            <span className={!isRootChildren ? classes.menuLabel : classes.menuLabelParent}>
               {menu.title}
             </span>
           </a>
@@ -96,7 +96,7 @@ export default function LandingDrawerContainer({
         )}
         {hasChildren && (
           <Stack gap={0}>
-            {menu.children?.map((child) => renderMenuItem(child, depth + 1))}
+            {menu.children?.map((child) => renderMenuItem(child, depth + 1, false))}
           </Stack>
         )}
       </div>
@@ -108,7 +108,7 @@ export default function LandingDrawerContainer({
     if (!root || !root.children || root.children.length === 0) {
       return null;
     }
-    return root.children.map((menu) => renderMenuItem(menu, 0));
+    return root.children.map((menu) => renderMenuItem(menu, 0, true));
   };
 
   return (

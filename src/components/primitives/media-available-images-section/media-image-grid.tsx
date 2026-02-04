@@ -17,14 +17,12 @@ export default function MediaImageGrid({ images }: MediaImageGridProps) {
   const pathSegments = pathname.split('/');
   const isDetailPage = pathSegments.length === 5 && pathSegments[3] === 'images';
   const selectedImageId = isDetailPage ? pathSegments[4] : null;
-  console.log(selectedImageId)
   const handleImageClick = (imageId: string) => {
     router.push(`/adminup/media/images/${imageId}` as Route);
   };
 
   return (
     <MediaGrid
-      itemsPerPage={16}
       images={images as unknown as IMedia[]}
       selectedImageId={selectedImageId}
       onImageClick={handleImageClick}

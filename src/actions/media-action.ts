@@ -94,7 +94,6 @@ export async function deleteMediaAction(
       domainIndex = pathParts.findIndex(part => part === process.env.SMASH_API_URL);
     }
     const relativePath = pathParts.slice(domainIndex + 1).join('/');
-    console.log(relativePath)
     if (relativePath) {
       deleteLocalImageAction(relativePath);
     }

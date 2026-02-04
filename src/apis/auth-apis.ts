@@ -29,3 +29,15 @@ export async function getMeApi() {
     method: 'GET',
   });
 }
+
+export async function resetPasswordForUserApi(targetUserId: string) {
+  return api<void>(`/auth/reset-password/${targetUserId}`, {
+    method: 'POST',
+  });
+}
+
+export async function resetMyPasswordApi() {
+  return api<void>('/auth/reset-password', {
+    method: 'POST',
+  });
+}

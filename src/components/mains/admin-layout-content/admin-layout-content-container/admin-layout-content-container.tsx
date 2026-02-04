@@ -26,7 +26,7 @@ export default function AdminLayoutContentContainer({ children, userData }: Admi
         collapsed: { mobile: collapsed }
       }}
     >
-      <DashboardSidebar />
+      <DashboardSidebar userData={userData} />
       <DashboardHeader userData={userData} />
       <AppShellMain miw={1080} classNames={{ main: classes.mainRoot }}>
         {children}

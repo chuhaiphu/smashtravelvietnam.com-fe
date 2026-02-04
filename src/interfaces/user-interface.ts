@@ -9,6 +9,7 @@ export interface IUserResponse {
   email: string;
   name: string | null;
   role: string;
+  createdAt?: string;
 }
 
 export interface IUpdatePassword {

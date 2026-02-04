@@ -14,7 +14,7 @@ interface SmtpPageContentContainerProps {
   userData: IUserResponse;
 }
 
-export default function SmtpPageContentContainer({ smtpConfig, userData }: SmtpPageContentContainerProps) {
+export default function SmtpPageContentContainer({ smtpConfig }: SmtpPageContentContainerProps) {
   const [host, setHost] = useState(smtpConfig?.host || '');
   const [port, setPort] = useState<number | string>(smtpConfig?.port || 587);
   const [username, setUsername] = useState(smtpConfig?.username || '');
@@ -46,7 +46,6 @@ export default function SmtpPageContentContainer({ smtpConfig, userData }: SmtpP
           fromName,
           fromEmail,
           receiveEmail: receiveEmail || null,
-          userId: userData.id,
         };
 
         if (password && password.length > 0) {
@@ -70,7 +69,6 @@ export default function SmtpPageContentContainer({ smtpConfig, userData }: SmtpP
           fromName,
           fromEmail,
           receiveEmail: receiveEmail || null,
-          userId: userData.id,
         };
         response = await saveSmtpConfigAction(createPayload);
       }

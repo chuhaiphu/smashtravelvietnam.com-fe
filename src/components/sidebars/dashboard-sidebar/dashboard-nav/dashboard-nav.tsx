@@ -14,8 +14,7 @@ export function DashboardNav({ navItems }: Readonly<{ navItems: NavItemProps[] }
   const pathName = usePathname();
   const { close } = useLayoutSiderStore();
 
-  const [isParentItemOpened, setIsParentItemOpened] = useState<Record<string, boolean>>({});
-
+  const [openedItems, setOpenedItems] = useState<Record<string, boolean>>({});
   const navItemsRef = useRef(navItems);
 
   useEffect(() => {
@@ -23,46 +22,48 @@ export function DashboardNav({ navItems }: Readonly<{ navItems: NavItemProps[] }
   }, [navItems]);
 
   useEffect(() => {
-    setIsParentItemOpened((prev) => {
+    setOpenedItems((prev) => {
       const next = { ...prev };
       navItemsRef.current.forEach((item) => {
-        if (item.childrens?.some(c => c.path === pathName) || item.defaultOpened) {
+        if (item.childrens?.some((c) => c.path === pathName) || item.defaultOpened) {
           next[item.key] = true;
         }
-      })
+      });
       return next;
     });
   }, [pathName]);
 
-  const renderNavItem = (item: NavItemProps, isChild: boolean = false) => {
+  const handleToggle = (key: string, opened: boolean) => {
+    setOpenedItems((prev) => ({ ...prev, [key]: opened }));
+  };
+
+  const renderNavItem = (item: NavItemProps, isChild = false) => {
     if (item.key === 'spacer') {
-      return <div key="spacer" className={classes.navSpacer} />;
+      return <div key="spacer" className={classes.spacer} />;
     }
 
-    // Handle parent items
+    // Parent with children
     if (item.childrens) {
-      const hasChildrenActived = item.childrens.some((child) => isPathActive(pathName, child.path!));
+      const isActive = item.childrens.some((child) => isPathActive(pathName, child.path!));
+      const isOpened = openedItems[item.key];
+
       return (
         <NavLink
           key={item.key}
           label={item.label}
-          rightSection={<div className={classes.rightSectionIconWrapper}>
-            <FaChevronUp size={16} className={classes.rightSectionIcon} />
-          </div>}
+          opened={isOpened}
+          onChange={(opened) => handleToggle(item.key, opened)}
+          rightSection={
+            <div className={classes.iconWrapper}>
+              <FaChevronUp size={16} />
+            </div>
+          }
           classNames={{
-            root: `
-            ${classes.parentNavItem} 
-            ${isParentItemOpened[item.key] ? classes.opened : ''} 
-            ${hasChildrenActived ? classes.actived : ''}
-            `,
-            children: classes.childrenNavGroup,
-            label: classes.parentNavLabel,
-            body: classes.parentNavBody,
-            section: classes.parentNavSection,
-          }}
-          opened={isParentItemOpened[item.key]}
-          onChange={(opened) => {
-            setIsParentItemOpened((prev) => ({ ...prev, [item.key]: opened }));
+            root: `${classes.item} ${isOpened ? classes.opened : ''} ${isActive ? classes.active : ''}`,
+            children: classes.childGroup,
+            label: classes.label,
+            body: classes.body,
+            section: classes.section,
           }}
         >
           {item.childrens.map((child) => renderNavItem(child, true))}
@@ -70,13 +71,12 @@ export function DashboardNav({ navItems }: Readonly<{ navItems: NavItemProps[] }
       );
     }
 
-    // Handle sub items with path
+    // Item with path
     if (item.path) {
-      const isActived = isPathActive(pathName, item.path, item.isRoot);
-      const displayIcon = isActived && item.rightSectionActive
-        ? item.rightSectionActive
-        : item.rightSection;
+      const isActive = isPathActive(pathName, item.path, item.isRoot);
+      const icon = isActive && item.rightSectionActive ? item.rightSectionActive : item.rightSection;
 
+      // Child item
       if (isChild) {
         return (
           <NavLink
@@ -85,21 +85,19 @@ export function DashboardNav({ navItems }: Readonly<{ navItems: NavItemProps[] }
             component={Link}
             href={item.path}
             onClick={close}
-            rightSection={
-              <div className={classes.rightSectionIconWrapper}>
-                {displayIcon}
-              </div>
-            }
+            active={isActive}
+            rightSection={<div className={classes.iconWrapper}>{icon}</div>}
             classNames={{
-              label: classes.childrenNavLabel,
-              body: classes.childrenNavBody,
-              root: `${classes.childrenNavItem} ${isActived ? classes.actived : ''}`,
-              section: classes.childrenNavSection,
+              root: `${classes.childItem} ${isActive ? classes.active : ''}`,
+              label: classes.label,
+              body: classes.body,
+              section: classes.section,
             }}
-            active={isActived}
           />
         );
       }
+
+      // Parent item without children
       return (
         <NavLink
           key={item.key}
@@ -107,27 +105,20 @@ export function DashboardNav({ navItems }: Readonly<{ navItems: NavItemProps[] }
           component={Link}
           href={item.path}
           onClick={close}
+          rightSection={<div className={classes.iconWrapper}>{icon}</div>}
           classNames={{
-            root: `
-            ${classes.parentNavItem}
-            ${classes.parentNavItemNoChildren} 
-            ${isActived ? classes.actived : ''}
-            `,
-            label: classes.parentNavLabel,
-            body: classes.parentNavBody,
-            section: classes.parentNavSection,
-          }}
-          rightSection={<div className={classes.rightSectionIconWrapper}>{displayIcon}</div>}
-          onChange={(opened) => {
-            setIsParentItemOpened((prev) => ({ ...prev, [item.key]: opened }));
+            root: `${classes.item} ${classes.single} ${isActive ? classes.active : ''}`,
+            label: classes.label,
+            body: classes.body,
+            section: classes.section,
           }}
         />
       );
     }
 
-    // Handle items without path (just display)
+    // Item without path (display only)
     return <NavLink key={item.key} label={item.label} rightSection={item.rightSection} />;
   };
 
-  return <div className={classes.navRoot}>{navItems.map((item) => renderNavItem(item))}</div>;
+  return <div className={classes.root}>{navItems.map((item) => renderNavItem(item))}</div>;
 }

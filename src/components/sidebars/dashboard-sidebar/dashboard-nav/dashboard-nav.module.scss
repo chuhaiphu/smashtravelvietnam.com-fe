@@ -1,137 +1,100 @@
 @use '@/app/mixins' as *;
 
-.navRoot {
-  padding: 0;
+// =============================================
+// Variables
+// =============================================
+$nav-spacing: 0.5rem;
+$nav-padding: 0.5rem 0.375rem;
+$nav-font-size: 1.1rem;
+$group-gap: 0.5rem;
 
-  .rightSectionIconWrapper {
-    @include flex-center;
-    width: 2rem;
-
-    >* {
-      color: white;
-    }
-
-    .rightSectionIcon {
-      color: white;
-    }
-  }
-
+// =============================================
+// Root
+// =============================================
+.root {
+  padding: 1rem 0 0 0;
 }
 
 // =============================================
-// Parent Nav Items
+// Shared Styles
 // =============================================
-.parentNavItem {
-  margin: 0.75rem 0 0.5rem 0;
-  border-radius: 0.5rem;
-  padding: 0.625rem 0.375rem;
+.iconWrapper {
+  @include flex-center;
+  width: 2rem;
+  color: white;
+}
 
-  &.actived {
-    background-color: transparent;
+.label {
+  color: white;
+  font-size: $nav-font-size;
+}
 
-    .rightSectionIconWrapper {
-      >* {
-        color: var(--vinaup-yellow);
-      }
-    }
-  }
+.body {
+  text-align: right;
+}
+
+.section {
+  margin-left: 0;
+}
+
+// =============================================
+// Nav Item (Parent Level)
+// =============================================
+.item {
+  margin-top: $group-gap;
+  margin-bottom: $nav-spacing;
+  padding: $nav-padding;
+  background-color: transparent;
 
   &:hover {
     background-color: transparent;
   }
 
-  .parentNavBody {
-    text-align: right;
-  }
-
-  .parentNavLabel {
-    color: white;
-    font-size: 1.1rem;
-  }
-
-  .parentNavSection {
-    margin-left: 0rem;
-
-    &:last-of-type {
-      transform: none;
-    }
-  }
-
-  // Parent item opened state
-  &.opened {
-    .parentNavSection:first-of-type {
-      transform: rotateX(180deg);
-    }
-  }
-}
-
-.parentNavItemNoChildren {
-  &.actived {
-    background-color: transparent;
-
-    .rightSectionIconWrapper {
-      >* {
-        color: var(--vinaup-yellow);
-      }
-    }
-
-    .parentNavLabel {
+  &.active {
+    .iconWrapper {
       color: var(--vinaup-yellow);
     }
   }
+
+  // Has children - toggle icon rotation
+  &.opened .section:first-of-type {
+    transform: rotateX(180deg);
+  }
+
+  // No children - highlight label when active
+  &.single.active .label {
+    color: var(--vinaup-yellow);
+  }
 }
 
 // =============================================
-// Children Nav Group
+// Children Group
 // =============================================
-.childrenNavGroup {
+.childGroup {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: $nav-spacing;
+  padding-bottom: $nav-spacing;
 }
 
 // =============================================
-// Child Nav Items
+// Child Item
 // =============================================
-.childrenNavItem {
-  padding: 0.25rem 0.375rem 0.375rem 0.375rem;
-  border-radius: 0.5rem;
-
-  &:first-of-type {
-    padding-top: 0;
-  }
-
-  &:last-of-type {
-    padding-bottom: 1rem;
-  }
+.childItem {
+  padding: $nav-padding;
+  background-color: transparent;
 
   &:hover {
     background-color: transparent;
   }
 
-  .childrenNavBody {
-    text-align: right;
-  }
-
-  .childrenNavLabel {
-    color: white;
-    font-size: 1.1rem;
-  }
-
-  .childrenNavSection {
-    margin-left: 0rem;
-  }
-
-  &.actived {
-    background-color: transparent;
-
-    .childrenNavLabel {
+  &.active {
+    .label {
       color: var(--vinaup-yellow);
     }
 
-    .rightSectionIcon {
+    .iconWrapper {
       color: var(--vinaup-yellow);
-      opacity: 100%;
     }
   }
 }

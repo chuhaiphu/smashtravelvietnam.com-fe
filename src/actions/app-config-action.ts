@@ -5,13 +5,13 @@ import { ActionResponse } from '@/interfaces/_base-interface';
 import { IAppConfigResponse, IUpdateAppConfig } from '@/interfaces/app-config-interface';
 import { executeApi } from '@/actions/_base';
 import {
-  getAppConfigAdminApi,
+  getPublicAppConfigApi,
   updateAppConfigApi,
 } from '@/apis/app-config-apis';
 
 export async function getAppConfigAction(): Promise<ActionResponse<IAppConfigResponse>> {
   return executeApi(
-    async () => getAppConfigAdminApi()
+    async () => getPublicAppConfigApi()
   );
 }
 

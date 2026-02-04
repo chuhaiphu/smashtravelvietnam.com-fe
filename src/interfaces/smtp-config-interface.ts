@@ -23,7 +23,6 @@ export interface ICreateSmtpConfig {
   fromName: string;
   fromEmail: string;
   receiveEmail?: string | null;
-  userId: string;
 }
 
 export type IUpdateSmtpConfig = Partial<ICreateSmtpConfig>

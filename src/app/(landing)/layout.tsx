@@ -13,6 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
   try {
     const configResponse = await getAppConfigAction();
     const config = configResponse.data;
+
     return {
       title: config?.websiteTitle,
       description: config?.websiteDescription,

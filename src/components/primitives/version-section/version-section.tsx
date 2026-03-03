@@ -10,7 +10,7 @@ export function VersionSection() {
     <div className={classes.versionSectionRoot}>
       <Group gap={8}>
         <Link href="https://vinaup.net" target="_blank" rel="noopener noreferrer" className={classes.versionText}>
-          {version}VinaUp
+          {version}VinaUp 1.1
         </Link>
         <LogoAlternative />
       </Group>

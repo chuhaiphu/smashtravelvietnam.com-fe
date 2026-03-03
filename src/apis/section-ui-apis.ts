@@ -1,18 +1,20 @@
 import {
   ICreateSectionUICredentials,
   ISectionUICredentialsResponse,
-  IUpdateSectionUICredentials
-} from "@/interfaces/section-ui-credentials-interface";
+  IUpdateSectionUICredentials,
+} from '@/interfaces/section-ui-credentials-interface';
 import {
   ICreateDynamicSectionUI,
   IDynamicSectionUIResponse,
-  IUpdateDynamicSectionUI
-} from "@/interfaces/dynamic-section-ui-interface";
-import { api } from "./_base";
+  IUpdateDynamicSectionUI,
+} from '@/interfaces/dynamic-section-ui-interface';
+import { api } from './_base';
 
 // ==================== SECTION UI CREDENTIALS ROUTES ====================
 
-export async function createSectionUICredentialsApi(data: ICreateSectionUICredentials) {
+export async function createSectionUICredentialsApi(
+  data: ICreateSectionUICredentials
+) {
   return api<ISectionUICredentialsResponse>('/section-ui/admin/credentials', {
     method: 'POST',
     body: JSON.stringify(data),
@@ -25,22 +27,13 @@ export async function getAllSectionUICredentialsApi() {
   });
 }
 
-export async function getDistinctSectionUICredentialsTypesApi() {
-  return api<string[]>('/section-ui/admin/credentials/types/distinct', {
-    method: 'GET',
-  });
-}
-
 export async function getSectionUICredentialsByCodeApi(code: string) {
-  return api<ISectionUICredentialsResponse>(`/section-ui/admin/credentials/code/${code}`, {
-    method: 'GET',
-  });
-}
-
-export async function getSectionUICredentialsByTypeApi(type: string) {
-  return api<ISectionUICredentialsResponse[]>(`/section-ui/admin/credentials/type/${type}`, {
-    method: 'GET',
-  });
+  return api<ISectionUICredentialsResponse>(
+    `/section-ui/admin/credentials/code/${code}`,
+    {
+      method: 'GET',
+    }
+  );
 }
 
 export async function getSectionUICredentialsByIdApi(id: string) {
@@ -49,7 +42,10 @@ export async function getSectionUICredentialsByIdApi(id: string) {
   });
 }
 
-export async function updateSectionUICredentialsApi(id: string, data: IUpdateSectionUICredentials) {
+export async function updateSectionUICredentialsApi(
+  id: string,
+  data: IUpdateSectionUICredentials
+) {
   return api<ISectionUICredentialsResponse>(`/section-ui/admin/credentials/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data),
@@ -63,7 +59,7 @@ export async function deleteSectionUICredentialsApi(id: string) {
 }
 
 // ==================== DYNAMIC SECTION UI ROUTES ====================
-  // Public GETs: /section-ui/sections; Admin mutate: /section-ui/admin/sections
+// Public GETs: /section-ui/sections; Admin mutate: /section-ui/admin/sections
 
 export async function createSectionUIApi(data: ICreateDynamicSectionUI) {
   return api<IDynamicSectionUIResponse>('/section-ui/admin/sections', {
@@ -85,15 +81,12 @@ export async function getUsedSectionUIPositionsApi() {
 }
 
 export async function getSectionUIByPositionApi(position: number) {
-  return api<IDynamicSectionUIResponse>(`/section-ui/sections/position/${position}`, {
-    method: 'GET',
-  });
-}
-
-export async function getSectionUIsByTypeApi(type: string) {
-  return api<IDynamicSectionUIResponse[]>(`/section-ui/sections/type/${type}`, {
-    method: 'GET',
-  });
+  return api<IDynamicSectionUIResponse>(
+    `/section-ui/sections/position/${position}`,
+    {
+      method: 'GET',
+    }
+  );
 }
 
 export async function getSectionUIByIdApi(id: string) {
@@ -102,7 +95,10 @@ export async function getSectionUIByIdApi(id: string) {
   });
 }
 
-export async function updateSectionUIApi(id: string, data: IUpdateDynamicSectionUI) {
+export async function updateSectionUIApi(
+  id: string,
+  data: IUpdateDynamicSectionUI
+) {
   return api<IDynamicSectionUIResponse>(`/section-ui/admin/sections/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data),

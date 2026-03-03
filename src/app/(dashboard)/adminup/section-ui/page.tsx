@@ -1,5 +1,10 @@
-export default function AdminSectionUIPage() {
+import AdminSectionUIDetailPageContent from '@/components/mains/admin-section-ui-detail-page-content/admin-section-ui-detail-page-content';
+import { Suspense } from 'react';
+
+export default async function AdminSectionUIPage() {
   return (
-    <div></div>
+    <Suspense>
+      <AdminSectionUIDetailPageContent />
+    </Suspense>
   );
 }

@@ -1,19 +1,24 @@
-import { getBlogByEndpointAction } from "@/actions/blog-action";
-import { Grid, GridCol, Group, Paper, Stack, Text } from "@mantine/core";
-import LocationIcon from "@/components/icons/vinaup-location-icon";
-import classes from './page.module.scss'
-import { CarouselSlide, LandingCarouselV1 } from "@/components/primitives/landing-carousel/v1/landing-carousel-v1";
-import VideoSection from "@/components/primitives/video-section/video-section";
-import SocialTab from "@/components/primitives/social-tab/social-tab";
-import IncrementView from "@/components/primitives/social-tab/increment-view";
-import { RiCheckDoubleFill, RiPriceTag3Line } from "react-icons/ri";
-import { SERVICE_ITEMS } from "@/constants";
-import { notFound } from "next/navigation";
-import type { Metadata } from "next";
-import Image from "next/image";
+import { getBlogByEndpointAction } from '@/actions/blog-action';
+import { Grid, GridCol, Group, Paper, Stack, Text } from '@mantine/core';
+import LocationIcon from '@/components/icons/vinaup-location-icon';
+import classes from './page.module.scss';
+import {
+  CarouselSlide,
+  LandingCarousel,
+} from '@/components/primitives/landing-carousel/landing-carousel';
+import VideoSection from '@/components/primitives/video-section/video-section';
+import SocialTab from '@/components/primitives/social-tab/social-tab';
+import IncrementView from '@/components/primitives/social-tab/increment-view';
+import { RiCheckDoubleFill, RiPriceTag3Line } from 'react-icons/ri';
+import { SERVICE_ITEMS } from '@/constants';
+import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
+import Image from 'next/image';
 
-export async function generateMetadata({ params }: {
-  params: Promise<{ endpoint: string }>
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ endpoint: string }>;
 }): Promise<Metadata> {
   const { endpoint } = await params;
   const blogResponse = await getBlogByEndpointAction(endpoint);
@@ -43,10 +48,11 @@ export async function generateMetadata({ params }: {
   };
 }
 
-export default async function BlogDetailPage({ params }: {
-  params: Promise<{ endpoint: string }>
+export default async function BlogDetailPage({
+  params,
+}: {
+  params: Promise<{ endpoint: string }>;
 }) {
-
   const { endpoint } = await params;
   const blogResponse = await getBlogByEndpointAction(endpoint);
 
@@ -54,39 +60,43 @@ export default async function BlogDetailPage({ params }: {
     notFound();
   }
   const blogData = blogResponse.data;
-  const additionalImageSlides = blogData.additionalImageUrls.map((url) => ({
-    item: url
-  }));
+  const additionalImageSlides: CarouselSlide[] = blogData.additionalImageUrls.map(
+    (url) => ({
+      imageUrl: url,
+    })
+  );
 
   const staticServiceSlides: CarouselSlide[] = SERVICE_ITEMS.map((item) => ({
-    item: '',
-    type: 'STATIC_ITEM',
-    staticItem: {
-      imageUrl: item.imageUrl,
-      name: item.name,
-      endpoint: item.endpoint
-    }
+    imageUrl: item.imageUrl,
+    titleMain: item.name,
+    href: item.endpoint,
   }));
 
   const renderAdditionalImagesCarousel = () => {
     if (additionalImageSlides.length === 0) {
-      return <></>
+      return <></>;
+    } else {
+      return <LandingCarousel slides={additionalImageSlides} height={480} />;
     }
-    else {
-      return <LandingCarouselV1 slides={additionalImageSlides} height={480} />
-    }
-  }
+  };
 
-  const renderVideoSection = (videoUrl?: string, thumbnailUrl?: string, title?: string) => {
+  const renderVideoSection = (
+    videoUrl?: string,
+    thumbnailUrl?: string,
+    title?: string
+  ) => {
     if (!videoUrl) {
-      return <></>
+      return <></>;
     }
     return (
-      <VideoSection url={videoUrl}
+      <VideoSection
+        url={videoUrl}
         title={title}
-        height={480} thumbnailUrl={thumbnailUrl || undefined} />
+        height={480}
+        thumbnailUrl={thumbnailUrl || undefined}
+      />
     );
-  }
+  };
 
   // const renderHTMLDescription = (htmlDescription: string | undefined | null) => {
   //   if (!htmlDescription || htmlDescription.trim() === '' || htmlDescription.trim() === '<p></p>') {
@@ -101,8 +111,12 @@ export default async function BlogDetailPage({ params }: {
   // }
 
   const renderHTMLContent = (htmlContent: string | undefined | null) => {
-    if (!htmlContent || htmlContent.trim() === '' || htmlContent.trim() === '<p></p>') {
-      return <></>
+    if (
+      !htmlContent ||
+      htmlContent.trim() === '' ||
+      htmlContent.trim() === '<p></p>'
+    ) {
+      return <></>;
     }
     return (
       <Stack gap={2}>
@@ -110,18 +124,19 @@ export default async function BlogDetailPage({ params }: {
         <div
           dangerouslySetInnerHTML={{ __html: htmlContent }}
           className={classes.htmlContent}
-        >
-        </div>
+        ></div>
       </Stack>
     );
-  }
+  };
 
   const renderDestinationAndCategory = () => {
-    const hasDestinations = blogData.destinations && blogData.destinations.length > 0;
+    const hasDestinations =
+      blogData.destinations && blogData.destinations.length > 0;
 
-    const categories = blogData.blogCategoryBlogs
-      ?.map(bcb => bcb.blogCategory?.title)
-      .filter(Boolean) || [];
+    const categories =
+      blogData.blogCategoryBlogs
+        ?.map((bcb) => bcb.blogCategory?.title)
+        .filter(Boolean) || [];
     const hasCategories = categories.length > 0;
 
     if (!hasDestinations && !hasCategories) {
@@ -133,11 +148,7 @@ export default async function BlogDetailPage({ params }: {
         {hasDestinations && (
           <Group gap={4}>
             <LocationIcon size={20} fill="#00E1FF" />
-            <Text
-              fz={16}
-              c={'white'}
-              td="underline"
-            >
+            <Text fz={16} c={'white'} td="underline">
               {blogData.destinations.join(', ')}
             </Text>
           </Group>
@@ -145,11 +156,7 @@ export default async function BlogDetailPage({ params }: {
         {hasCategories && (
           <Group gap={4}>
             <RiPriceTag3Line size={20} color="#00E1FF" />
-            <Text
-              fz={16}
-              c={'white'}
-              td="underline"
-            >
+            <Text fz={16} c={'white'} td="underline">
               {categories.join('; ')}
             </Text>
           </Group>
@@ -163,14 +170,21 @@ export default async function BlogDetailPage({ params }: {
   return (
     <div className={classes.blogDetailPage}>
       <IncrementView blogId={blogData.id} />
-      <Grid mb={'lg'} classNames={{
-        root: classes.topInfo
-      }}>
+      <Grid
+        mb={'lg'}
+        classNames={{
+          root: classes.topInfo,
+        }}
+      >
         <GridCol span={12}>
           <Stack gap={'sm'}>
-            <Text c={'#00E1FF'} component="h2" classNames={{
-              root: classes.blogTitle
-            }}>
+            <Text
+              c={'#00E1FF'}
+              component="h2"
+              classNames={{
+                root: classes.blogTitle,
+              }}
+            >
               {blogData.title}
             </Text>
             <SocialTab
@@ -182,33 +196,44 @@ export default async function BlogDetailPage({ params }: {
           </Stack>
         </GridCol>
       </Grid>
-      <Grid gutter={'xl'} classNames={{
-        root: classes.mainContent
-      }}>
-        <GridCol span={{ base: 12, sm: 12, md: 8, lg: 8, xl: 8 }} classNames={{
-          col: classes.leftCol
-        }}>
-          {blogData.additionalImagesPosition === 'top' && renderAdditionalImagesCarousel()}
+      <Grid
+        gutter={'xl'}
+        classNames={{
+          root: classes.mainContent,
+        }}
+      >
+        <GridCol
+          span={{ base: 12, sm: 12, md: 8, lg: 8, xl: 8 }}
+          classNames={{
+            col: classes.leftCol,
+          }}
+        >
+          {blogData.additionalImagesPosition === 'top' &&
+            renderAdditionalImagesCarousel()}
           {blogData.videoPosition === 'top' &&
-            renderVideoSection(blogData.videoUrl || undefined,
+            renderVideoSection(
+              blogData.videoUrl || undefined,
               blogData.videoThumbnailUrl || undefined,
               blogData.title
-            )
-          }
+            )}
           {/* {renderHTMLDescription(blogData.description)} */}
           {renderHTMLContent(blogData.content)}
-          {blogData.additionalImagesPosition === 'bottom' && renderAdditionalImagesCarousel()}
+          {blogData.additionalImagesPosition === 'bottom' &&
+            renderAdditionalImagesCarousel()}
           {blogData.videoPosition === 'bottom' &&
-            renderVideoSection(blogData.videoUrl || undefined,
+            renderVideoSection(
+              blogData.videoUrl || undefined,
               blogData.videoThumbnailUrl || undefined,
               blogData.title
-            )
-          }
+            )}
           {renderDestinationAndCategory()}
         </GridCol>
-        <GridCol span={{ base: 12, sm: 12, md: 4, lg: 4, xl: 4 }} classNames={{
-          col: classes.rightCol
-        }}>
+        <GridCol
+          span={{ base: 12, sm: 12, md: 4, lg: 4, xl: 4 }}
+          classNames={{
+            col: classes.rightCol,
+          }}
+        >
           <div className={classes.mainImageWrapper}>
             <Image
               className={classes.mainImage}
@@ -217,11 +242,25 @@ export default async function BlogDetailPage({ params }: {
               fill
             />
           </div>
-          <Paper shadow="0" bg={'transparent'} mb={'sm'} pt={'sm'} pb={'sm'} pl={'md'} pr={'md'} classNames={{
-            root: classes.whyBox
-          }}>
+          <Paper
+            shadow="0"
+            bg={'transparent'}
+            mb={'sm'}
+            pt={'sm'}
+            pb={'sm'}
+            pl={'md'}
+            pr={'md'}
+            classNames={{
+              root: classes.whyBox,
+            }}
+          >
             <Stack gap={'sm'}>
-              <Text classNames={{ root: classes.title }} c={'#FCBE11'} fz={24} fw={'bold'}>
+              <Text
+                classNames={{ root: classes.title }}
+                c={'#FCBE11'}
+                fz={24}
+                fw={'bold'}
+              >
                 Why you should choose us?
               </Text>
               <Group wrap="nowrap">
@@ -244,10 +283,14 @@ export default async function BlogDetailPage({ params }: {
               </Group>
             </Stack>
           </Paper>
-          <LandingCarouselV1 slides={staticServiceSlides} height={400} orientation="vertical" loop={true} />
+          <LandingCarousel
+            slides={staticServiceSlides}
+            height={400}
+            orientation="vertical"
+            loop={true}
+          />
         </GridCol>
       </Grid>
-    </div >
-  )
+    </div>
+  );
 }
-

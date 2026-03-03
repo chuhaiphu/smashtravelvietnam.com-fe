@@ -1,22 +1,16 @@
-import { SECTION_KEYS } from "./section-key";
+import { SECTION_KEYS } from './section-key';
 
 export const SECTION_METADATA = {
   [SECTION_KEYS.LANDING_CAROUSEL_V1]: {
-    name: "Banner",
-    type: "banner",
+    name: 'Banner',
     properties: {
       slides: {
         titleMain: null,
         titleHighlight: null,
         subTitle: null,
-        item: null,
+        imageUrl: null,
         alt: null,
-        type: null,
-        staticItem: {
-          name: null,
-          imageUrl: null,
-          endpoint: null,
-        },
+        href: null,
       },
       showText: null,
       height: null,

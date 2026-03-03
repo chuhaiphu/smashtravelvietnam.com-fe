@@ -1,5 +1,5 @@
-import { getSectionUIByPositionAction } from "@/actions/section-ui-action";
-import { SECTION_REGISTRY } from "./section-registry";
+import { getSectionUIByPositionAction } from '@/actions/section-ui-action';
+import { SECTION_REGISTRY } from './section-registry';
 
 interface DynamicSectionProps {
   position: number;
@@ -13,6 +13,7 @@ export default async function DynamicSection({ position }: DynamicSectionProps) 
   }
 
   const dynamicSectionUI = response.data;
+
   // Use componentKey (immutable) for component lookup
   const componentKey = dynamicSectionUI.sectionUICredentials?.componentKey;
 

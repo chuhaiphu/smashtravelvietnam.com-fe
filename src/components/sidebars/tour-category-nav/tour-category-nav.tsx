@@ -1,18 +1,20 @@
 'use client';
 
-import React, { useMemo } from "react";
-import { Paper, Stack, Group, Text } from "@mantine/core";
-import { useParams, useRouter } from "next/navigation";
-import { Route } from "next";
-import classes from "./tour-category-nav.module.scss";
-import { ITourCategoryResponse } from "@/interfaces/tour-category-interface";
-import { TreeManager } from "@/helpers/tree-manager-helper";
+import React, { useMemo } from 'react';
+import { Paper, Stack, Group, Text } from '@mantine/core';
+import { useParams, useRouter } from 'next/navigation';
+import { Route } from 'next';
+import classes from './tour-category-nav.module.scss';
+import { ITourCategoryResponse } from '@/interfaces/tour-category-interface';
+import { TreeManager } from '@/utils/tree-manager';
 
 interface TourCategoryNavProps {
   tourCategoriesData: ITourCategoryResponse[];
 }
 
-export default function TourCategoryNav({ tourCategoriesData }: TourCategoryNavProps) {
+export default function TourCategoryNav({
+  tourCategoriesData,
+}: TourCategoryNavProps) {
   const router = useRouter();
   const { id } = useParams();
 
@@ -32,12 +34,13 @@ export default function TourCategoryNav({ tourCategoriesData }: TourCategoryNavP
     if (!root || !root.children) {
       return null;
     }
-    return root.children?.map(child =>
-      renderTourCategoryBar(child, 0)
-    );
+    return root.children?.map((child) => renderTourCategoryBar(child, 0));
   };
 
-  const renderTourCategoryBar = (tourCategory: ITourCategoryResponse, depth: number = 0): React.ReactNode => {
+  const renderTourCategoryBar = (
+    tourCategory: ITourCategoryResponse,
+    depth: number = 0
+  ): React.ReactNode => {
     return (
       <React.Fragment key={tourCategory.id}>
         <Stack
@@ -47,14 +50,20 @@ export default function TourCategoryNav({ tourCategoriesData }: TourCategoryNavP
           bdrs={'sm'}
           p={'8px'}
           ml={depth * 16}
-          onClick={() => { router.push(`/adminup/tour-category/${tourCategory.id}` as Route); }}
+          onClick={() => {
+            router.push(`/adminup/tour-category/${tourCategory.id}` as Route);
+          }}
         >
           <Group key={tourCategory.id}>
-            <Text fw={isActiveTourCategory(tourCategory.id) ? 'bold' : 'normal'}>{tourCategory.title}</Text>
+            <Text fw={isActiveTourCategory(tourCategory.id) ? 'bold' : 'normal'}>
+              {tourCategory.title}
+            </Text>
           </Group>
         </Stack>
         <>
-          {tourCategory.children?.map((child) => renderTourCategoryBar(child, depth + 1))}
+          {tourCategory.children?.map((child) =>
+            renderTourCategoryBar(child, depth + 1)
+          )}
         </>
       </React.Fragment>
     );
@@ -62,9 +71,7 @@ export default function TourCategoryNav({ tourCategoriesData }: TourCategoryNavP
 
   return (
     <Paper p={'sm'} radius={'md'} shadow="xs" withBorder>
-      <Stack gap={'xs'}>
-        {renderTourCategoryTree()}
-      </Stack>
+      <Stack gap={'xs'}>{renderTourCategoryTree()}</Stack>
     </Paper>
   );
 }

@@ -1,17 +1,17 @@
 'use client';
 
-import { ActionIcon, Group, Text, UnstyledButton } from "@mantine/core";
-import { useRouter } from "next/navigation";
-import AddNewIcon from "@/components/icons/vinaup-add-new-icon.svg";
-import ToursTable from "@/components/tables/tours-table/tours-table";
-import { createTourAction } from "@/actions/tour-action";
-import { Route } from "next";
-import { ITourResponse } from "@/interfaces/tour-interface";
-import { IUserResponse } from "@/interfaces/user-interface";
-import { generateUniqueEndpoint } from "@/helpers/function-helpers";
-import { useState } from "react";
-import { notifications } from "@mantine/notifications";
-import classes from "./admin-tour-page-content-container.module.scss";
+import { ActionIcon, Group, Text, UnstyledButton } from '@mantine/core';
+import { useRouter } from 'next/navigation';
+import AddNewIcon from '@/components/icons/vinaup-add-new-icon.svg';
+import ToursTable from '@/components/tables/tours-table/tours-table';
+import { createTourAction } from '@/actions/tour-action';
+import { Route } from 'next';
+import { ITourResponse } from '@/interfaces/tour-interface';
+import { IUserResponse } from '@/interfaces/user-interface';
+import { generateUniqueEndpoint } from '@/utils/function-helpers';
+import { useState } from 'react';
+import { notifications } from '@mantine/notifications';
+import classes from './admin-tour-page-content-container.module.scss';
 
 interface AdminTourPageContentContainerProps {
   toursData: ITourResponse[];
@@ -20,7 +20,7 @@ interface AdminTourPageContentContainerProps {
 
 export default function AdminTourPageContentContainer({
   toursData,
-  userData
+  userData,
 }: AdminTourPageContentContainerProps) {
   const router = useRouter();
   const [isCreating, setIsCreating] = useState(false);
@@ -34,7 +34,7 @@ export default function AdminTourPageContentContainer({
       title: newTitle,
       endpoint: endpoint,
       destinations: ['Ho Chi Minh'],
-      userId: userData.id
+      userId: userData.id,
     });
 
     if (!response.success || !response.data) {
@@ -57,7 +57,9 @@ export default function AdminTourPageContentContainer({
       <Group className={classes.pageHeader} justify="space-between">
         <Text size="xl">Tour</Text>
         <Group gap="sm">
-          <UnstyledButton onClick={handleAddNewTour} fz={'lg'}>Add new</UnstyledButton>
+          <UnstyledButton onClick={handleAddNewTour} fz={'lg'}>
+            Add new
+          </UnstyledButton>
           <ActionIcon
             variant="transparent"
             onClick={handleAddNewTour}

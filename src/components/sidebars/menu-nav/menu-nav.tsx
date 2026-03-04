@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useMemo } from "react";
-import { Paper, Stack, Group, Text } from "@mantine/core";
-import { useParams, useRouter } from "next/navigation";
-import { Route } from "next";
-import classes from "./menu-nav.module.scss";
-import { IMenuResponse } from "@/interfaces/menu-interface";
-import { TreeManager } from "@/helpers/tree-manager-helper";
+import React, { useMemo } from 'react';
+import { Paper, Stack, Group, Text } from '@mantine/core';
+import { useParams, useRouter } from 'next/navigation';
+import { Route } from 'next';
+import classes from './menu-nav.module.scss';
+import { IMenuResponse } from '@/interfaces/menu-interface';
+import { TreeManager } from '@/utils/tree-manager';
 
 interface MenuNavProps {
   menusData: IMenuResponse[];
@@ -32,12 +32,13 @@ export default function MenuNav({ menusData }: MenuNavProps) {
     if (!root || !root.children) {
       return null;
     }
-    return root.children?.map(child =>
-      renderMenuBar(child, 0)
-    );
+    return root.children?.map((child) => renderMenuBar(child, 0));
   };
 
-  const renderMenuBar = (menu: IMenuResponse, depth: number = 0): React.ReactNode => {
+  const renderMenuBar = (
+    menu: IMenuResponse,
+    depth: number = 0
+  ): React.ReactNode => {
     return (
       <React.Fragment key={menu.id}>
         <Stack
@@ -47,24 +48,22 @@ export default function MenuNav({ menusData }: MenuNavProps) {
           bdrs={'sm'}
           p={'8px'}
           ml={depth * 16}
-          onClick={() => { router.push(`/adminup/menu/${menu.id}` as Route); }}
+          onClick={() => {
+            router.push(`/adminup/menu/${menu.id}` as Route);
+          }}
         >
           <Group key={menu.id}>
             <Text fw={isActiveMenu(menu.id) ? 'bold' : 'normal'}>{menu.title}</Text>
           </Group>
         </Stack>
-        <>
-          {menu.children?.map((child) => renderMenuBar(child, depth + 1))}
-        </>
+        <>{menu.children?.map((child) => renderMenuBar(child, depth + 1))}</>
       </React.Fragment>
     );
   };
 
   return (
     <Paper p={'sm'} radius={'md'} shadow="xs" withBorder>
-      <Stack gap={'xs'}>
-        {renderMenuTree()}
-      </Stack>
+      <Stack gap={'xs'}>{renderMenuTree()}</Stack>
     </Paper>
   );
 }

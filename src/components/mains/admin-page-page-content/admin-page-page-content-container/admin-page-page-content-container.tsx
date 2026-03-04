@@ -1,17 +1,17 @@
 'use client';
 
-import { ActionIcon, Group, Text, UnstyledButton } from "@mantine/core";
-import { useRouter } from "next/navigation";
-import classes from "./admin-page-page-content-container.module.scss";
-import AddNewIcon from "@/components/icons/vinaup-add-new-icon.svg";
-import PagesTable from "@/components/tables/pages-table/pages-table";
-import { createPageAction } from "@/actions/page-action";
-import { Route } from "next";
-import { IPageResponse } from "@/interfaces/page-interface";
-import { IUserResponse } from "@/interfaces/user-interface";
-import { generateUniqueEndpoint } from "@/helpers/function-helpers";
-import { useState } from "react";
-import { notifications } from "@mantine/notifications";
+import { ActionIcon, Group, Text, UnstyledButton } from '@mantine/core';
+import { useRouter } from 'next/navigation';
+import classes from './admin-page-page-content-container.module.scss';
+import AddNewIcon from '@/components/icons/vinaup-add-new-icon.svg';
+import PagesTable from '@/components/tables/pages-table/pages-table';
+import { createPageAction } from '@/actions/page-action';
+import { Route } from 'next';
+import { IPageResponse } from '@/interfaces/page-interface';
+import { IUserResponse } from '@/interfaces/user-interface';
+import { generateUniqueEndpoint } from '@/utils/function-helpers';
+import { useState } from 'react';
+import { notifications } from '@mantine/notifications';
 
 interface AdminPagePageContentContainerProps {
   pagesData: IPageResponse[];
@@ -20,7 +20,7 @@ interface AdminPagePageContentContainerProps {
 
 export default function AdminPagePageContentContainer({
   pagesData,
-  userData
+  userData,
 }: AdminPagePageContentContainerProps) {
   const router = useRouter();
   const [isCreating, setIsCreating] = useState(false);
@@ -34,7 +34,7 @@ export default function AdminPagePageContentContainer({
       title: newTitle,
       endpoint: endpoint,
       destinations: [],
-      userId: userData.id
+      userId: userData.id,
     });
 
     if (!response.success || !response.data) {
@@ -57,7 +57,9 @@ export default function AdminPagePageContentContainer({
       <Group className={classes.pageHeader} justify="space-between">
         <Text size="xl">Page</Text>
         <Group gap="sm">
-          <UnstyledButton onClick={handleAddNewPage} fz={'lg'}>Add new</UnstyledButton>
+          <UnstyledButton onClick={handleAddNewPage} fz={'lg'}>
+            Add new
+          </UnstyledButton>
           <ActionIcon
             variant="transparent"
             onClick={handleAddNewPage}

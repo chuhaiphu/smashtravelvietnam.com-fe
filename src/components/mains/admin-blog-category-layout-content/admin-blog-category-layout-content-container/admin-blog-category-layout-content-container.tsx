@@ -1,15 +1,22 @@
 'use client';
 
-import { ActionIcon, Grid, GridCol, Group, Text, UnstyledButton } from "@mantine/core";
-import { useRouter } from "next/navigation";
-import { Route } from "next";
-import AddNewIcon from "@/components/icons/vinaup-add-new-icon.svg";
-import { generateUniqueEndpoint } from "@/helpers/function-helpers";
-import { useState } from "react";
-import { IBlogCategoryResponse } from "@/interfaces/blog-category-interface";
-import { createBlogCategoryAction } from "@/actions/blog-category-action";
-import BlogCategoryNav from "@/components/sidebars/blog-category-nav/blog-category-nav";
-import classes from "./admin-blog-category-layout-content-container.module.scss";
+import {
+  ActionIcon,
+  Grid,
+  GridCol,
+  Group,
+  Text,
+  UnstyledButton,
+} from '@mantine/core';
+import { useRouter } from 'next/navigation';
+import { Route } from 'next';
+import AddNewIcon from '@/components/icons/vinaup-add-new-icon.svg';
+import { generateUniqueEndpoint } from '@/utils/function-helpers';
+import { useState } from 'react';
+import { IBlogCategoryResponse } from '@/interfaces/blog-category-interface';
+import { createBlogCategoryAction } from '@/actions/blog-category-action';
+import BlogCategoryNav from '@/components/sidebars/blog-category-nav/blog-category-nav';
+import classes from './admin-blog-category-layout-content-container.module.scss';
 
 interface AdminBlogCategoryLayoutContentContainerProps {
   blogCategoriesData: IBlogCategoryResponse[];
@@ -18,7 +25,7 @@ interface AdminBlogCategoryLayoutContentContainerProps {
 
 export default function AdminBlogCategoryLayoutContentContainer({
   blogCategoriesData,
-  children
+  children,
 }: AdminBlogCategoryLayoutContentContainerProps) {
   const router = useRouter();
   const [isCreating, setIsCreating] = useState(false);
@@ -29,7 +36,7 @@ export default function AdminBlogCategoryLayoutContentContainer({
     const endpoint = await generateUniqueEndpoint(newTitle, 'landing');
     const response = await createBlogCategoryAction({
       title: newTitle,
-      endpoint: endpoint
+      endpoint: endpoint,
     });
 
     if (!response.success || !response.data) {
@@ -47,7 +54,9 @@ export default function AdminBlogCategoryLayoutContentContainer({
       <Group className={classes.pageHeader} justify="space-between">
         <Text size="xl">Blog Category</Text>
         <Group gap="sm">
-          <UnstyledButton onClick={handleAddNewBlogCategory} fz={'lg'}>Add new</UnstyledButton>
+          <UnstyledButton onClick={handleAddNewBlogCategory} fz={'lg'}>
+            Add new
+          </UnstyledButton>
           <ActionIcon
             variant="transparent"
             onClick={handleAddNewBlogCategory}
@@ -61,7 +70,9 @@ export default function AdminBlogCategoryLayoutContentContainer({
         <GridCol span={{ base: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
           <BlogCategoryNav blogCategoriesData={blogCategoriesData} />
         </GridCol>
-        <GridCol span={{ base: 12, sm: 12, md: 8, lg: 8, xl: 9 }}>{children}</GridCol>
+        <GridCol span={{ base: 12, sm: 12, md: 8, lg: 8, xl: 9 }}>
+          {children}
+        </GridCol>
       </Grid>
     </div>
   );

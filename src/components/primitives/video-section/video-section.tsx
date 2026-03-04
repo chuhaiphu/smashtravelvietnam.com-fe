@@ -1,10 +1,10 @@
 'use client';
 
-import { getEmbeddedVideoUrl } from '@/helpers/function-helpers';
+import { getEmbeddedVideoUrl } from '@/utils/function-helpers';
 import classes from './video-section.module.scss';
 import { ActionIcon, Text } from '@mantine/core';
 import { useState } from 'react';
-import { BsPlayBtnFill } from "react-icons/bs";
+import { BsPlayBtnFill } from 'react-icons/bs';
 
 interface VideoPlayerProps {
   url: string;
@@ -13,7 +13,12 @@ interface VideoPlayerProps {
   thumbnailUrl?: string;
 }
 
-export default function VideoSection({ url, title = "Embedded Video", height, thumbnailUrl }: VideoPlayerProps) {
+export default function VideoSection({
+  url,
+  title = 'Embedded Video',
+  height,
+  thumbnailUrl,
+}: VideoPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const embedUrl = getEmbeddedVideoUrl(url);
@@ -34,14 +39,14 @@ export default function VideoSection({ url, title = "Embedded Video", height, th
           style={{ backgroundImage: `url(${thumbnailUrl})` }}
           onClick={() => setIsPlaying(true)}
         >
-          <ActionIcon variant='transparent' size={72}>
-            <BsPlayBtnFill size={72} color='red' />
+          <ActionIcon variant="transparent" size={72}>
+            <BsPlayBtnFill size={72} color="red" />
           </ActionIcon>
         </div>
       )}
       {(isPlaying || !thumbnailUrl) && (
         <iframe
-          loading='lazy'
+          loading="lazy"
           src={autoplayEmbedUrl}
           title={title}
           referrerPolicy="strict-origin-when-cross-origin"

@@ -1,30 +1,55 @@
 'use client';
 
-import { ActionIcon, Button, Grid, GridCol, Group, Modal, MultiSelect, MultiSelectProps, Paper, Select, Stack, Text, TextInput, UnstyledButton } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import classes from "./admin-blog-detail-page-content-container.module.scss";
-import { TextEditor } from "@/components/editors/text-editor/text-editor";
-import UploadImageSection from "@/components/primitives/upload-image-section/upload-image-section";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { createBlogAction, deleteBlogAction, updateBlogAction } from "@/actions/blog-action";
-import { IBlogResponse } from "@/interfaces/blog-interface";
-import { useDebouncedCallback } from "use-debounce";
-import { generateUniqueEndpoint, stripHtmlAndTruncate } from "@/helpers/function-helpers";
-import { MAX_IMAGE_COUNT_ALLOWED, VN_PROVINCES } from "@/constants";
-import { FaCaretDown, FaCheck } from "react-icons/fa6";
-import { GrTrash } from "react-icons/gr";
+import {
+  ActionIcon,
+  Button,
+  Grid,
+  GridCol,
+  Group,
+  Modal,
+  MultiSelect,
+  MultiSelectProps,
+  Paper,
+  Select,
+  Stack,
+  Text,
+  TextInput,
+  UnstyledButton,
+} from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import classes from './admin-blog-detail-page-content-container.module.scss';
+import { TextEditor } from '@/components/editors/text-editor/text-editor';
+import UploadImageSection from '@/components/primitives/upload-image-section/upload-image-section';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  createBlogAction,
+  deleteBlogAction,
+  updateBlogAction,
+} from '@/actions/blog-action';
+import { IBlogResponse } from '@/interfaces/blog-interface';
+import { useDebouncedCallback } from 'use-debounce';
+import {
+  generateUniqueEndpoint,
+  stripHtmlAndTruncate,
+} from '@/utils/function-helpers';
+import { MAX_IMAGE_COUNT_ALLOWED, VN_PROVINCES } from '@/constants';
+import { FaCaretDown, FaCheck } from 'react-icons/fa6';
+import { GrTrash } from 'react-icons/gr';
 import UploadIconV2 from '@/components/icons/vinaup-upload-icon-v2.svg';
 import UploadIconV3 from '@/components/icons/vinaup-upload-icon-v3.svg';
 import PenIcon from '@/components/icons/vinaup-pen-icon.svg';
-import AddNewIcon from "@/components/icons/vinaup-add-new-icon.svg";
-import { useRouter } from "next/navigation";
-import { IBlogCategoryResponse } from "@/interfaces/blog-category-interface";
-import { IBlogCategoryBlogResponse } from "@/interfaces/blog-category-blog-interface";
-import { createBlogCategoryBlogAction, deleteBlogCategoryBlogAction } from "@/actions/blog-category-blog-action";
-import { TreeManager } from "@/helpers/tree-manager-helper";
-import { Route } from "next";
-import { IUserResponse } from "@/interfaces/user-interface";
-import dayjs from "dayjs";
+import AddNewIcon from '@/components/icons/vinaup-add-new-icon.svg';
+import { useRouter } from 'next/navigation';
+import { IBlogCategoryResponse } from '@/interfaces/blog-category-interface';
+import { IBlogCategoryBlogResponse } from '@/interfaces/blog-category-blog-interface';
+import {
+  createBlogCategoryBlogAction,
+  deleteBlogCategoryBlogAction,
+} from '@/actions/blog-category-blog-action';
+import { TreeManager } from '@/utils/tree-manager';
+import { Route } from 'next';
+import { IUserResponse } from '@/interfaces/user-interface';
+import dayjs from 'dayjs';
 
 interface AdminBlogDetailPageContentContainerProps {
   currentBlogData: IBlogResponse;
@@ -37,22 +62,37 @@ export default function AdminBlogDetailPageContentContainer({
   blogCategoriesData,
   userData,
 }: AdminBlogDetailPageContentContainerProps) {
-  const [additionalImageUrls, setAdditionalImageUrls] = useState<string[]>(currentBlogData.additionalImageUrls);
-  const [additionalImagesPosition, setAdditionalImagesPosition] = useState<string>(currentBlogData.additionalImagesPosition || 'top');
+  const [additionalImageUrls, setAdditionalImageUrls] = useState<string[]>(
+    currentBlogData.additionalImageUrls
+  );
+  const [additionalImagesPosition, setAdditionalImagesPosition] = useState<string>(
+    currentBlogData.additionalImagesPosition || 'top'
+  );
   const [videoUrl, setVideoUrl] = useState<string>(currentBlogData.videoUrl || '');
-  const [videoThumbnailUrl, setVideoThumbnailUrl] = useState<string>(currentBlogData.videoThumbnailUrl || '');
-  const [mainImageUrl, setMainImageUrl] = useState<string>(currentBlogData.mainImageUrl || '');
-  const [videoPosition, setVideoPosition] = useState<string>(currentBlogData.videoPosition || 'bottom');
+  const [videoThumbnailUrl, setVideoThumbnailUrl] = useState<string>(
+    currentBlogData.videoThumbnailUrl || ''
+  );
+  const [mainImageUrl, setMainImageUrl] = useState<string>(
+    currentBlogData.mainImageUrl || ''
+  );
+  const [videoPosition, setVideoPosition] = useState<string>(
+    currentBlogData.videoPosition || 'bottom'
+  );
   const [loadingImageIndex, setLoadingImageIndex] = useState<number | null>(null);
-  const [videoThumbnailLoading, setVideoThumbnailLoading] = useState<boolean>(false);
+  const [videoThumbnailLoading, setVideoThumbnailLoading] =
+    useState<boolean>(false);
   const [mainImageLoading, setMainImageLoading] = useState<boolean>(false);
   const [title, setTitle] = useState<string>(currentBlogData.title);
   // const [description, setDescription] = useState<string>(currentBlogData.description || '');
   const [content, setContent] = useState<string>(currentBlogData.content || '');
-  const [destinations, setDestinations] = useState<string[]>(currentBlogData.destinations);
+  const [destinations, setDestinations] = useState<string[]>(
+    currentBlogData.destinations
+  );
   const [status, setStatus] = useState<string>(currentBlogData.visibility);
   const [sortOrder, setSortOrder] = useState<number>(currentBlogData.sortOrder);
-  const [blogCategoryBlogs, setBlogCategoryBlogs] = useState<IBlogCategoryBlogResponse[]>(currentBlogData.blogCategoryBlogs);
+  const [blogCategoryBlogs, setBlogCategoryBlogs] = useState<
+    IBlogCategoryBlogResponse[]
+  >(currentBlogData.blogCategoryBlogs);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [deleteModalOpened, setDeleteModalOpened] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
@@ -68,10 +108,12 @@ export default function AdminBlogDetailPageContentContainer({
       return null;
     }
     return new TreeManager(blogCategoriesData);
-  }, [blogCategoriesData])
+  }, [blogCategoriesData]);
 
   const videoUrlInputRef = useRef<HTMLInputElement>(null);
-  const handleFocusAndSelectInput = (ref: React.RefObject<HTMLInputElement | null>) => {
+  const handleFocusAndSelectInput = (
+    ref: React.RefObject<HTMLInputElement | null>
+  ) => {
     if (ref.current) {
       ref.current.focus();
       ref.current.select();
@@ -86,7 +128,7 @@ export default function AdminBlogDetailPageContentContainer({
       title: newTitle,
       endpoint: endpoint,
       destinations: ['Ho Chi Minh'],
-      userId: userData.id
+      userId: userData.id,
     });
 
     if (!response.success || !response.data) {
@@ -109,13 +151,15 @@ export default function AdminBlogDetailPageContentContainer({
     });
   };
 
-  const handleSelectAdditionalImage = async (imageUrl: string, imageIndex: number) => {
+  const handleSelectAdditionalImage = async (
+    imageUrl: string,
+    imageIndex: number
+  ) => {
     setLoadingImageIndex(imageIndex);
     try {
-      await updateBlogAction(
-        currentBlogData.id,
-        { additionalImageUrls: [...additionalImageUrls, imageUrl] }
-      );
+      await updateBlogAction(currentBlogData.id, {
+        additionalImageUrls: [...additionalImageUrls, imageUrl],
+      });
       setAdditionalImageUrls([...additionalImageUrls, imageUrl]);
     } catch (error) {
       notifications.show({
@@ -144,10 +188,7 @@ export default function AdminBlogDetailPageContentContainer({
   const handleSelectVideoThumbnail = async (imageUrl: string) => {
     setVideoThumbnailLoading(true);
     try {
-      await updateBlogAction(
-        currentBlogData.id,
-        { videoThumbnailUrl: imageUrl }
-      );
+      await updateBlogAction(currentBlogData.id, { videoThumbnailUrl: imageUrl });
       setVideoThumbnailUrl(imageUrl);
     } catch (error) {
       notifications.show({
@@ -174,10 +215,7 @@ export default function AdminBlogDetailPageContentContainer({
   const handleSelectMainImage = async (imageUrl: string) => {
     setMainImageLoading(true);
     try {
-      await updateBlogAction(
-        currentBlogData.id,
-        { mainImageUrl: imageUrl }
-      );
+      await updateBlogAction(currentBlogData.id, { mainImageUrl: imageUrl });
       setMainImageUrl(imageUrl);
     } catch (error) {
       notifications.show({
@@ -202,15 +240,16 @@ export default function AdminBlogDetailPageContentContainer({
   };
 
   const handleUpdateTitle = useDebouncedCallback(async (newTitle: string) => {
-    const endpoint = await generateUniqueEndpoint(newTitle, 'blog', currentBlogData.id);
-
-    await updateBlogAction(
-      currentBlogData.id,
-      {
-        title: newTitle,
-        endpoint: endpoint
-      }
+    const endpoint = await generateUniqueEndpoint(
+      newTitle,
+      'blog',
+      currentBlogData.id
     );
+
+    await updateBlogAction(currentBlogData.id, {
+      title: newTitle,
+      endpoint: endpoint,
+    });
     setIsSaving(false);
     notifications.show({
       message: 'Saved successfully',
@@ -218,7 +257,7 @@ export default function AdminBlogDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }, 1500)
+  }, 1500);
 
   // const handleUpdateDescription = useDebouncedCallback(async (newDescription: string) => {
   //   await updateBlogAction(
@@ -229,12 +268,9 @@ export default function AdminBlogDetailPageContentContainer({
   // }, 1500)
 
   const handleUpdateContent = useDebouncedCallback(async (newContent: string) => {
-    await updateBlogAction(
-      currentBlogData.id,
-      { content: newContent }
-    );
+    await updateBlogAction(currentBlogData.id, { content: newContent });
     setIsSaving(false);
-  }, 1500)
+  }, 1500);
 
   const handleUpdateAdditionalImagesPosition = (newPosition: string) => {
     setAdditionalImagesPosition(newPosition);
@@ -245,7 +281,7 @@ export default function AdminBlogDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }
+  };
 
   const handleUpdateDestinations = (newDestinations: string[]) => {
     setDestinations(newDestinations);
@@ -256,7 +292,7 @@ export default function AdminBlogDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }
+  };
 
   const handleUpdateStatus = (newStatus: string) => {
     setStatus(newStatus);
@@ -267,7 +303,7 @@ export default function AdminBlogDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }
+  };
 
   const handleUpdateSortOrder = (newSortOrder: string) => {
     const sortOrderNumber = Number(newSortOrder);
@@ -279,7 +315,7 @@ export default function AdminBlogDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }
+  };
 
   const handleUpdateVideoPosition = (newPosition: string) => {
     setVideoPosition(newPosition);
@@ -290,7 +326,7 @@ export default function AdminBlogDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }
+  };
 
   const handleUpdateVideoUrl = useDebouncedCallback(async (newUrl: string) => {
     await updateBlogAction(currentBlogData.id, { videoUrl: newUrl });
@@ -301,7 +337,7 @@ export default function AdminBlogDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }, 1500)
+  }, 1500);
 
   // Generate SEO title and description
   const seoTitle = title ? stripHtmlAndTruncate(title, 100) : '';
@@ -355,10 +391,14 @@ export default function AdminBlogDetailPageContentContainer({
   };
 
   // blog category options record for renderBlogCategoryOption to reference the id from option value
-  const blogCategoryOptionsData: Record<string, IBlogCategoryResponse> = blogCategoriesData.reduce((acc, blogCategory) => {
-    acc[blogCategory.id] = blogCategory;
-    return acc;
-  }, {} as Record<string, IBlogCategoryResponse>);
+  const blogCategoryOptionsData: Record<string, IBlogCategoryResponse> =
+    blogCategoriesData.reduce(
+      (acc, blogCategory) => {
+        acc[blogCategory.id] = blogCategory;
+        return acc;
+      },
+      {} as Record<string, IBlogCategoryResponse>
+    );
 
   // Helper function to get parent chain recursively
   const getOptionChain = (blogCategoryId: string): IBlogCategoryResponse[] => {
@@ -370,12 +410,17 @@ export default function AdminBlogDetailPageContentContainer({
     return [blogCategoryChain];
   };
 
-  const getOptionChainWithoutRoot = (blogCategoryId: string): IBlogCategoryResponse[] => {
+  const getOptionChainWithoutRoot = (
+    blogCategoryId: string
+  ): IBlogCategoryResponse[] => {
     const parentChain = getOptionChain(blogCategoryId);
     return parentChain.slice(1);
   };
 
-  const renderBlogCategoryOption: MultiSelectProps['renderOption'] = ({ option, checked }) => {
+  const renderBlogCategoryOption: MultiSelectProps['renderOption'] = ({
+    option,
+    checked,
+  }) => {
     const parentChain = getOptionChainWithoutRoot(option.value);
 
     // If has parent(s), show the full chain
@@ -389,12 +434,14 @@ export default function AdminBlogDetailPageContentContainer({
                 <Text
                   size="sm"
                   fw={index === parentChain.length - 1 ? 500 : 400}
-                  c={index === parentChain.length - 1 ? undefined : "dark.3"}
+                  c={index === parentChain.length - 1 ? undefined : 'dark.3'}
                 >
                   {category.title}
                 </Text>
                 {index < parentChain.length - 1 && (
-                  <Text size="sm" c="dark.3" fw={300}>›</Text>
+                  <Text size="sm" c="dark.3" fw={300}>
+                    ›
+                  </Text>
                 )}
               </Group>
             ))}
@@ -407,30 +454,38 @@ export default function AdminBlogDetailPageContentContainer({
     return (
       <Group gap="sm" justify="space-between">
         {checked && <FaCheck size={20} color="gray" />}
-        <Text size="sm" fw={500}>{blogCategoryOptionsData[option.value].title}</Text>
+        <Text size="sm" fw={500}>
+          {blogCategoryOptionsData[option.value].title}
+        </Text>
       </Group>
     );
-  }
+  };
 
   const handleUpdateBlogCategories = async (newBlogCategoryIds: string[]) => {
     // Find blog categories to add (have in selected but not in current)
-    const currentBlogCategoryIds = blogCategoryBlogs.map(bcb => bcb.blogCategoryId);
-    const toAdd = newBlogCategoryIds.filter(id => !currentBlogCategoryIds.includes(id));
-    const toRemove = currentBlogCategoryIds.filter(id => !newBlogCategoryIds.includes(id));
+    const currentBlogCategoryIds = blogCategoryBlogs.map(
+      (bcb) => bcb.blogCategoryId
+    );
+    const toAdd = newBlogCategoryIds.filter(
+      (id) => !currentBlogCategoryIds.includes(id)
+    );
+    const toRemove = currentBlogCategoryIds.filter(
+      (id) => !newBlogCategoryIds.includes(id)
+    );
 
     // Add new blog categories
     for (const blogCategoryId of toAdd) {
       await createBlogCategoryBlogAction({
         blogId: currentBlogData.id,
         blogCategoryId: blogCategoryId,
-        sortOrder: 0
+        sortOrder: 0,
       });
     }
 
     // Remove blog categories that are not selected
     for (const blogCategoryId of toRemove) {
       const blogCategoryBlog = blogCategoryBlogs.find(
-        bcb => bcb.blogCategoryId === blogCategoryId
+        (bcb) => bcb.blogCategoryId === blogCategoryId
       );
       if (blogCategoryBlog) {
         await deleteBlogCategoryBlogAction(blogCategoryBlog.id);
@@ -442,14 +497,16 @@ export default function AdminBlogDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }
+  };
 
   return (
     <div className={classes.adminBlogDetailPageRoot}>
       <Group className={classes.pageHeader} justify="space-between">
         <Text size="xl">Blog detail</Text>
         <Group gap="sm">
-          <UnstyledButton onClick={handleAddNewBlog} fz={'lg'}>Add new</UnstyledButton>
+          <UnstyledButton onClick={handleAddNewBlog} fz={'lg'}>
+            Add new
+          </UnstyledButton>
           <ActionIcon
             variant="transparent"
             onClick={handleAddNewBlog}
@@ -465,15 +522,21 @@ export default function AdminBlogDetailPageContentContainer({
             <Paper p={'sm'} radius={'md'} classNames={{ root: classes.paperBlock }}>
               <Stack gap={'xs'}>
                 <Text>Title</Text>
-                <TextInput size="md" value={title} placeholder="A title under 100 characters"
+                <TextInput
+                  size="md"
+                  value={title}
+                  placeholder="A title under 100 characters"
                   maxLength={100}
                   onChange={(e) => {
                     setTitle(e.target.value);
                     setIsSaving(true);
-                    handleUpdateTitle(e.target.value)
-                  }} />
+                    handleUpdateTitle(e.target.value);
+                  }}
+                />
                 <Group gap={'xs'} justify="space-between">
-                  <Text size="md">URL: smashtravelvietnam.com/blogs/{currentBlogData.endpoint}</Text>
+                  <Text size="md">
+                    URL: smashtravelvietnam.com/blogs/{currentBlogData.endpoint}
+                  </Text>
                   <Group>
                     <Text
                       size="sm"
@@ -496,11 +559,14 @@ export default function AdminBlogDetailPageContentContainer({
             <Paper p={'sm'} radius={'md'} classNames={{ root: classes.paperBlock }}>
               <Stack gap={'xs'}>
                 <Text>Content</Text>
-                <TextEditor content={content} onChange={(newContent) => {
-                  setContent(newContent);
-                  setIsSaving(true);
-                  handleUpdateContent(newContent);
-                }} />
+                <TextEditor
+                  content={content}
+                  onChange={(newContent) => {
+                    setContent(newContent);
+                    setIsSaving(true);
+                    handleUpdateContent(newContent);
+                  }}
+                />
               </Stack>
             </Paper>
             <Paper p={'sm'} radius={'md'} classNames={{ root: classes.paperBlock }}>
@@ -519,11 +585,13 @@ export default function AdminBlogDetailPageContentContainer({
                     }}
                     data={[
                       { value: 'top', label: 'Top' },
-                      { value: 'bottom', label: 'Bottom' }
+                      { value: 'bottom', label: 'Bottom' },
                     ]}
                     value={additionalImagesPosition}
                     variant="unstyled"
-                    rightSection={<FaCaretDown color="var(--vinaup-blue-link)" size={20} />}
+                    rightSection={
+                      <FaCaretDown color="var(--vinaup-blue-link)" size={20} />
+                    }
                     onChange={(value) => {
                       if (!value) return;
                       handleUpdateAdditionalImagesPosition(value);
@@ -537,7 +605,9 @@ export default function AdminBlogDetailPageContentContainer({
                       size="xl"
                       imageUrl={imgUrl}
                       isLoading={loadingImageIndex === index}
-                      onImageSelect={(imageUrl) => handleSelectAdditionalImage(imageUrl, index)}
+                      onImageSelect={(imageUrl) =>
+                        handleSelectAdditionalImage(imageUrl, index)
+                      }
                       onRemoveFile={() => handleRemoveAdditionalImage(index)}
                     />
                   ))}
@@ -545,7 +615,12 @@ export default function AdminBlogDetailPageContentContainer({
                     <UploadImageSection
                       size="xl"
                       isLoading={loadingImageIndex === additionalImageUrls.length}
-                      onImageSelect={(imageUrl) => handleSelectAdditionalImage(imageUrl, additionalImageUrls.length)}
+                      onImageSelect={(imageUrl) =>
+                        handleSelectAdditionalImage(
+                          imageUrl,
+                          additionalImageUrls.length
+                        )
+                      }
                     />
                   )}
                 </Group>
@@ -556,9 +631,14 @@ export default function AdminBlogDetailPageContentContainer({
                 <GridCol span={6}>
                   <Stack gap={'xs'}>
                     <Text>Country</Text>
-                    <TextInput size="md" classNames={{
-                      input: classes.countryInput
-                    }} value={currentBlogData.country} disabled />
+                    <TextInput
+                      size="md"
+                      classNames={{
+                        input: classes.countryInput,
+                      }}
+                      value={currentBlogData.country}
+                      disabled
+                    />
                   </Stack>
                 </GridCol>
                 <GridCol span={6}>
@@ -570,7 +650,9 @@ export default function AdminBlogDetailPageContentContainer({
                       hidePickedOptions
                       data={VN_PROVINCES.map((p) => ({ value: p, label: p }))}
                       value={destinations}
-                      placeholder={destinations.length < 3 ? 'Select up to 3 destinations' : ''}
+                      placeholder={
+                        destinations.length < 3 ? 'Select up to 3 destinations' : ''
+                      }
                       searchable
                       nothingFoundMessage="Not found"
                       onChange={(value) => handleUpdateDestinations(value)}
@@ -579,9 +661,17 @@ export default function AdminBlogDetailPageContentContainer({
                 </GridCol>
               </Grid>
             </Paper>
-            <Paper p={'md'} radius={'md'} withBorder classNames={{ root: classes.paperBlock }} bg={'var(--vinaup-soft-gray)'}>
+            <Paper
+              p={'md'}
+              radius={'md'}
+              withBorder
+              classNames={{ root: classes.paperBlock }}
+              bg={'var(--vinaup-soft-gray)'}
+            >
               <Stack gap={4}>
-                <div className={classes.seoBlockTitle}><b>S</b>earch <b>E</b>ngine <b>O</b>ptimization</div>
+                <div className={classes.seoBlockTitle}>
+                  <b>S</b>earch <b>E</b>ngine <b>O</b>ptimization
+                </div>
                 <div className={classes.seoDivider} />
                 <Stack gap={4}>
                   <Text
@@ -604,7 +694,7 @@ export default function AdminBlogDetailPageContentContainer({
                     https://smashtravelvietnam.com/blogs/{currentBlogData.endpoint}
                   </Text>
                   <Text size="sm">
-                    {dayjs(currentBlogData.updatedAt).format("MMM DD, YYYY")}
+                    {dayjs(currentBlogData.updatedAt).format('MMM DD, YYYY')}
                   </Text>
                   <div
                     dangerouslySetInnerHTML={{ __html: seoContent || '' }}
@@ -614,11 +704,13 @@ export default function AdminBlogDetailPageContentContainer({
                 <div className={classes.seoDivider} />
                 <Stack gap={4}>
                   <Group justify="space-between" align="center">
-                    <Text size="md" fw={500}>Seo title</Text>
+                    <Text size="md" fw={500}>
+                      Seo title
+                    </Text>
                   </Group>
                   <TextInput
                     classNames={{
-                      input: classes.seoTextInput
+                      input: classes.seoTextInput,
                     }}
                     size="md"
                     placeholder="Name title (Suggest < 72 characters)"
@@ -629,10 +721,12 @@ export default function AdminBlogDetailPageContentContainer({
                 </Stack>
                 <div className={classes.seoDivider} />
                 <Stack gap={4}>
-                  <Text size="md" fw={500}>Seo description</Text>
+                  <Text size="md" fw={500}>
+                    Seo description
+                  </Text>
                   <TextInput
                     classNames={{
-                      input: classes.seoTextInput
+                      input: classes.seoTextInput,
                     }}
                     size="md"
                     placeholder="..."
@@ -646,20 +740,22 @@ export default function AdminBlogDetailPageContentContainer({
           </Stack>
         </GridCol>
         <GridCol span={{ base: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
-          <Paper p={'xs'}
+          <Paper
+            p={'xs'}
             radius={'md'}
             classNames={{
-              root: classes.blogConfiguration
-            }}>
+              root: classes.blogConfiguration,
+            }}
+          >
             <Stack gap={'0'}>
               <Group justify="space-between" wrap="nowrap">
                 <Text size="lg">Updated at</Text>
                 <Group>
                   <Text size="md" fw={500} lh={'2.5rem'}>
-                    {dayjs(currentBlogData.updatedAt).format("DD/MM/YYYY")}
+                    {dayjs(currentBlogData.updatedAt).format('DD/MM/YYYY')}
                   </Text>
                   <Text size="md" fw={500} lh={'2.5rem'}>
-                    {dayjs(currentBlogData.updatedAt).format("HH:mm")}
+                    {dayjs(currentBlogData.updatedAt).format('HH:mm')}
                   </Text>
                 </Group>
               </Group>
@@ -678,7 +774,9 @@ export default function AdminBlogDetailPageContentContainer({
                   ]}
                   value={status}
                   variant="unstyled"
-                  rightSection={<FaCaretDown color="var(--vinaup-blue-link)" size={24} />}
+                  rightSection={
+                    <FaCaretDown color="var(--vinaup-blue-link)" size={24} />
+                  }
                   onChange={(value) => {
                     if (!value) return;
                     handleUpdateStatus(value);
@@ -690,7 +788,7 @@ export default function AdminBlogDetailPageContentContainer({
                 <Select
                   scrollAreaProps={{
                     scrollbarSize: 6,
-                    type: 'always'
+                    type: 'always',
                   }}
                   w={'5rem'}
                   classNames={{
@@ -712,11 +810,12 @@ export default function AdminBlogDetailPageContentContainer({
                     { value: '7', label: '8' },
                     { value: '8', label: '9' },
                     { value: '9', label: '10' },
-
                   ]}
                   value={sortOrder.toString()}
                   variant="unstyled"
-                  rightSection={<FaCaretDown color="var(--vinaup-blue-link)" size={24} />}
+                  rightSection={
+                    <FaCaretDown color="var(--vinaup-blue-link)" size={24} />
+                  }
                   onChange={(value) => {
                     if (!value) return;
                     handleUpdateSortOrder(value);
@@ -733,12 +832,21 @@ export default function AdminBlogDetailPageContentContainer({
                   <GrTrash size={24} color="var(--vinaup-blue-link)" />
                 </ActionIcon>
                 <Group gap={'xs'}>
-                  <Text size="lg" c="dark.3" className={isSaving ? classes.savingText : classes.savedText}>
+                  <Text
+                    size="lg"
+                    c="dark.3"
+                    className={isSaving ? classes.savingText : classes.savedText}
+                  >
                     {isSaving ? 'Saving...' : 'Saved'}
                   </Text>
                   <Button
-                    onClick={() => { router.push('/adminup/blog') }}
-                    variant="filled" color="blue" size="xs" bg={'#01426e'}
+                    onClick={() => {
+                      router.push('/adminup/blog');
+                    }}
+                    variant="filled"
+                    color="blue"
+                    size="xs"
+                    bg={'#01426e'}
                   >
                     Exit
                   </Button>
@@ -746,22 +854,31 @@ export default function AdminBlogDetailPageContentContainer({
               </Group>
             </Stack>
           </Paper>
-          <Paper p={'xs'} radius={'md'} mt={'sm'} classNames={{ root: classes.paperBlock }}>
+          <Paper
+            p={'xs'}
+            radius={'md'}
+            mt={'sm'}
+            classNames={{ root: classes.paperBlock }}
+          >
             <Group justify="space-between" wrap="nowrap">
               <MultiSelect
-                placeholder={blogCategoryBlogs.length < 3 ? 'Select up to 3 blog categories' : ''}
+                placeholder={
+                  blogCategoryBlogs.length < 3
+                    ? 'Select up to 3 blog categories'
+                    : ''
+                }
                 maxValues={3}
                 w={'100%'}
                 searchable
                 nothingFoundMessage="Not found"
-                value={blogCategoryBlogs.map((blogCategoryBlog) => blogCategoryBlog.blogCategoryId)}
+                value={blogCategoryBlogs.map(
+                  (blogCategoryBlog) => blogCategoryBlog.blogCategoryId
+                )}
                 renderOption={renderBlogCategoryOption}
-                data={
-                  treeManager?.toFlatListWithoutRoot().map((blogCategory) => ({
-                    value: blogCategory.id,
-                    label: blogCategory.title,
-                  }))
-                }
+                data={treeManager?.toFlatListWithoutRoot().map((blogCategory) => ({
+                  value: blogCategory.id,
+                  label: blogCategory.title,
+                }))}
                 onChange={(blogCategoryIds) => {
                   if (!blogCategoryIds) return;
                   handleUpdateBlogCategories(blogCategoryIds);
@@ -769,7 +886,12 @@ export default function AdminBlogDetailPageContentContainer({
               />
             </Group>
           </Paper>
-          <Paper p={'xs'} radius={'md'} mt={'sm'} classNames={{ root: classes.paperBlock + ' ' + classes.videoSection }}>
+          <Paper
+            p={'xs'}
+            radius={'md'}
+            mt={'sm'}
+            classNames={{ root: classes.paperBlock + ' ' + classes.videoSection }}
+          >
             <Stack gap={'2px'}>
               <Group justify="space-between" wrap="nowrap">
                 <Text size="lg">Video:</Text>
@@ -785,11 +907,13 @@ export default function AdminBlogDetailPageContentContainer({
                   }}
                   data={[
                     { value: 'top', label: 'Top' },
-                    { value: 'bottom', label: 'Bottom' }
+                    { value: 'bottom', label: 'Bottom' },
                   ]}
                   value={videoPosition}
                   variant="unstyled"
-                  rightSection={<FaCaretDown color="var(--vinaup-blue-link)" size={20} />}
+                  rightSection={
+                    <FaCaretDown color="var(--vinaup-blue-link)" size={20} />
+                  }
                   onChange={(value) => {
                     if (!value) return;
                     handleUpdateVideoPosition(value);
@@ -801,8 +925,16 @@ export default function AdminBlogDetailPageContentContainer({
                   size="md"
                   icon={<UploadIconV2 width={60} height={60} />}
                   isLoading={videoThumbnailLoading}
-                  onImageSelect={videoThumbnailUrl.length > 0 ? undefined : handleSelectVideoThumbnail}
-                  onRemoveFile={videoThumbnailUrl.length > 0 ? handleRemoveVideoThumbnail : undefined}
+                  onImageSelect={
+                    videoThumbnailUrl.length > 0
+                      ? undefined
+                      : handleSelectVideoThumbnail
+                  }
+                  onRemoveFile={
+                    videoThumbnailUrl.length > 0
+                      ? handleRemoveVideoThumbnail
+                      : undefined
+                  }
                   imageUrl={videoThumbnailUrl}
                 />
                 <Stack gap={'0'} w={'75%'}>
@@ -811,7 +943,7 @@ export default function AdminBlogDetailPageContentContainer({
                       ref={videoUrlInputRef}
                       w={'100%'}
                       classNames={{
-                        input: classes.videoUrlInput
+                        input: classes.videoUrlInput,
                       }}
                       variant="unstyled"
                       placeholder="https://www.youtube.com/watch?v=..."
@@ -822,16 +954,27 @@ export default function AdminBlogDetailPageContentContainer({
                         handleUpdateVideoUrl(e.target.value);
                       }}
                     />
-                    <ActionIcon size="md" variant="transparent" onClick={() => handleFocusAndSelectInput(videoUrlInputRef)}>
+                    <ActionIcon
+                      size="md"
+                      variant="transparent"
+                      onClick={() => handleFocusAndSelectInput(videoUrlInputRef)}
+                    >
                       <PenIcon width={24} height={24} />
                     </ActionIcon>
                   </Group>
-                  <Text size="sm" c="dimmed">← Auto or Upload thumbnail</Text>
+                  <Text size="sm" c="dimmed">
+                    ← Auto or Upload thumbnail
+                  </Text>
                 </Stack>
               </Group>
             </Stack>
           </Paper>
-          <Paper p={'xs'} radius={'md'} mt={'sm'} classNames={{ root: classes.paperBlock + ' ' + classes.videoSection }}>
+          <Paper
+            p={'xs'}
+            radius={'md'}
+            mt={'sm'}
+            classNames={{ root: classes.paperBlock + ' ' + classes.videoSection }}
+          >
             <Stack gap={'0'}>
               <Text size="xl">Feature Image:</Text>
               <Group justify="center">
@@ -840,12 +983,18 @@ export default function AdminBlogDetailPageContentContainer({
                   icon={<UploadIconV3 width={200} height={200} />}
                   isLoading={mainImageLoading}
                   imageUrl={mainImageUrl}
-                  onImageSelect={mainImageUrl.length > 0 ? undefined : handleSelectMainImage}
-                  onRemoveFile={mainImageUrl.length > 0 ? handleRemoveMainImage : undefined}
+                  onImageSelect={
+                    mainImageUrl.length > 0 ? undefined : handleSelectMainImage
+                  }
+                  onRemoveFile={
+                    mainImageUrl.length > 0 ? handleRemoveMainImage : undefined
+                  }
                 />
               </Group>
               <Group justify="center">
-                <Text size="md" c="dimmed">(png, jpg; jpeg; Size ≤ 2M)</Text>
+                <Text size="md" c="dimmed">
+                  (png, jpg; jpeg; Size ≤ 2M)
+                </Text>
               </Group>
             </Stack>
           </Paper>
@@ -866,16 +1015,12 @@ export default function AdminBlogDetailPageContentContainer({
             >
               Cancel
             </Button>
-            <Button
-              color="red"
-              onClick={handleDeleteBlog}
-              loading={isDeleting}
-            >
+            <Button color="red" onClick={handleDeleteBlog} loading={isDeleting}>
               Delete
             </Button>
           </Group>
         </Stack>
       </Modal>
     </div>
-  )
+  );
 }

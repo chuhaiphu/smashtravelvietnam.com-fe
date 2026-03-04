@@ -1,12 +1,12 @@
-import { HttpResponse } from "@/interfaces/_base-interface";
-import { ApiError } from "@/helpers/classes";
-import { parseSetCookie } from "@/helpers/function-helpers";
-import { cookies } from "next/headers";
+import { HttpResponse } from '@/interfaces/_base-interface';
+import { ApiError } from '@/utils/api-error';
+import { parseSetCookie } from '@/utils/function-helpers';
+import { cookies } from 'next/headers';
 
 const SMASH_API_URL = process.env.SMASH_API_URL;
 
 if (!SMASH_API_URL) {
-  throw new Error("Missing SMASH_API_URL env variable");
+  throw new Error('Missing SMASH_API_URL env variable');
 }
 
 export async function api<T>(
@@ -20,13 +20,13 @@ export async function api<T>(
   const cookieStore = await cookies();
   const cookieHeader = cookieStore.toString();
   const headers: HeadersInit = {
-    ...(cookieHeader && { "Cookie": cookieHeader }),
+    ...(cookieHeader && { Cookie: cookieHeader }),
     ...options.headers,
   };
 
   // FormData donot need to set Content-Type header
   if (!(options.body instanceof FormData)) {
-    (headers as Record<string, string>)['Content-Type'] = "application/json";
+    (headers as Record<string, string>)['Content-Type'] = 'application/json';
   }
 
   const config: RequestInit = {
@@ -61,11 +61,14 @@ export async function api<T>(
     }
     const httpResponse: HttpResponse<T> = await response.json();
     return httpResponse;
-
   } catch (error) {
     if (error instanceof ApiError) {
       throw error;
     }
-    throw new ApiError(error instanceof Error ? error.message : 'Unexpected error occurred', "UNKNOWN", 520);
+    throw new ApiError(
+      error instanceof Error ? error.message : 'Unexpected error occurred',
+      'UNKNOWN',
+      520
+    );
   }
 }

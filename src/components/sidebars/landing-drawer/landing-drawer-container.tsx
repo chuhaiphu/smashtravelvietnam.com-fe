@@ -1,17 +1,17 @@
 'use client';
 
-import { ActionIcon, Stack } from "@mantine/core";
-import { FaListCheck } from "react-icons/fa6";
-import { useDisclosure } from "@mantine/hooks";
-import { Drawer } from "@mantine/core";
-import Link from "next/link";
-import { Route } from "next";
-import classes from "./landing-drawer.module.scss";
-import { IMenuResponse } from "@/interfaces/menu-interface";
-import { ITourCategoryResponse } from "@/interfaces/tour-category-interface";
-import { TreeManager } from "@/helpers/tree-manager-helper";
-import HomeIcon from "@/components/icons/vinaup-home-icon";
-import React, { useMemo } from "react";
+import { ActionIcon, Stack } from '@mantine/core';
+import { FaListCheck } from 'react-icons/fa6';
+import { useDisclosure } from '@mantine/hooks';
+import { Drawer } from '@mantine/core';
+import Link from 'next/link';
+import { Route } from 'next';
+import classes from './landing-drawer.module.scss';
+import { IMenuResponse } from '@/interfaces/menu-interface';
+import { ITourCategoryResponse } from '@/interfaces/tour-category-interface';
+import { TreeManager } from '@/utils/tree-manager';
+import HomeIcon from '@/components/icons/vinaup-home-icon';
+import React, { useMemo } from 'react';
 
 interface LandingDrawerContainerProps {
   menusData: IMenuResponse[];
@@ -32,36 +32,47 @@ export default function LandingDrawerContainer({
   }, [menusData]);
 
   // Build tour category lookup map
-  const tourCategoryMap = tourCategoriesData.reduce((tcMap, tc) => {
-    tcMap[tc.id] = tc;
-    return tcMap;
-  }, {} as Record<string, ITourCategoryResponse>);
+  const tourCategoryMap = tourCategoriesData.reduce(
+    (tcMap, tc) => {
+      tcMap[tc.id] = tc;
+      return tcMap;
+    },
+    {} as Record<string, ITourCategoryResponse>
+  );
 
   // Get URL for a menu item
   const getMenuUrl = (menu: IMenuResponse): string => {
-    if (menu.targetType === "tour-category" && menu.targetId) {
+    if (menu.targetType === 'tour-category' && menu.targetId) {
       const tourCategory = tourCategoryMap[menu.targetId];
       if (tourCategory) {
         return `/${tourCategory.endpoint}`;
       }
     }
-    if (menu.targetType === "custom-url" && menu.customUrl) {
-      if (menu.customUrl === "") {
-        return "/";
+    if (menu.targetType === 'custom-url' && menu.customUrl) {
+      if (menu.customUrl === '') {
+        return '/';
       }
       // If customUrl doesn't start with http:// or https://, add https://
-      if (!menu.customUrl.startsWith("http://") && !menu.customUrl.startsWith("https://")) {
+      if (
+        !menu.customUrl.startsWith('http://') &&
+        !menu.customUrl.startsWith('https://')
+      ) {
         return `https://${menu.customUrl}`;
       }
       return menu.customUrl;
     }
-    return "/";
+    return '/';
   };
 
-  const renderMenuItem = (menu: IMenuResponse, depth: number = 0, isRootChildren: boolean): React.ReactNode => {
+  const renderMenuItem = (
+    menu: IMenuResponse,
+    depth: number = 0,
+    isRootChildren: boolean
+  ): React.ReactNode => {
     const url = getMenuUrl(menu);
     const hasChildren = menu.children && menu.children.length > 0;
-    const isCustomUrl = menu.targetType === "custom-url" && menu.customUrl && menu.customUrl !== "";
+    const isCustomUrl =
+      menu.targetType === 'custom-url' && menu.customUrl && menu.customUrl !== '';
 
     return (
       <div key={menu.id}>
@@ -72,11 +83,15 @@ export default function LandingDrawerContainer({
             target="_blank"
             rel="noopener noreferrer"
             style={{
-              paddingLeft: depth > 0 ? `${depth * 16 + 12}px` : "12px",
+              paddingLeft: depth > 0 ? `${depth * 16 + 12}px` : '12px',
             }}
             className={`${classes.menuLink} ${classes.menuItem}`}
           >
-            <span className={!isRootChildren ? classes.menuLabel : classes.menuLabelParent}>
+            <span
+              className={
+                !isRootChildren ? classes.menuLabel : classes.menuLabelParent
+              }
+            >
               {menu.title}
             </span>
           </a>
@@ -85,11 +100,13 @@ export default function LandingDrawerContainer({
             onClick={close}
             href={url as Route}
             style={{
-              paddingLeft: depth > 0 ? `${depth * 16 + 12}px` : "12px",
+              paddingLeft: depth > 0 ? `${depth * 16 + 12}px` : '12px',
             }}
             className={`${classes.menuLink} ${classes.menuItem}`}
           >
-            <span className={!hasChildren ? classes.menuLabel : classes.menuLabelParent}>
+            <span
+              className={!hasChildren ? classes.menuLabel : classes.menuLabelParent}
+            >
               {menu.title}
             </span>
           </Link>
@@ -126,7 +143,7 @@ export default function LandingDrawerContainer({
           </Link>
         }
         position="right"
-        size={"xs"}
+        size={'xs'}
         offset={8}
       >
         <div className={classes.divider} />
@@ -135,4 +152,3 @@ export default function LandingDrawerContainer({
     </>
   );
 }
-

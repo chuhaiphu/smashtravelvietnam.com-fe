@@ -1,18 +1,20 @@
 'use client';
 
-import React, { useMemo } from "react";
-import { Paper, Stack, Group, Text } from "@mantine/core";
-import { useParams, useRouter } from "next/navigation";
-import { Route } from "next";
-import classes from "./blog-category-nav.module.scss";
-import { IBlogCategoryResponse } from "@/interfaces/blog-category-interface";
-import { TreeManager } from "@/helpers/tree-manager-helper";
+import React, { useMemo } from 'react';
+import { Paper, Stack, Group, Text } from '@mantine/core';
+import { useParams, useRouter } from 'next/navigation';
+import { Route } from 'next';
+import classes from './blog-category-nav.module.scss';
+import { IBlogCategoryResponse } from '@/interfaces/blog-category-interface';
+import { TreeManager } from '@/utils/tree-manager';
 
 interface BlogCategoryNavProps {
   blogCategoriesData: IBlogCategoryResponse[];
 }
 
-export default function BlogCategoryNav({ blogCategoriesData }: BlogCategoryNavProps) {
+export default function BlogCategoryNav({
+  blogCategoriesData,
+}: BlogCategoryNavProps) {
   const router = useRouter();
   const { id } = useParams();
 
@@ -32,12 +34,13 @@ export default function BlogCategoryNav({ blogCategoriesData }: BlogCategoryNavP
     if (!root || !root.children) {
       return null;
     }
-    return root.children?.map(child =>
-      renderBlogCategoryBar(child, 0)
-    );
+    return root.children?.map((child) => renderBlogCategoryBar(child, 0));
   };
 
-  const renderBlogCategoryBar = (blogCategory: IBlogCategoryResponse, depth: number = 0): React.ReactNode => {
+  const renderBlogCategoryBar = (
+    blogCategory: IBlogCategoryResponse,
+    depth: number = 0
+  ): React.ReactNode => {
     return (
       <React.Fragment key={blogCategory.id}>
         <Stack
@@ -47,14 +50,20 @@ export default function BlogCategoryNav({ blogCategoriesData }: BlogCategoryNavP
           bdrs={'sm'}
           p={'8px'}
           ml={depth * 16}
-          onClick={() => { router.push(`/adminup/blog-category/${blogCategory.id}` as Route); }}
+          onClick={() => {
+            router.push(`/adminup/blog-category/${blogCategory.id}` as Route);
+          }}
         >
           <Group key={blogCategory.id}>
-            <Text fw={isActiveBlogCategory(blogCategory.id) ? 'bold' : 'normal'}>{blogCategory.title}</Text>
+            <Text fw={isActiveBlogCategory(blogCategory.id) ? 'bold' : 'normal'}>
+              {blogCategory.title}
+            </Text>
           </Group>
         </Stack>
         <>
-          {blogCategory.children?.map((child) => renderBlogCategoryBar(child, depth + 1))}
+          {blogCategory.children?.map((child) =>
+            renderBlogCategoryBar(child, depth + 1)
+          )}
         </>
       </React.Fragment>
     );
@@ -62,9 +71,7 @@ export default function BlogCategoryNav({ blogCategoriesData }: BlogCategoryNavP
 
   return (
     <Paper p={'sm'} radius={'md'} shadow="xs" withBorder>
-      <Stack gap={'xs'}>
-        {renderBlogCategoryTree()}
-      </Stack>
+      <Stack gap={'xs'}>{renderBlogCategoryTree()}</Stack>
     </Paper>
   );
 }

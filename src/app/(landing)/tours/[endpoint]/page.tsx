@@ -19,7 +19,7 @@ import {
   LandingCarousel,
 } from '@/components/primitives/landing-carousel/landing-carousel';
 import VideoSection from '@/components/primitives/video-section/video-section';
-import { formatPrice, renderDurationDays } from '@/helpers/function-helpers';
+import { formatPrice, renderDurationDays } from '@/utils/function-helpers';
 import { RiCheckDoubleFill } from 'react-icons/ri';
 import { SERVICE_ITEMS } from '@/constants';
 import SocialTab from '@/components/primitives/social-tab/social-tab';

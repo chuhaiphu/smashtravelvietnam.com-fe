@@ -1,7 +1,7 @@
-import { Card, Text, Group, Stack } from "@mantine/core";
-import classes from "./tour-item.module.scss";
-import { formatPrice, renderDurationDays } from "@/helpers/function-helpers";
-import Image from "next/image";
+import { Card, Text, Group, Stack } from '@mantine/core';
+import classes from './tour-item.module.scss';
+import { formatPrice, renderDurationDays } from '@/utils/function-helpers';
+import Image from 'next/image';
 
 interface TourItemProps {
   item: {
@@ -32,7 +32,9 @@ export default async function TourItem({ item }: TourItemProps) {
     if (discountPrice === 0) {
       return (
         <Group classNames={{ root: classes.price }} gap={'xs'}>
-          <Text c={'#00E1FF'} className={classes.currency} pb={4} size="md">đ</Text>
+          <Text c={'#00E1FF'} className={classes.currency} pb={4} size="md">
+            đ
+          </Text>
           <Text c={'#00E1FF'} className={classes.value} size="lg">
             {formatPrice(price)}
           </Text>
@@ -43,17 +45,14 @@ export default async function TourItem({ item }: TourItemProps) {
     // Case 3: Both price and discountPrice exist -> price strikethrough, discountPrice as main
     return (
       <Group classNames={{ root: classes.price }} gap={'xs'}>
-        <Text c={'#00E1FF'} className={classes.currency} pb={4} size="md">đ</Text>
+        <Text c={'#00E1FF'} className={classes.currency} pb={4} size="md">
+          đ
+        </Text>
         <Group gap={'xs'}>
           <Text c={'#00E1FF'} className={classes.value} size="lg">
             {formatPrice(discountPrice)}
           </Text>
-          <Text
-            td="line-through"
-            c={'white'}
-            className={classes.value}
-            size="sm"
-          >
+          <Text td="line-through" c={'white'} className={classes.value} size="sm">
             {formatPrice(price)}
           </Text>
         </Group>
@@ -65,7 +64,7 @@ export default async function TourItem({ item }: TourItemProps) {
     <Card className={classes.tourItem} padding={0} bg={'transparent'}>
       <div className={classes.imageWrapper}>
         <Image
-          src={item.mainImageUrl || "/images/image-placeholder.png"}
+          src={item.mainImageUrl || '/images/image-placeholder.png'}
           alt={item.title}
           className={classes.image}
           fill
@@ -73,7 +72,13 @@ export default async function TourItem({ item }: TourItemProps) {
       </div>
 
       <Stack className={classes.content} gap="xs" p="sm" pt={'lg'}>
-        <Text className={classes.title} fw={'400'} c={'#00E1FF'} lineClamp={2} component="h3" fz={'lg'}
+        <Text
+          className={classes.title}
+          fw={'400'}
+          c={'#00E1FF'}
+          lineClamp={2}
+          component="h3"
+          fz={'lg'}
           styles={{ root: { lineHeight: 1.5, minHeight: '3em' } }}
         >
           {item.title}

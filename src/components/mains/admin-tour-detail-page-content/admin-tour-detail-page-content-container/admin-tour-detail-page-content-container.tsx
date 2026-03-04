@@ -1,32 +1,57 @@
 'use client';
 
-import { ActionIcon, Button, Grid, GridCol, Group, Modal, MultiSelect, MultiSelectProps, Paper, Select, Stack, Text, TextInput, UnstyledButton } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import classes from "./admin-tour-detail-page-content-container.module.scss";
-import { TextEditor } from "@/components/editors/text-editor/text-editor";
-import UploadImageSection from "@/components/primitives/upload-image-section/upload-image-section";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { createTourAction, deleteTourAction, updateTourAction } from "@/actions/tour-action";
-import { ITourResponse } from "@/interfaces/tour-interface";
-import { useDebouncedCallback } from "use-debounce";
-import { generateUniqueEndpoint, stripHtmlAndTruncate } from "@/helpers/function-helpers";
-import { MAX_IMAGE_COUNT_ALLOWED, VN_PROVINCES } from "@/constants";
+import {
+  ActionIcon,
+  Button,
+  Grid,
+  GridCol,
+  Group,
+  Modal,
+  MultiSelect,
+  MultiSelectProps,
+  Paper,
+  Select,
+  Stack,
+  Text,
+  TextInput,
+  UnstyledButton,
+} from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import classes from './admin-tour-detail-page-content-container.module.scss';
+import { TextEditor } from '@/components/editors/text-editor/text-editor';
+import UploadImageSection from '@/components/primitives/upload-image-section/upload-image-section';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import {
+  createTourAction,
+  deleteTourAction,
+  updateTourAction,
+} from '@/actions/tour-action';
+import { ITourResponse } from '@/interfaces/tour-interface';
+import { useDebouncedCallback } from 'use-debounce';
+import {
+  generateUniqueEndpoint,
+  stripHtmlAndTruncate,
+} from '@/utils/function-helpers';
+import { MAX_IMAGE_COUNT_ALLOWED, VN_PROVINCES } from '@/constants';
 // import { DatePickerInput, TimePicker } from "@mantine/dates";
-import dayjs from "dayjs"
-import { FaCaretDown, FaCheck } from "react-icons/fa6";
-import { GrTrash } from "react-icons/gr";
-import UnlockIcon from "@/components/icons/vinaup-unlock-icon";
+import dayjs from 'dayjs';
+import { FaCaretDown, FaCheck } from 'react-icons/fa6';
+import { GrTrash } from 'react-icons/gr';
+import UnlockIcon from '@/components/icons/vinaup-unlock-icon';
 import UploadIconV2 from '@/components/icons/vinaup-upload-icon-v2.svg';
 import UploadIconV3 from '@/components/icons/vinaup-upload-icon-v3.svg';
 import PenIcon from '@/components/icons/vinaup-pen-icon.svg';
-import AddNewIcon from "@/components/icons/vinaup-add-new-icon.svg";
-import { useRouter } from "next/navigation";
-import { ITourCategoryResponse } from "@/interfaces/tour-category-interface";
-import { ITourCategoryTourResponse } from "@/interfaces/tour-category-tour-interface";
-import { createTourCategoryTourAction, deleteTourCategoryTourAction } from "@/actions/tour-category-tour-action";
-import { TreeManager } from "@/helpers/tree-manager-helper";
-import { Route } from "next";
-import { IUserResponse } from "@/interfaces/user-interface";
+import AddNewIcon from '@/components/icons/vinaup-add-new-icon.svg';
+import { useRouter } from 'next/navigation';
+import { ITourCategoryResponse } from '@/interfaces/tour-category-interface';
+import { ITourCategoryTourResponse } from '@/interfaces/tour-category-tour-interface';
+import {
+  createTourCategoryTourAction,
+  deleteTourCategoryTourAction,
+} from '@/actions/tour-category-tour-action';
+import { TreeManager } from '@/utils/tree-manager';
+import { Route } from 'next';
+import { IUserResponse } from '@/interfaces/user-interface';
 
 interface AdminTourDetailPageContentContainerProps {
   currentTourData: ITourResponse;
@@ -39,29 +64,47 @@ export default function AdminTourDetailPageContentContainer({
   tourCategoriesData,
   userData,
 }: AdminTourDetailPageContentContainerProps) {
-
-  const [additionalImageUrls, setAdditionalImageUrls] = useState<string[]>(currentTourData.additionalImageUrls);
-  const [additionalImagesPosition, setAdditionalImagesPosition] = useState<string>(currentTourData.additionalImagesPosition || 'top');
+  const [additionalImageUrls, setAdditionalImageUrls] = useState<string[]>(
+    currentTourData.additionalImageUrls
+  );
+  const [additionalImagesPosition, setAdditionalImagesPosition] = useState<string>(
+    currentTourData.additionalImagesPosition || 'top'
+  );
   const [videoUrl, setVideoUrl] = useState<string>(currentTourData.videoUrl || '');
-  const [videoThumbnailUrl, setVideoThumbnailUrl] = useState<string>(currentTourData.videoThumbnailUrl || '');
-  const [mainImageUrl, setMainImageUrl] = useState<string>(currentTourData.mainImageUrl || '');
-  const [videoPosition, setVideoPosition] = useState<string>(currentTourData.videoPosition || 'bottom');
+  const [videoThumbnailUrl, setVideoThumbnailUrl] = useState<string>(
+    currentTourData.videoThumbnailUrl || ''
+  );
+  const [mainImageUrl, setMainImageUrl] = useState<string>(
+    currentTourData.mainImageUrl || ''
+  );
+  const [videoPosition, setVideoPosition] = useState<string>(
+    currentTourData.videoPosition || 'bottom'
+  );
   const [loadingImageIndex, setLoadingImageIndex] = useState<number | null>(null);
-  const [videoThumbnailLoading, setVideoThumbnailLoading] = useState<boolean>(false);
+  const [videoThumbnailLoading, setVideoThumbnailLoading] =
+    useState<boolean>(false);
   const [mainImageLoading, setMainImageLoading] = useState<boolean>(false);
   const [title, setTitle] = useState<string>(currentTourData.title);
-  const [description, setDescription] = useState<string>(currentTourData.description || '');
+  const [description, setDescription] = useState<string>(
+    currentTourData.description || ''
+  );
   const [content, setContent] = useState<string>(currentTourData.content || '');
-  const [destinations, setDestinations] = useState<string[]>(currentTourData.destinations);
+  const [destinations, setDestinations] = useState<string[]>(
+    currentTourData.destinations
+  );
   // const [startDate, setStartDate] = useState<Date>(currentTourData.startDate);
   const [status, setStatus] = useState<string>(currentTourData.visibility);
   const [sortOrder, setSortOrder] = useState<number>(currentTourData.sortOrder);
   const [normalPrice, setNormalPrice] = useState<number>(currentTourData.price);
-  const [discountPrice, setDiscountPrice] = useState<number>(currentTourData.discountPrice);
+  const [discountPrice, setDiscountPrice] = useState<number>(
+    currentTourData.discountPrice
+  );
   const [childPrice, setChildPrice] = useState<number>(currentTourData.childPrice);
   const [type, setType] = useState<string>(currentTourData.type);
   const [duration, setDuration] = useState<number>(currentTourData.durationDays);
-  const [tourCategoryTours, setTourCategoryTours] = useState<ITourCategoryTourResponse[]>(currentTourData.tourCategoryTours);
+  const [tourCategoryTours, setTourCategoryTours] = useState<
+    ITourCategoryTourResponse[]
+  >(currentTourData.tourCategoryTours);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [deleteModalOpened, setDeleteModalOpened] = useState<boolean>(false);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
@@ -77,10 +120,12 @@ export default function AdminTourDetailPageContentContainer({
       return null;
     }
     return new TreeManager(tourCategoriesData);
-  }, [tourCategoriesData])
+  }, [tourCategoriesData]);
 
   const videoUrlInputRef = useRef<HTMLInputElement>(null);
-  const handleFocusAndSelectInput = (ref: React.RefObject<HTMLInputElement | null>) => {
+  const handleFocusAndSelectInput = (
+    ref: React.RefObject<HTMLInputElement | null>
+  ) => {
     if (ref.current) {
       ref.current.focus();
       ref.current.select();
@@ -96,7 +141,7 @@ export default function AdminTourDetailPageContentContainer({
       title: newTitle,
       endpoint: endpoint,
       destinations: ['Ho Chi Minh'],
-      userId: userData.id
+      userId: userData.id,
     });
 
     if (!response.success || !response.data) {
@@ -119,13 +164,15 @@ export default function AdminTourDetailPageContentContainer({
     });
   };
 
-  const handleSelectAdditionalImage = async (imageUrl: string, imageIndex: number) => {
+  const handleSelectAdditionalImage = async (
+    imageUrl: string,
+    imageIndex: number
+  ) => {
     setLoadingImageIndex(imageIndex);
     try {
-      await updateTourAction(
-        currentTourData.id,
-        { additionalImageUrls: [...additionalImageUrls, imageUrl] }
-      );
+      await updateTourAction(currentTourData.id, {
+        additionalImageUrls: [...additionalImageUrls, imageUrl],
+      });
       setAdditionalImageUrls([...additionalImageUrls, imageUrl]);
     } catch (error) {
       notifications.show({
@@ -154,10 +201,7 @@ export default function AdminTourDetailPageContentContainer({
   const handleSelectVideoThumbnail = async (imageUrl: string) => {
     setVideoThumbnailLoading(true);
     try {
-      await updateTourAction(
-        currentTourData.id,
-        { videoThumbnailUrl: imageUrl }
-      );
+      await updateTourAction(currentTourData.id, { videoThumbnailUrl: imageUrl });
       setVideoThumbnailUrl(imageUrl);
     } catch (error) {
       notifications.show({
@@ -184,10 +228,7 @@ export default function AdminTourDetailPageContentContainer({
   const handleSelectMainImage = async (imageUrl: string) => {
     setMainImageLoading(true);
     try {
-      await updateTourAction(
-        currentTourData.id,
-        { mainImageUrl: imageUrl }
-      );
+      await updateTourAction(currentTourData.id, { mainImageUrl: imageUrl });
       setMainImageUrl(imageUrl);
     } catch (error) {
       notifications.show({
@@ -212,15 +253,16 @@ export default function AdminTourDetailPageContentContainer({
   };
 
   const handleUpdateTitle = useDebouncedCallback(async (newTitle: string) => {
-    const endpoint = await generateUniqueEndpoint(newTitle, 'tour', currentTourData.id);
-
-    await updateTourAction(
-      currentTourData.id,
-      {
-        title: newTitle,
-        endpoint: endpoint
-      }
+    const endpoint = await generateUniqueEndpoint(
+      newTitle,
+      'tour',
+      currentTourData.id
     );
+
+    await updateTourAction(currentTourData.id, {
+      title: newTitle,
+      endpoint: endpoint,
+    });
     setIsSaving(false);
     notifications.show({
       message: 'Saved successfully',
@@ -228,23 +270,20 @@ export default function AdminTourDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }, 1500)
+  }, 1500);
 
-  const handleUpdateDescription = useDebouncedCallback(async (newDescription: string) => {
-    await updateTourAction(
-      currentTourData.id,
-      { description: newDescription }
-    );
-    setIsSaving(false);
-  }, 1500)
+  const handleUpdateDescription = useDebouncedCallback(
+    async (newDescription: string) => {
+      await updateTourAction(currentTourData.id, { description: newDescription });
+      setIsSaving(false);
+    },
+    1500
+  );
 
   const handleUpdateContent = useDebouncedCallback(async (newContent: string) => {
-    await updateTourAction(
-      currentTourData.id,
-      { content: newContent }
-    );
+    await updateTourAction(currentTourData.id, { content: newContent });
     setIsSaving(false);
-  }, 1500)
+  }, 1500);
 
   const handleUpdateAdditionalImagesPosition = (newPosition: string) => {
     setAdditionalImagesPosition(newPosition);
@@ -255,7 +294,7 @@ export default function AdminTourDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }
+  };
 
   const handleUpdateDestinations = (newDestinations: string[]) => {
     setDestinations(newDestinations);
@@ -266,7 +305,7 @@ export default function AdminTourDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }
+  };
 
   // const handleUpdateStartDate = (newDate: Date) => {
   //   setStartDate(newDate);
@@ -310,7 +349,7 @@ export default function AdminTourDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }
+  };
 
   const handleUpdateSortOrder = (newSortOrder: string) => {
     const sortOrderNumber = Number(newSortOrder);
@@ -322,7 +361,7 @@ export default function AdminTourDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }
+  };
 
   const handleUpdateType = (newType: string) => {
     setType(newType);
@@ -333,7 +372,7 @@ export default function AdminTourDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }
+  };
 
   const handleUpdateNormalPrice = useDebouncedCallback(async (newPrice: number) => {
     await updateTourAction(currentTourData.id, { price: newPrice });
@@ -344,18 +383,21 @@ export default function AdminTourDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }, 1500)
+  }, 1500);
 
-  const handleUpdateDiscountPrice = useDebouncedCallback(async (newPrice: number) => {
-    await updateTourAction(currentTourData.id, { discountPrice: newPrice });
-    setIsSaving(false);
-    notifications.show({
-      message: 'Saved successfully',
-      color: 'green',
-      position: 'top-right',
-      autoClose: 900,
-    });
-  }, 1500)
+  const handleUpdateDiscountPrice = useDebouncedCallback(
+    async (newPrice: number) => {
+      await updateTourAction(currentTourData.id, { discountPrice: newPrice });
+      setIsSaving(false);
+      notifications.show({
+        message: 'Saved successfully',
+        color: 'green',
+        position: 'top-right',
+        autoClose: 900,
+      });
+    },
+    1500
+  );
 
   const handleUpdateChildPrice = useDebouncedCallback(async (newPrice: number) => {
     await updateTourAction(currentTourData.id, { childPrice: newPrice });
@@ -366,7 +408,7 @@ export default function AdminTourDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }, 1500)
+  }, 1500);
 
   const handleUpdateVideoPosition = (newPosition: string) => {
     setVideoPosition(newPosition);
@@ -377,7 +419,7 @@ export default function AdminTourDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }
+  };
 
   const handleUpdateVideoUrl = useDebouncedCallback(async (newUrl: string) => {
     await updateTourAction(currentTourData.id, { videoUrl: newUrl });
@@ -388,7 +430,7 @@ export default function AdminTourDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }, 1500)
+  }, 1500);
 
   const handleUpdateDuration = (newDuration: string) => {
     const newDurationNumber = Number(newDuration);
@@ -400,7 +442,7 @@ export default function AdminTourDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }
+  };
 
   // Generate SEO title and description
   const seoTitle = title ? stripHtmlAndTruncate(title, 100) : '';
@@ -454,10 +496,14 @@ export default function AdminTourDetailPageContentContainer({
   };
 
   // tour category options record for renderTourCategoryOption to reference the id from option value
-  const tourCategoryOptionsData: Record<string, ITourCategoryResponse> = tourCategoriesData.reduce((acc, tourCategory) => {
-    acc[tourCategory.id] = tourCategory;
-    return acc;
-  }, {} as Record<string, ITourCategoryResponse>);
+  const tourCategoryOptionsData: Record<string, ITourCategoryResponse> =
+    tourCategoriesData.reduce(
+      (acc, tourCategory) => {
+        acc[tourCategory.id] = tourCategory;
+        return acc;
+      },
+      {} as Record<string, ITourCategoryResponse>
+    );
 
   // Helper function to get parent chain recursively
   const getOptionChain = (tourCategoryId: string): ITourCategoryResponse[] => {
@@ -469,12 +515,17 @@ export default function AdminTourDetailPageContentContainer({
     return [tourCategoryChain];
   };
 
-  const getOptionChainWithoutRoot = (tourCategoryId: string): ITourCategoryResponse[] => {
+  const getOptionChainWithoutRoot = (
+    tourCategoryId: string
+  ): ITourCategoryResponse[] => {
     const parentChain = getOptionChain(tourCategoryId);
     return parentChain.slice(1);
   };
 
-  const renderTourCategoryOption: MultiSelectProps['renderOption'] = ({ option, checked }) => {
+  const renderTourCategoryOption: MultiSelectProps['renderOption'] = ({
+    option,
+    checked,
+  }) => {
     const parentChain = getOptionChainWithoutRoot(option.value);
 
     // If has parent(s), show the full chain
@@ -488,12 +539,14 @@ export default function AdminTourDetailPageContentContainer({
                 <Text
                   size="sm"
                   fw={index === parentChain.length - 1 ? 500 : 400}
-                  c={index === parentChain.length - 1 ? undefined : "dark.3"}
+                  c={index === parentChain.length - 1 ? undefined : 'dark.3'}
                 >
                   {category.title}
                 </Text>
                 {index < parentChain.length - 1 && (
-                  <Text size="sm" c="dark.3" fw={300}>›</Text>
+                  <Text size="sm" c="dark.3" fw={300}>
+                    ›
+                  </Text>
                 )}
               </Group>
             ))}
@@ -506,30 +559,38 @@ export default function AdminTourDetailPageContentContainer({
     return (
       <Group gap="sm" justify="space-between">
         {checked && <FaCheck size={20} color="gray" />}
-        <Text size="sm" fw={500}>{tourCategoryOptionsData[option.value].title}</Text>
+        <Text size="sm" fw={500}>
+          {tourCategoryOptionsData[option.value].title}
+        </Text>
       </Group>
     );
-  }
+  };
 
   const handleUpdateTourCategories = async (newTourCategoryIds: string[]) => {
     // Find tour categories to add (have in selected but not in current)
-    const currentTourCategoryIds = tourCategoryTours.map(tct => tct.tourCategoryId);
-    const toAdd = newTourCategoryIds.filter(id => !currentTourCategoryIds.includes(id));
-    const toRemove = currentTourCategoryIds.filter(id => !newTourCategoryIds.includes(id));
+    const currentTourCategoryIds = tourCategoryTours.map(
+      (tct) => tct.tourCategoryId
+    );
+    const toAdd = newTourCategoryIds.filter(
+      (id) => !currentTourCategoryIds.includes(id)
+    );
+    const toRemove = currentTourCategoryIds.filter(
+      (id) => !newTourCategoryIds.includes(id)
+    );
 
     // Add new tour categories
     for (const tourCategoryId of toAdd) {
       await createTourCategoryTourAction({
         tourId: currentTourData.id,
         tourCategoryId: tourCategoryId,
-        sortOrder: 0
+        sortOrder: 0,
       });
     }
 
     // Remove tour categories that are not selected
     for (const tourCategoryId of toRemove) {
       const tourCategoryTour = tourCategoryTours.find(
-        tct => tct.tourCategoryId === tourCategoryId
+        (tct) => tct.tourCategoryId === tourCategoryId
       );
       if (tourCategoryTour) {
         await deleteTourCategoryTourAction(tourCategoryTour.id);
@@ -541,14 +602,16 @@ export default function AdminTourDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }
+  };
 
   return (
     <div className={classes.adminTourDetailPageRoot}>
       <Group className={classes.pageHeader} justify="space-between">
         <Text size="xl">Tour detail</Text>
         <Group gap="sm">
-          <UnstyledButton onClick={handleAddNewTour} fz={'lg'}>Add new</UnstyledButton>
+          <UnstyledButton onClick={handleAddNewTour} fz={'lg'}>
+            Add new
+          </UnstyledButton>
           <ActionIcon
             variant="transparent"
             onClick={handleAddNewTour}
@@ -564,15 +627,21 @@ export default function AdminTourDetailPageContentContainer({
             <Paper p={'sm'} radius={'md'} classNames={{ root: classes.paperBlock }}>
               <Stack gap={'xs'}>
                 <Text>Title</Text>
-                <TextInput size="md" value={title} placeholder="A title under 100 characters"
+                <TextInput
+                  size="md"
+                  value={title}
+                  placeholder="A title under 100 characters"
                   maxLength={100}
                   onChange={(e) => {
                     setTitle(e.target.value);
                     setIsSaving(true);
-                    handleUpdateTitle(e.target.value)
-                  }} />
+                    handleUpdateTitle(e.target.value);
+                  }}
+                />
                 <Group gap={'xs'} justify="space-between">
-                  <Text size="md">URL: smashtravelvietnam.com/tours/{currentTourData.endpoint}</Text>
+                  <Text size="md">
+                    URL: smashtravelvietnam.com/tours/{currentTourData.endpoint}
+                  </Text>
                   <Group>
                     <Text
                       size="sm"
@@ -593,21 +662,27 @@ export default function AdminTourDetailPageContentContainer({
               </Stack>
               <Stack gap={'xs'} mt={'md'}>
                 <Text>Description / Overview</Text>
-                <TextEditor content={description} onChange={(newDescription) => {
-                  setDescription(newDescription);
-                  setIsSaving(true);
-                  handleUpdateDescription(newDescription);
-                }} />
+                <TextEditor
+                  content={description}
+                  onChange={(newDescription) => {
+                    setDescription(newDescription);
+                    setIsSaving(true);
+                    handleUpdateDescription(newDescription);
+                  }}
+                />
               </Stack>
             </Paper>
             <Paper p={'sm'} radius={'md'} classNames={{ root: classes.paperBlock }}>
               <Stack gap={'xs'}>
                 <Text>Content</Text>
-                <TextEditor content={content} onChange={(newContent) => {
-                  setContent(newContent);
-                  setIsSaving(true);
-                  handleUpdateContent(newContent);
-                }} />
+                <TextEditor
+                  content={content}
+                  onChange={(newContent) => {
+                    setContent(newContent);
+                    setIsSaving(true);
+                    handleUpdateContent(newContent);
+                  }}
+                />
               </Stack>
             </Paper>
             <Paper p={'sm'} radius={'md'} classNames={{ root: classes.paperBlock }}>
@@ -626,11 +701,13 @@ export default function AdminTourDetailPageContentContainer({
                     }}
                     data={[
                       { value: 'top', label: 'Top' },
-                      { value: 'bottom', label: 'Bottom' }
+                      { value: 'bottom', label: 'Bottom' },
                     ]}
                     value={additionalImagesPosition}
                     variant="unstyled"
-                    rightSection={<FaCaretDown color="var(--vinaup-blue-link)" size={20} />}
+                    rightSection={
+                      <FaCaretDown color="var(--vinaup-blue-link)" size={20} />
+                    }
                     onChange={(value) => {
                       if (!value) return;
                       handleUpdateAdditionalImagesPosition(value);
@@ -644,7 +721,9 @@ export default function AdminTourDetailPageContentContainer({
                       size="xl"
                       imageUrl={imgUrl}
                       isLoading={loadingImageIndex === index}
-                      onImageSelect={(imageUrl) => handleSelectAdditionalImage(imageUrl, index)}
+                      onImageSelect={(imageUrl) =>
+                        handleSelectAdditionalImage(imageUrl, index)
+                      }
                       onRemoveFile={() => handleRemoveAdditionalImage(index)}
                     />
                   ))}
@@ -652,7 +731,12 @@ export default function AdminTourDetailPageContentContainer({
                     <UploadImageSection
                       size="xl"
                       isLoading={loadingImageIndex === additionalImageUrls.length}
-                      onImageSelect={(imageUrl) => handleSelectAdditionalImage(imageUrl, additionalImageUrls.length)}
+                      onImageSelect={(imageUrl) =>
+                        handleSelectAdditionalImage(
+                          imageUrl,
+                          additionalImageUrls.length
+                        )
+                      }
                     />
                   )}
                 </Group>
@@ -663,9 +747,14 @@ export default function AdminTourDetailPageContentContainer({
                 <GridCol span={6}>
                   <Stack gap={'xs'}>
                     <Text>Country</Text>
-                    <TextInput size="md" classNames={{
-                      input: classes.countryInput
-                    }} value={currentTourData.country} disabled />
+                    <TextInput
+                      size="md"
+                      classNames={{
+                        input: classes.countryInput,
+                      }}
+                      value={currentTourData.country}
+                      disabled
+                    />
                   </Stack>
                 </GridCol>
                 <GridCol span={6}>
@@ -677,7 +766,9 @@ export default function AdminTourDetailPageContentContainer({
                       hidePickedOptions
                       data={VN_PROVINCES.map((p) => ({ value: p, label: p }))}
                       value={destinations}
-                      placeholder={destinations.length < 3 ? 'Select up to 3 destinations' : ''}
+                      placeholder={
+                        destinations.length < 3 ? 'Select up to 3 destinations' : ''
+                      }
                       searchable
                       nothingFoundMessage="Not found"
                       onChange={(value) => handleUpdateDestinations(value)}
@@ -686,9 +777,17 @@ export default function AdminTourDetailPageContentContainer({
                 </GridCol>
               </Grid>
             </Paper>
-            <Paper p={'md'} radius={'md'} withBorder classNames={{ root: classes.paperBlock }} bg={'var(--vinaup-soft-gray)'}>
+            <Paper
+              p={'md'}
+              radius={'md'}
+              withBorder
+              classNames={{ root: classes.paperBlock }}
+              bg={'var(--vinaup-soft-gray)'}
+            >
               <Stack gap={4}>
-                <div className={classes.seoBlockTitle}><b>S</b>earch <b>E</b>ngine <b>O</b>ptimization</div>
+                <div className={classes.seoBlockTitle}>
+                  <b>S</b>earch <b>E</b>ngine <b>O</b>ptimization
+                </div>
                 <div className={classes.seoDivider} />
                 <Stack gap={4}>
                   <Text
@@ -711,7 +810,7 @@ export default function AdminTourDetailPageContentContainer({
                     https://smashtravelvietnam.com/tours/{currentTourData.endpoint}
                   </Text>
                   <Text size="sm">
-                    {dayjs(currentTourData.updatedAt).format("MMM DD, YYYY")}
+                    {dayjs(currentTourData.updatedAt).format('MMM DD, YYYY')}
                   </Text>
                   <div
                     dangerouslySetInnerHTML={{ __html: seoDescription || '' }}
@@ -721,11 +820,13 @@ export default function AdminTourDetailPageContentContainer({
                 <div className={classes.seoDivider} />
                 <Stack gap={4}>
                   <Group justify="space-between" align="center">
-                    <Text size="md" fw={500}>Seo title</Text>
+                    <Text size="md" fw={500}>
+                      Seo title
+                    </Text>
                   </Group>
                   <TextInput
                     classNames={{
-                      input: classes.seoTextInput
+                      input: classes.seoTextInput,
                     }}
                     size="md"
                     placeholder="Name title (Suggest < 72 characters)"
@@ -736,7 +837,9 @@ export default function AdminTourDetailPageContentContainer({
                 </Stack>
                 <div className={classes.seoDivider} />
                 <Stack gap={4}>
-                  <Text size="md" fw={500}>Seo description</Text>
+                  <Text size="md" fw={500}>
+                    Seo description
+                  </Text>
                   <TextInput
                     classNames={{ input: classes.seoTextInput }}
                     size="md"
@@ -751,20 +854,22 @@ export default function AdminTourDetailPageContentContainer({
           </Stack>
         </GridCol>
         <GridCol span={{ base: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
-          <Paper p={'xs'}
+          <Paper
+            p={'xs'}
             radius={'md'}
             classNames={{
-              root: classes.tourConfiguration
-            }}>
+              root: classes.tourConfiguration,
+            }}
+          >
             <Stack gap={'0'}>
               <Group justify="space-between" wrap="nowrap">
                 <Text size="lg">Updated at</Text>
                 <Group>
                   <Text size="md" fw={500} lh={'2.5rem'}>
-                    {dayjs(currentTourData.updatedAt).format("DD/MM/YYYY")}
+                    {dayjs(currentTourData.updatedAt).format('DD/MM/YYYY')}
                   </Text>
                   <Text size="md" fw={500} lh={'2.5rem'}>
-                    {dayjs(currentTourData.updatedAt).format("HH:mm")}
+                    {dayjs(currentTourData.updatedAt).format('HH:mm')}
                   </Text>
                 </Group>
               </Group>
@@ -783,7 +888,9 @@ export default function AdminTourDetailPageContentContainer({
                   ]}
                   value={status}
                   variant="unstyled"
-                  rightSection={<FaCaretDown color="var(--vinaup-blue-link)" size={24} />}
+                  rightSection={
+                    <FaCaretDown color="var(--vinaup-blue-link)" size={24} />
+                  }
                   onChange={(value) => {
                     if (!value) return;
                     handleUpdateStatus(value);
@@ -795,7 +902,7 @@ export default function AdminTourDetailPageContentContainer({
                 <Select
                   scrollAreaProps={{
                     scrollbarSize: 6,
-                    type: 'always'
+                    type: 'always',
                   }}
                   w={'5rem'}
                   classNames={{
@@ -817,11 +924,12 @@ export default function AdminTourDetailPageContentContainer({
                     { value: '7', label: '8' },
                     { value: '8', label: '9' },
                     { value: '9', label: '10' },
-
                   ]}
                   value={sortOrder.toString()}
                   variant="unstyled"
-                  rightSection={<FaCaretDown color="var(--vinaup-blue-link)" size={24} />}
+                  rightSection={
+                    <FaCaretDown color="var(--vinaup-blue-link)" size={24} />
+                  }
                   onChange={(value) => {
                     if (!value) return;
                     handleUpdateSortOrder(value);
@@ -846,7 +954,9 @@ export default function AdminTourDetailPageContentContainer({
                   ]}
                   value={type}
                   variant="unstyled"
-                  rightSection={<FaCaretDown color="var(--vinaup-blue-link)" size={24} />}
+                  rightSection={
+                    <FaCaretDown color="var(--vinaup-blue-link)" size={24} />
+                  }
                   onChange={(value) => {
                     if (!value) return;
                     handleUpdateType(value);
@@ -863,12 +973,21 @@ export default function AdminTourDetailPageContentContainer({
                   <GrTrash size={24} color="var(--vinaup-blue-link)" />
                 </ActionIcon>
                 <Group gap={'xs'}>
-                  <Text size="lg" c="dark.3" className={isSaving ? classes.savingText : classes.savedText}>
+                  <Text
+                    size="lg"
+                    c="dark.3"
+                    className={isSaving ? classes.savingText : classes.savedText}
+                  >
                     {isSaving ? 'Saving...' : 'Saved'}
                   </Text>
                   <Button
-                    onClick={() => { router.push('/adminup/tour') }}
-                    variant="filled" color="blue" size="xs" bg={'#01426e'}
+                    onClick={() => {
+                      router.push('/adminup/tour');
+                    }}
+                    variant="filled"
+                    color="blue"
+                    size="xs"
+                    bg={'#01426e'}
                   >
                     Exit
                   </Button>
@@ -876,23 +995,35 @@ export default function AdminTourDetailPageContentContainer({
               </Group>
             </Stack>
           </Paper>
-          <Paper p={'xs'} pb={0} radius={'md'} mt={'sm'} classNames={{ root: classes.paperBlock }}>
+          <Paper
+            p={'xs'}
+            pb={0}
+            radius={'md'}
+            mt={'sm'}
+            classNames={{ root: classes.paperBlock }}
+          >
             <Stack gap={'0'}>
               <Group justify="space-between" wrap="nowrap" mb={4}>
                 <MultiSelect
-                  placeholder={tourCategoryTours.length < 3 ? 'Select up to 3 tour categories' : ''}
+                  placeholder={
+                    tourCategoryTours.length < 3
+                      ? 'Select up to 3 tour categories'
+                      : ''
+                  }
                   maxValues={3}
                   w={'100%'}
                   searchable
                   nothingFoundMessage="Not found"
-                  value={tourCategoryTours.map((tourCategoryTour) => tourCategoryTour.tourCategoryId)}
+                  value={tourCategoryTours.map(
+                    (tourCategoryTour) => tourCategoryTour.tourCategoryId
+                  )}
                   renderOption={renderTourCategoryOption}
-                  data={
-                    treeManager?.toFlatListWithoutRoot().map((tourCategory) => ({
+                  data={treeManager
+                    ?.toFlatListWithoutRoot()
+                    .map((tourCategory) => ({
                       value: tourCategory.id,
                       label: tourCategory.title,
-                    }))
-                  }
+                    }))}
                   onChange={(tourCategoryIds) => {
                     if (!tourCategoryIds) return;
                     handleUpdateTourCategories(tourCategoryIds);
@@ -904,7 +1035,7 @@ export default function AdminTourDetailPageContentContainer({
                 <Select
                   scrollAreaProps={{
                     scrollbarSize: 6,
-                    type: 'always'
+                    type: 'always',
                   }}
                   w={'8rem'}
                   classNames={{
@@ -956,31 +1087,53 @@ export default function AdminTourDetailPageContentContainer({
                     handleUpdateDuration(value);
                   }}
                   variant="unstyled"
-                  rightSection={<FaCaretDown color="var(--vinaup-blue-link)" size={24} />}
+                  rightSection={
+                    <FaCaretDown color="var(--vinaup-blue-link)" size={24} />
+                  }
                 />
               </Group>
             </Stack>
           </Paper>
-          <Paper p={'xs'} radius={'md'} mt={'sm'} classNames={{ root: classes.paperBlock }}>
+          <Paper
+            p={'xs'}
+            radius={'md'}
+            mt={'sm'}
+            classNames={{ root: classes.paperBlock }}
+          >
             <Group justify="space-between">
               <Group>
                 <Text size="lg">Boss:</Text>
-                <Text size="lg" c={'var(--vinaup-blue-link)'}>Accept</Text>
+                <Text size="lg" c={'var(--vinaup-blue-link)'}>
+                  Accept
+                </Text>
               </Group>
               <UnlockIcon size={24} />
             </Group>
           </Paper>
-          <Paper p={'xs'} radius={'md'} mt={'sm'} classNames={{ root: classes.paperBlock }}>
+          <Paper
+            p={'xs'}
+            radius={'md'}
+            mt={'sm'}
+            classNames={{ root: classes.paperBlock }}
+          >
             <Stack gap={'xs'}>
               <Group justify="space-between">
                 <Text size="lg">Price:</Text>
-                <Text size="lg" c={'var(--vinaup-blue-link)'}>VND</Text>
+                <Text size="lg" c={'var(--vinaup-blue-link)'}>
+                  VND
+                </Text>
               </Group>
-              <TextInput classNames={{ input: classes.priceInput, section: classes.priceInputSection }}
-                leftSection="Adult:" size="md" placeholder="Input a adult price"
+              <TextInput
+                classNames={{
+                  input: classes.priceInput,
+                  section: classes.priceInputSection,
+                }}
+                leftSection="Adult:"
+                size="md"
+                placeholder="Input a adult price"
                 value={normalPrice === 0 ? '' : normalPrice.toLocaleString('vi-VN')}
                 onChange={(e) => {
-                  const rawValue = e.target.value.replace(/\./g, '')
+                  const rawValue = e.target.value.replace(/\./g, '');
                   if (rawValue === '' || /^\d+$/.test(rawValue)) {
                     const newValue = rawValue === '' ? 0 : Number(rawValue);
                     setNormalPrice(newValue);
@@ -989,12 +1142,20 @@ export default function AdminTourDetailPageContentContainer({
                   }
                 }}
               />
-              <TextInput classNames={{ input: classes.priceInput, section: classes.priceInputSection }}
-                leftSection="Discount:" size="md" placeholder="Input a discount price"
-                value={discountPrice === 0 ? '' : discountPrice.toLocaleString('vi-VN')}
+              <TextInput
+                classNames={{
+                  input: classes.priceInput,
+                  section: classes.priceInputSection,
+                }}
+                leftSection="Discount:"
+                size="md"
+                placeholder="Input a discount price"
+                value={
+                  discountPrice === 0 ? '' : discountPrice.toLocaleString('vi-VN')
+                }
                 disabled={normalPrice === 0}
                 onChange={(e) => {
-                  const rawValue = e.target.value.replace(/\./g, '')
+                  const rawValue = e.target.value.replace(/\./g, '');
                   if (rawValue === '' || /^\d+$/.test(rawValue)) {
                     const newValue = rawValue === '' ? 0 : Number(rawValue);
                     setDiscountPrice(newValue);
@@ -1003,11 +1164,17 @@ export default function AdminTourDetailPageContentContainer({
                   }
                 }}
               />
-              <TextInput classNames={{ input: classes.priceInput, section: classes.priceInputSection }}
-                leftSection="Child:" size="md" placeholder="Input a child price"
+              <TextInput
+                classNames={{
+                  input: classes.priceInput,
+                  section: classes.priceInputSection,
+                }}
+                leftSection="Child:"
+                size="md"
+                placeholder="Input a child price"
                 value={childPrice === 0 ? '' : childPrice.toLocaleString('vi-VN')}
                 onChange={(e) => {
-                  const rawValue = e.target.value.replace(/\./g, '')
+                  const rawValue = e.target.value.replace(/\./g, '');
                   if (rawValue === '' || /^\d+$/.test(rawValue)) {
                     const newValue = rawValue === '' ? 0 : Number(rawValue);
                     setChildPrice(newValue);
@@ -1018,7 +1185,12 @@ export default function AdminTourDetailPageContentContainer({
               />
             </Stack>
           </Paper>
-          <Paper p={'xs'} radius={'md'} mt={'sm'} classNames={{ root: classes.paperBlock + ' ' + classes.videoSection }}>
+          <Paper
+            p={'xs'}
+            radius={'md'}
+            mt={'sm'}
+            classNames={{ root: classes.paperBlock + ' ' + classes.videoSection }}
+          >
             <Stack gap={'2px'}>
               <Group justify="space-between" wrap="nowrap">
                 <Text size="lg">Video:</Text>
@@ -1034,11 +1206,13 @@ export default function AdminTourDetailPageContentContainer({
                   }}
                   data={[
                     { value: 'top', label: 'Top' },
-                    { value: 'bottom', label: 'Bottom' }
+                    { value: 'bottom', label: 'Bottom' },
                   ]}
                   value={videoPosition}
                   variant="unstyled"
-                  rightSection={<FaCaretDown color="var(--vinaup-blue-link)" size={20} />}
+                  rightSection={
+                    <FaCaretDown color="var(--vinaup-blue-link)" size={20} />
+                  }
                   onChange={(value) => {
                     if (!value) return;
                     handleUpdateVideoPosition(value);
@@ -1050,8 +1224,16 @@ export default function AdminTourDetailPageContentContainer({
                   size="md"
                   icon={<UploadIconV2 width={60} height={60} />}
                   isLoading={videoThumbnailLoading}
-                  onImageSelect={videoThumbnailUrl.length > 0 ? undefined : handleSelectVideoThumbnail}
-                  onRemoveFile={videoThumbnailUrl.length > 0 ? handleRemoveVideoThumbnail : undefined}
+                  onImageSelect={
+                    videoThumbnailUrl.length > 0
+                      ? undefined
+                      : handleSelectVideoThumbnail
+                  }
+                  onRemoveFile={
+                    videoThumbnailUrl.length > 0
+                      ? handleRemoveVideoThumbnail
+                      : undefined
+                  }
                   imageUrl={videoThumbnailUrl}
                 />
                 <Stack gap={'0'} w={'75%'}>
@@ -1060,7 +1242,7 @@ export default function AdminTourDetailPageContentContainer({
                       ref={videoUrlInputRef}
                       w={'100%'}
                       classNames={{
-                        input: classes.videoUrlInput
+                        input: classes.videoUrlInput,
                       }}
                       variant="unstyled"
                       placeholder="https://www.youtube.com/watch?v=..."
@@ -1071,16 +1253,27 @@ export default function AdminTourDetailPageContentContainer({
                         handleUpdateVideoUrl(e.target.value);
                       }}
                     />
-                    <ActionIcon size="md" variant="transparent" onClick={() => handleFocusAndSelectInput(videoUrlInputRef)}>
+                    <ActionIcon
+                      size="md"
+                      variant="transparent"
+                      onClick={() => handleFocusAndSelectInput(videoUrlInputRef)}
+                    >
                       <PenIcon width={24} height={24} />
                     </ActionIcon>
                   </Group>
-                  <Text size="sm" c="dimmed">← Auto or Upload thumbnail</Text>
+                  <Text size="sm" c="dimmed">
+                    ← Auto or Upload thumbnail
+                  </Text>
                 </Stack>
               </Group>
             </Stack>
           </Paper>
-          <Paper p={'xs'} radius={'md'} mt={'sm'} classNames={{ root: classes.paperBlock + ' ' + classes.videoSection }}>
+          <Paper
+            p={'xs'}
+            radius={'md'}
+            mt={'sm'}
+            classNames={{ root: classes.paperBlock + ' ' + classes.videoSection }}
+          >
             <Stack gap={'0'}>
               <Text size="xl">Feature Image:</Text>
               <Group justify="center">
@@ -1089,12 +1282,18 @@ export default function AdminTourDetailPageContentContainer({
                   icon={<UploadIconV3 width={200} height={200} />}
                   isLoading={mainImageLoading}
                   imageUrl={mainImageUrl}
-                  onImageSelect={mainImageUrl.length > 0 ? undefined : handleSelectMainImage}
-                  onRemoveFile={mainImageUrl.length > 0 ? handleRemoveMainImage : undefined}
+                  onImageSelect={
+                    mainImageUrl.length > 0 ? undefined : handleSelectMainImage
+                  }
+                  onRemoveFile={
+                    mainImageUrl.length > 0 ? handleRemoveMainImage : undefined
+                  }
                 />
               </Group>
               <Group justify="center">
-                <Text size="md" c="dimmed">(png, jpg; jpeg; Size ≤ 2M)</Text>
+                <Text size="md" c="dimmed">
+                  (png, jpg; jpeg; Size ≤ 2M)
+                </Text>
               </Group>
             </Stack>
           </Paper>
@@ -1115,16 +1314,12 @@ export default function AdminTourDetailPageContentContainer({
             >
               Cancel
             </Button>
-            <Button
-              color="red"
-              onClick={handleDeleteTour}
-              loading={isDeleting}
-            >
+            <Button color="red" onClick={handleDeleteTour} loading={isDeleting}>
               Delete
             </Button>
           </Group>
         </Stack>
       </Modal>
     </div>
-  )
+  );
 }

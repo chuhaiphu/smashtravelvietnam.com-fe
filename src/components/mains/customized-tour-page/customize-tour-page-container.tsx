@@ -1,8 +1,13 @@
 'use client';
 
-import { submitCustomTourRequestAction } from "@/actions/custom-tour-request-action";
-import { VN_PROVINCES, HOTEL_TYPES, ROOM_TYPES, RECAPTCHA_SITE_KEY } from "@/constants";
-import SubmitFormIcon from "@/components/icons/submit-form-icon.svg";
+import { submitCustomTourRequestAction } from '@/actions/custom-tour-request-action';
+import {
+  VN_PROVINCES,
+  HOTEL_TYPES,
+  ROOM_TYPES,
+  RECAPTCHA_SITE_KEY,
+} from '@/constants';
+import SubmitFormIcon from '@/components/icons/submit-form-icon.svg';
 import {
   Grid,
   GridCol,
@@ -15,33 +20,41 @@ import {
   Select,
   Checkbox,
   MultiSelect,
-  ActionIcon
-} from "@mantine/core";
-import { DateTimePicker } from "@mantine/dates";
-import { useState, useMemo, useRef } from "react";
+  ActionIcon,
+} from '@mantine/core';
+import { DateTimePicker } from '@mantine/dates';
+import { useState, useMemo, useRef } from 'react';
 import classes from './customize-tour-page-container.module.scss';
-import dayjs from "dayjs";
-import type { ITourCategoryResponse } from "@/interfaces/tour-category-interface";
-import { TreeManager } from "@/helpers/tree-manager-helper";
-import { IoChevronDownOutline } from "react-icons/io5";
-import ReCAPTCHA from "react-google-recaptcha";
+import dayjs from 'dayjs';
+import type { ITourCategoryResponse } from '@/interfaces/tour-category-interface';
+import { TreeManager } from '@/utils/tree-manager';
+import { IoChevronDownOutline } from 'react-icons/io5';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 interface CustomizedTourPageContainerProps {
   tourCategoriesData: ITourCategoryResponse[];
 }
 
-export default function CustomizedTourPageContainer({ tourCategoriesData }: CustomizedTourPageContainerProps) {
+export default function CustomizedTourPageContainer({
+  tourCategoriesData,
+}: CustomizedTourPageContainerProps) {
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   // Form state
-  const [startDate, setStartDate] = useState<Date | null>(dayjs().set('hour', 0).set('minute', 0).set('second', 0).toDate());
-  const [endDate, setEndDate] = useState<Date | null>(dayjs().set('hour', 0).set('minute', 0).set('second', 0).add(1, 'day').toDate());
+  const [startDate, setStartDate] = useState<Date | null>(
+    dayjs().set('hour', 0).set('minute', 0).set('second', 0).toDate()
+  );
+  const [endDate, setEndDate] = useState<Date | null>(
+    dayjs().set('hour', 0).set('minute', 0).set('second', 0).add(1, 'day').toDate()
+  );
   const [hotelType, setHotelType] = useState<string | null>('3-star');
   const [roomType, setRoomType] = useState<string | null>('superior');
   const [adultCount, setAdultCount] = useState<string>('1');
   const [childCount, setChildCount] = useState<string>('0');
-  const [selectedTourCategoryIds, setSelectedTourCategoryIds] = useState<string[]>([]);
+  const [selectedTourCategoryIds, setSelectedTourCategoryIds] = useState<string[]>(
+    []
+  );
   const [destinations, setDestinations] = useState<string[]>([]);
 
   const treeManager = useMemo(() => {
@@ -57,17 +70,22 @@ export default function CustomizedTourPageContainer({ tourCategoriesData }: Cust
   const quantityOptions = Array.from({ length: 56 }, (_, i) => ({
     value: i.toString(),
     label: i.toString(),
-  }))
-
+  }));
 
   // Date validation
-  const isDateRangeInvalid = !!(startDate && endDate && dayjs(startDate).isAfter(dayjs(endDate)));
+  const isDateRangeInvalid = !!(
+    startDate &&
+    endDate &&
+    dayjs(startDate).isAfter(dayjs(endDate))
+  );
 
   const handleTourCategoryChange = (tourCategoryId: string, checked: boolean) => {
     if (checked) {
       setSelectedTourCategoryIds([...selectedTourCategoryIds, tourCategoryId]);
     } else {
-      setSelectedTourCategoryIds(selectedTourCategoryIds.filter(id => id !== tourCategoryId));
+      setSelectedTourCategoryIds(
+        selectedTourCategoryIds.filter((id) => id !== tourCategoryId)
+      );
     }
   };
 
@@ -77,8 +95,17 @@ export default function CustomizedTourPageContainer({ tourCategoriesData }: Cust
     if (result.success) {
       alert('Your custom tour request has been submitted successfully!');
       // Reset form
-      setStartDate(dayjs().set('hour', 0).set('minute', 0).set('second', 0).toDate());
-      setEndDate(dayjs().set('hour', 0).set('minute', 0).set('second', 0).add(1, 'day').toDate());
+      setStartDate(
+        dayjs().set('hour', 0).set('minute', 0).set('second', 0).toDate()
+      );
+      setEndDate(
+        dayjs()
+          .set('hour', 0)
+          .set('minute', 0)
+          .set('second', 0)
+          .add(1, 'day')
+          .toDate()
+      );
       setHotelType('3-star');
       setRoomType('superior');
       setAdultCount('1');
@@ -95,7 +122,13 @@ export default function CustomizedTourPageContainer({ tourCategoriesData }: Cust
   };
 
   return (
-    <Paper shadow="xs" p={'md'} ml={{ base: '0rem', md: '5rem', lg: '10rem' }} mr={{ base: '0rem', md: '5rem', lg: '10rem' }} className={classes.customTourPaper}>
+    <Paper
+      shadow="xs"
+      p={'md'}
+      ml={{ base: '0rem', md: '5rem', lg: '10rem' }}
+      mr={{ base: '0rem', md: '5rem', lg: '10rem' }}
+      className={classes.customTourPaper}
+    >
       <Stack gap={'lg'}>
         {/* Your itinerary */}
         <Stack gap={2}>
@@ -183,10 +216,12 @@ export default function CustomizedTourPageContainer({ tourCategoriesData }: Cust
                 classNames={{
                   root: classes.quantitySelect,
                   input: classes.quantitySelectInput,
-                  option: classes.quantitySelectOption
+                  option: classes.quantitySelectOption,
                 }}
                 allowDeselect={false}
-                rightSection={<IoChevronDownOutline color="var(--vinaup-blue-link)" size={20} />}
+                rightSection={
+                  <IoChevronDownOutline color="var(--vinaup-blue-link)" size={20} />
+                }
               />
               <Text size="md">Number of Adults</Text>
             </Group>
@@ -200,10 +235,12 @@ export default function CustomizedTourPageContainer({ tourCategoriesData }: Cust
                 classNames={{
                   root: classes.quantitySelect,
                   input: classes.quantitySelectInput,
-                  option: classes.quantitySelectOption
+                  option: classes.quantitySelectOption,
                 }}
                 allowDeselect={false}
-                rightSection={<IoChevronDownOutline color="var(--vinaup-blue-link)" size={20} />}
+                rightSection={
+                  <IoChevronDownOutline color="var(--vinaup-blue-link)" size={20} />
+                }
               />
               <Text size="md">Number of Children</Text>
             </Group>
@@ -221,7 +258,9 @@ export default function CustomizedTourPageContainer({ tourCategoriesData }: Cust
                 <Checkbox
                   label={category.title}
                   checked={selectedTourCategoryIds.includes(category.id)}
-                  onChange={(e) => handleTourCategoryChange(category.id, e.currentTarget.checked)}
+                  onChange={(e) =>
+                    handleTourCategoryChange(category.id, e.currentTarget.checked)
+                  }
                   classNames={{
                     label: classes.checkboxLabel,
                   }}
@@ -268,7 +307,10 @@ export default function CustomizedTourPageContainer({ tourCategoriesData }: Cust
 
         <form action={handleSubmit}>
           <Stack gap="md">
-            <Group justify="space-between" classNames={{ root: classes.yourInformationGroup }}>
+            <Group
+              justify="space-between"
+              classNames={{ root: classes.yourInformationGroup }}
+            >
               Your Information
             </Group>
             <Grid>
@@ -330,12 +372,28 @@ export default function CustomizedTourPageContainer({ tourCategoriesData }: Cust
               </GridCol>
             </Grid>
 
-            <input type="hidden" name="startDate" value={startDate?.toISOString() || ''} />
-            <input type="hidden" name="endDate" value={endDate?.toISOString() || ''} />
+            <input
+              type="hidden"
+              name="startDate"
+              value={startDate?.toISOString() || ''}
+            />
+            <input
+              type="hidden"
+              name="endDate"
+              value={endDate?.toISOString() || ''}
+            />
             <input type="hidden" name="adultCount" value={adultCount} />
             <input type="hidden" name="childCount" value={childCount} />
-            <input type="hidden" name="destinations" value={JSON.stringify(destinations)} />
-            <input type="hidden" name="tourCategoryIds" value={JSON.stringify(selectedTourCategoryIds)} />
+            <input
+              type="hidden"
+              name="destinations"
+              value={JSON.stringify(destinations)}
+            />
+            <input
+              type="hidden"
+              name="tourCategoryIds"
+              value={JSON.stringify(selectedTourCategoryIds)}
+            />
             <input type="hidden" name="hotelType" value={hotelType || ''} />
             <input type="hidden" name="roomType" value={roomType || ''} />
             <input type="hidden" name="captchaToken" value={captchaToken ?? ''} />
@@ -347,9 +405,7 @@ export default function CustomizedTourPageContainer({ tourCategoriesData }: Cust
                 onChange={(token) => setCaptchaToken(token)}
               />
               <Group>
-                {captchaToken && (
-                  <Text>Send</Text>
-                )}
+                {captchaToken && <Text>Send</Text>}
                 <ActionIcon
                   type="submit"
                   size="xl"

@@ -7,7 +7,7 @@ import { FaChevronUp } from 'react-icons/fa6';
 import Link from 'next/link';
 
 import classes from './dashboard-nav.module.scss';
-import { isPathActive } from '@/helpers/function-helpers';
+import { isPathActive } from '@/utils/function-helpers';
 import { useLayoutSiderStore } from '@/libs/zustand/layout-sider-store';
 
 export function DashboardNav({ navItems }: Readonly<{ navItems: NavItemProps[] }>) {
@@ -25,7 +25,10 @@ export function DashboardNav({ navItems }: Readonly<{ navItems: NavItemProps[] }
     setOpenedItems((prev) => {
       const next = { ...prev };
       navItemsRef.current.forEach((item) => {
-        if (item.childrens?.some((c) => c.path === pathName) || item.defaultOpened) {
+        if (
+          item.childrens?.some((c) => c.path === pathName) ||
+          item.defaultOpened
+        ) {
           next[item.key] = true;
         }
       });
@@ -44,7 +47,9 @@ export function DashboardNav({ navItems }: Readonly<{ navItems: NavItemProps[] }
 
     // Parent with children
     if (item.childrens) {
-      const isActive = item.childrens.some((child) => isPathActive(pathName, child.path!));
+      const isActive = item.childrens.some((child) =>
+        isPathActive(pathName, child.path!)
+      );
       const isOpened = openedItems[item.key];
 
       return (
@@ -74,7 +79,10 @@ export function DashboardNav({ navItems }: Readonly<{ navItems: NavItemProps[] }
     // Item with path
     if (item.path) {
       const isActive = isPathActive(pathName, item.path, item.isRoot);
-      const icon = isActive && item.rightSectionActive ? item.rightSectionActive : item.rightSection;
+      const icon =
+        isActive && item.rightSectionActive
+          ? item.rightSectionActive
+          : item.rightSection;
 
       // Child item
       if (isChild) {
@@ -117,8 +125,14 @@ export function DashboardNav({ navItems }: Readonly<{ navItems: NavItemProps[] }
     }
 
     // Item without path (display only)
-    return <NavLink key={item.key} label={item.label} rightSection={item.rightSection} />;
+    return (
+      <NavLink key={item.key} label={item.label} rightSection={item.rightSection} />
+    );
   };
 
-  return <div className={classes.root}>{navItems.map((item) => renderNavItem(item))}</div>;
+  return (
+    <div className={classes.root}>
+      {navItems.map((item) => renderNavItem(item))}
+    </div>
+  );
 }

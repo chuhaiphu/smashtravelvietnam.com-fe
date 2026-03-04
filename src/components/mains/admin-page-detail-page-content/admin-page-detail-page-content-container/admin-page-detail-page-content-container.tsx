@@ -1,27 +1,47 @@
 'use client';
 
-import { ActionIcon, Button, Grid, GridCol, Group, Modal, Paper, Select, Stack, Text, TextInput, UnstyledButton } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import classes from "./admin-page-detail-page-content-container.module.scss";
-import { TextEditor } from "@/components/editors/text-editor/text-editor";
-import UploadImageSection from "@/components/primitives/upload-image-section/upload-image-section";
-import { useEffect, useRef, useState } from "react";
-import { createPageAction, deletePageAction, updatePageAction } from "@/actions/page-action";
-import { IPageResponse } from "@/interfaces/page-interface";
-import { useDebouncedCallback } from "use-debounce";
-import { generateUniqueEndpoint, stripHtmlAndTruncate } from "@/helpers/function-helpers";
-import { MAX_IMAGE_COUNT_ALLOWED, PAGE_TYPES } from "@/constants";
-import { FaCaretDown } from "react-icons/fa6";
-import { GrTrash } from "react-icons/gr";
+import {
+  ActionIcon,
+  Button,
+  Grid,
+  GridCol,
+  Group,
+  Modal,
+  Paper,
+  Select,
+  Stack,
+  Text,
+  TextInput,
+  UnstyledButton,
+} from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import classes from './admin-page-detail-page-content-container.module.scss';
+import { TextEditor } from '@/components/editors/text-editor/text-editor';
+import UploadImageSection from '@/components/primitives/upload-image-section/upload-image-section';
+import { useEffect, useRef, useState } from 'react';
+import {
+  createPageAction,
+  deletePageAction,
+  updatePageAction,
+} from '@/actions/page-action';
+import { IPageResponse } from '@/interfaces/page-interface';
+import { useDebouncedCallback } from 'use-debounce';
+import {
+  generateUniqueEndpoint,
+  stripHtmlAndTruncate,
+} from '@/utils/function-helpers';
+import { MAX_IMAGE_COUNT_ALLOWED, PAGE_TYPES } from '@/constants';
+import { FaCaretDown } from 'react-icons/fa6';
+import { GrTrash } from 'react-icons/gr';
 import UploadIconV2 from '@/components/icons/vinaup-upload-icon-v2.svg';
 import UploadIconV3 from '@/components/icons/vinaup-upload-icon-v3.svg';
 import PenIcon from '@/components/icons/vinaup-pen-icon.svg';
-import AddNewIcon from "@/components/icons/vinaup-add-new-icon.svg";
-import { sanitizeEndpoint } from "@/helpers/function-helpers";
-import { useRouter } from "next/navigation";
-import { Route } from "next";
-import { IUserResponse } from "@/interfaces/user-interface";
-import dayjs from "dayjs";
+import AddNewIcon from '@/components/icons/vinaup-add-new-icon.svg';
+import { sanitizeEndpoint } from '@/utils/function-helpers';
+import { useRouter } from 'next/navigation';
+import { Route } from 'next';
+import { IUserResponse } from '@/interfaces/user-interface';
+import dayjs from 'dayjs';
 
 interface AdminPageDetailPageContentContainerProps {
   currentPageData: IPageResponse;
@@ -32,15 +52,25 @@ export default function AdminPageDetailPageContentContainer({
   currentPageData,
   userData,
 }: AdminPageDetailPageContentContainerProps) {
-
-  const [additionalImageUrls, setAdditionalImageUrls] = useState<string[]>(currentPageData.additionalImageUrls);
-  const [additionalImagesPosition, setAdditionalImagesPosition] = useState<string>(currentPageData.additionalImagesPosition || 'top');
+  const [additionalImageUrls, setAdditionalImageUrls] = useState<string[]>(
+    currentPageData.additionalImageUrls
+  );
+  const [additionalImagesPosition, setAdditionalImagesPosition] = useState<string>(
+    currentPageData.additionalImagesPosition || 'top'
+  );
   const [videoUrl, setVideoUrl] = useState<string>(currentPageData.videoUrl || '');
-  const [videoThumbnailUrl, setVideoThumbnailUrl] = useState<string>(currentPageData.videoThumbnailUrl || '');
-  const [mainImageUrl, setMainImageUrl] = useState<string>(currentPageData.mainImageUrl || '');
-  const [videoPosition, setVideoPosition] = useState<string>(currentPageData.videoPosition || 'bottom');
+  const [videoThumbnailUrl, setVideoThumbnailUrl] = useState<string>(
+    currentPageData.videoThumbnailUrl || ''
+  );
+  const [mainImageUrl, setMainImageUrl] = useState<string>(
+    currentPageData.mainImageUrl || ''
+  );
+  const [videoPosition, setVideoPosition] = useState<string>(
+    currentPageData.videoPosition || 'bottom'
+  );
   const [loadingImageIndex, setLoadingImageIndex] = useState<number | null>(null);
-  const [videoThumbnailLoading, setVideoThumbnailLoading] = useState<boolean>(false);
+  const [videoThumbnailLoading, setVideoThumbnailLoading] =
+    useState<boolean>(false);
   const [mainImageLoading, setMainImageLoading] = useState<boolean>(false);
   const [title, setTitle] = useState<string>(currentPageData.title);
   const [content, setContent] = useState<string>(currentPageData.content || '');
@@ -60,7 +90,9 @@ export default function AdminPageDetailPageContentContainer({
 
   const videoUrlInputRef = useRef<HTMLInputElement>(null);
   const endpointInputRef = useRef<HTMLInputElement>(null);
-  const handleFocusAndSelectInput = (ref: React.RefObject<HTMLInputElement | null>) => {
+  const handleFocusAndSelectInput = (
+    ref: React.RefObject<HTMLInputElement | null>
+  ) => {
     if (ref.current) {
       ref.current.focus();
       ref.current.select();
@@ -76,7 +108,7 @@ export default function AdminPageDetailPageContentContainer({
       title: newTitle,
       endpoint: endpoint,
       destinations: [],
-      userId: userData.id
+      userId: userData.id,
     });
 
     if (!response.success || !response.data) {
@@ -99,13 +131,15 @@ export default function AdminPageDetailPageContentContainer({
     });
   };
 
-  const handleSelectAdditionalImage = async (imageUrl: string, imageIndex: number) => {
+  const handleSelectAdditionalImage = async (
+    imageUrl: string,
+    imageIndex: number
+  ) => {
     setLoadingImageIndex(imageIndex);
     try {
-      await updatePageAction(
-        currentPageData.id,
-        { additionalImageUrls: [...additionalImageUrls, imageUrl] }
-      );
+      await updatePageAction(currentPageData.id, {
+        additionalImageUrls: [...additionalImageUrls, imageUrl],
+      });
       setAdditionalImageUrls([...additionalImageUrls, imageUrl]);
     } catch (error) {
       notifications.show({
@@ -132,10 +166,7 @@ export default function AdminPageDetailPageContentContainer({
   const handleSelectVideoThumbnail = async (imageUrl: string) => {
     setVideoThumbnailLoading(true);
     try {
-      await updatePageAction(
-        currentPageData.id,
-        { videoThumbnailUrl: imageUrl }
-      );
+      await updatePageAction(currentPageData.id, { videoThumbnailUrl: imageUrl });
       setVideoThumbnailUrl(imageUrl);
     } catch (error) {
       notifications.show({
@@ -160,10 +191,7 @@ export default function AdminPageDetailPageContentContainer({
   const handleSelectMainImage = async (imageUrl: string) => {
     setMainImageLoading(true);
     try {
-      await updatePageAction(
-        currentPageData.id,
-        { mainImageUrl: imageUrl }
-      );
+      await updatePageAction(currentPageData.id, { mainImageUrl: imageUrl });
       setMainImageUrl(imageUrl);
     } catch (error) {
       notifications.show({
@@ -186,15 +214,16 @@ export default function AdminPageDetailPageContentContainer({
   };
 
   const handleUpdateTitle = useDebouncedCallback(async (newTitle: string) => {
-    const newEndpoint = await generateUniqueEndpoint(newTitle, 'landing', currentPageData.id);
-
-    await updatePageAction(
-      currentPageData.id,
-      {
-        title: newTitle,
-        endpoint: newEndpoint
-      }
+    const newEndpoint = await generateUniqueEndpoint(
+      newTitle,
+      'landing',
+      currentPageData.id
     );
+
+    await updatePageAction(currentPageData.id, {
+      title: newTitle,
+      endpoint: newEndpoint,
+    });
     setEndpoint(newEndpoint);
     setIsSaving(false);
     notifications.show({
@@ -203,15 +232,16 @@ export default function AdminPageDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }, 1500)
+  }, 1500);
 
   const handleUpdateEndpoint = useDebouncedCallback(async (newEndpoint: string) => {
-    const uniqueEndpoint = await generateUniqueEndpoint(newEndpoint, 'landing', currentPageData.id);
-
-    await updatePageAction(
-      currentPageData.id,
-      { endpoint: uniqueEndpoint }
+    const uniqueEndpoint = await generateUniqueEndpoint(
+      newEndpoint,
+      'landing',
+      currentPageData.id
     );
+
+    await updatePageAction(currentPageData.id, { endpoint: uniqueEndpoint });
     setEndpoint(uniqueEndpoint);
     setIsSaving(false);
     notifications.show({
@@ -220,7 +250,7 @@ export default function AdminPageDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }, 1500)
+  }, 1500);
 
   // const handleUpdateDescription = useDebouncedCallback(async (newDescription: string) => {
   //   await updatePageAction(
@@ -231,12 +261,9 @@ export default function AdminPageDetailPageContentContainer({
   // }, 1500)
 
   const handleUpdateContent = useDebouncedCallback(async (newContent: string) => {
-    await updatePageAction(
-      currentPageData.id,
-      { content: newContent }
-    );
+    await updatePageAction(currentPageData.id, { content: newContent });
     setIsSaving(false);
-  }, 1500)
+  }, 1500);
 
   const handleUpdateAdditionalImagesPosition = (newPosition: string) => {
     setAdditionalImagesPosition(newPosition);
@@ -247,7 +274,7 @@ export default function AdminPageDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }
+  };
 
   // const handleUpdateDestinations = (newDestinations: string[]) => {
   //   setDestinations(newDestinations);
@@ -269,7 +296,7 @@ export default function AdminPageDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }
+  };
 
   const handleUpdatePageType = (newPageType: string) => {
     setPageType(newPageType);
@@ -280,7 +307,7 @@ export default function AdminPageDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }
+  };
 
   const handleUpdateVideoPosition = (newPosition: string) => {
     setVideoPosition(newPosition);
@@ -291,7 +318,7 @@ export default function AdminPageDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }
+  };
 
   const handleUpdateVideoUrl = useDebouncedCallback(async (newUrl: string) => {
     await updatePageAction(currentPageData.id, { videoUrl: newUrl });
@@ -302,7 +329,7 @@ export default function AdminPageDetailPageContentContainer({
       position: 'top-right',
       autoClose: 900,
     });
-  }, 1500)
+  }, 1500);
 
   // Generate SEO title and description
   const seoTitle = title ? stripHtmlAndTruncate(title, 100) : '';
@@ -360,7 +387,9 @@ export default function AdminPageDetailPageContentContainer({
       <Group className={classes.pageHeader} justify="space-between">
         <Text size="xl">Page detail</Text>
         <Group gap="sm">
-          <UnstyledButton onClick={handleAddNewPage} fz={'lg'}>Add new</UnstyledButton>
+          <UnstyledButton onClick={handleAddNewPage} fz={'lg'}>
+            Add new
+          </UnstyledButton>
           <ActionIcon
             variant="transparent"
             onClick={handleAddNewPage}
@@ -376,17 +405,23 @@ export default function AdminPageDetailPageContentContainer({
             <Paper p={'sm'} radius={'md'} classNames={{ root: classes.paperBlock }}>
               <Stack gap={'xs'}>
                 <Text>Title</Text>
-                <TextInput size="md" value={title} placeholder="A title under 100 characters"
+                <TextInput
+                  size="md"
+                  value={title}
+                  placeholder="A title under 100 characters"
                   maxLength={100}
                   onChange={(e) => {
                     setTitle(e.target.value);
                     setIsSaving(true);
-                    handleUpdateTitle(e.target.value)
-                  }} />
+                    handleUpdateTitle(e.target.value);
+                  }}
+                />
                 <Group gap={'xs'} justify="space-between" wrap="nowrap">
                   <Group gap={0} wrap="nowrap" className={classes.urlGroup}>
                     <Group gap={4}>
-                      <Text size="md" c="dark.3">Custom URL:</Text>
+                      <Text size="md" c="dark.3">
+                        Custom URL:
+                      </Text>
                       <Text size="md">smashtravelvietnam.com/</Text>
                     </Group>
                     <Group gap={0}>
@@ -402,7 +437,11 @@ export default function AdminPageDetailPageContentContainer({
                           handleUpdateEndpoint(sanitized);
                         }}
                       />
-                      <ActionIcon size="md" variant="transparent" onClick={() => handleFocusAndSelectInput(endpointInputRef)}>
+                      <ActionIcon
+                        size="md"
+                        variant="transparent"
+                        onClick={() => handleFocusAndSelectInput(endpointInputRef)}
+                      >
                         <PenIcon width={24} height={24} />
                       </ActionIcon>
                     </Group>
@@ -437,11 +476,14 @@ export default function AdminPageDetailPageContentContainer({
             <Paper p={'sm'} radius={'md'} classNames={{ root: classes.paperBlock }}>
               <Stack gap={'xs'}>
                 <Text>Content</Text>
-                <TextEditor content={content} onChange={(newContent) => {
-                  setContent(newContent);
-                  setIsSaving(true);
-                  handleUpdateContent(newContent);
-                }} />
+                <TextEditor
+                  content={content}
+                  onChange={(newContent) => {
+                    setContent(newContent);
+                    setIsSaving(true);
+                    handleUpdateContent(newContent);
+                  }}
+                />
               </Stack>
             </Paper>
             <Paper p={'sm'} radius={'md'} classNames={{ root: classes.paperBlock }}>
@@ -460,11 +502,13 @@ export default function AdminPageDetailPageContentContainer({
                     }}
                     data={[
                       { value: 'top', label: 'Top' },
-                      { value: 'bottom', label: 'Bottom' }
+                      { value: 'bottom', label: 'Bottom' },
                     ]}
                     value={additionalImagesPosition}
                     variant="unstyled"
-                    rightSection={<FaCaretDown color="var(--vinaup-blue-link)" size={20} />}
+                    rightSection={
+                      <FaCaretDown color="var(--vinaup-blue-link)" size={20} />
+                    }
                     onChange={(value) => {
                       if (!value) return;
                       handleUpdateAdditionalImagesPosition(value);
@@ -478,7 +522,9 @@ export default function AdminPageDetailPageContentContainer({
                       size="xl"
                       imageUrl={imgUrl}
                       isLoading={loadingImageIndex === index}
-                      onImageSelect={(imageUrl) => handleSelectAdditionalImage(imageUrl, index)}
+                      onImageSelect={(imageUrl) =>
+                        handleSelectAdditionalImage(imageUrl, index)
+                      }
                       onRemoveFile={() => handleRemoveAdditionalImage(index)}
                     />
                   ))}
@@ -486,7 +532,12 @@ export default function AdminPageDetailPageContentContainer({
                     <UploadImageSection
                       size="xl"
                       isLoading={loadingImageIndex === additionalImageUrls.length}
-                      onImageSelect={(imageUrl) => handleSelectAdditionalImage(imageUrl, additionalImageUrls.length)}
+                      onImageSelect={(imageUrl) =>
+                        handleSelectAdditionalImage(
+                          imageUrl,
+                          additionalImageUrls.length
+                        )
+                      }
                     />
                   )}
                 </Group>
@@ -523,11 +574,13 @@ export default function AdminPageDetailPageContentContainer({
           </Stack>
         </GridCol>
         <GridCol span={{ base: 12, sm: 12, md: 4, lg: 4, xl: 3 }}>
-          <Paper p={'xs'}
+          <Paper
+            p={'xs'}
             radius={'md'}
             classNames={{
-              root: classes.pageConfiguration
-            }}>
+              root: classes.pageConfiguration,
+            }}
+          >
             <Stack gap={'0'}>
               <Group justify="space-between" wrap="nowrap">
                 <Text size="lg">Status</Text>
@@ -544,7 +597,9 @@ export default function AdminPageDetailPageContentContainer({
                   ]}
                   value={status}
                   variant="unstyled"
-                  rightSection={<FaCaretDown color="var(--vinaup-blue-link)" size={24} />}
+                  rightSection={
+                    <FaCaretDown color="var(--vinaup-blue-link)" size={24} />
+                  }
                   onChange={(value) => {
                     if (!value) return;
                     handleUpdateStatus(value);
@@ -563,7 +618,9 @@ export default function AdminPageDetailPageContentContainer({
                   data={PAGE_TYPES}
                   value={pageType}
                   variant="unstyled"
-                  rightSection={<FaCaretDown color="var(--vinaup-blue-link)" size={24} />}
+                  rightSection={
+                    <FaCaretDown color="var(--vinaup-blue-link)" size={24} />
+                  }
                   onChange={(value) => {
                     if (!value) return;
                     handleUpdatePageType(value);
@@ -580,12 +637,21 @@ export default function AdminPageDetailPageContentContainer({
                   <GrTrash size={24} color="var(--vinaup-blue-link)" />
                 </ActionIcon>
                 <Group gap={'xs'}>
-                  <Text size="lg" c="dark.3" className={isSaving ? classes.savingText : classes.savedText}>
+                  <Text
+                    size="lg"
+                    c="dark.3"
+                    className={isSaving ? classes.savingText : classes.savedText}
+                  >
                     {isSaving ? 'Saving...' : 'Saved'}
                   </Text>
                   <Button
-                    onClick={() => { router.push('/adminup/page' as Route) }}
-                    variant="filled" color="blue" size="xs" bg={'#01426e'}
+                    onClick={() => {
+                      router.push('/adminup/page' as Route);
+                    }}
+                    variant="filled"
+                    color="blue"
+                    size="xs"
+                    bg={'#01426e'}
                   >
                     Exit
                   </Button>
@@ -593,7 +659,12 @@ export default function AdminPageDetailPageContentContainer({
               </Group>
             </Stack>
           </Paper>
-          <Paper p={'xs'} radius={'md'} mt={'sm'} classNames={{ root: classes.paperBlock + ' ' + classes.videoSection }}>
+          <Paper
+            p={'xs'}
+            radius={'md'}
+            mt={'sm'}
+            classNames={{ root: classes.paperBlock + ' ' + classes.videoSection }}
+          >
             <Stack gap={'2px'}>
               <Group justify="space-between" wrap="nowrap">
                 <Text size="lg">Video:</Text>
@@ -609,11 +680,13 @@ export default function AdminPageDetailPageContentContainer({
                   }}
                   data={[
                     { value: 'top', label: 'Top' },
-                    { value: 'bottom', label: 'Bottom' }
+                    { value: 'bottom', label: 'Bottom' },
                   ]}
                   value={videoPosition}
                   variant="unstyled"
-                  rightSection={<FaCaretDown color="var(--vinaup-blue-link)" size={20} />}
+                  rightSection={
+                    <FaCaretDown color="var(--vinaup-blue-link)" size={20} />
+                  }
                   onChange={(value) => {
                     if (!value) return;
                     handleUpdateVideoPosition(value);
@@ -625,8 +698,16 @@ export default function AdminPageDetailPageContentContainer({
                   size="md"
                   icon={<UploadIconV2 width={60} height={60} />}
                   isLoading={videoThumbnailLoading}
-                  onImageSelect={videoThumbnailUrl.length > 0 ? undefined : handleSelectVideoThumbnail}
-                  onRemoveFile={videoThumbnailUrl.length > 0 ? handleRemoveVideoThumbnail : undefined}
+                  onImageSelect={
+                    videoThumbnailUrl.length > 0
+                      ? undefined
+                      : handleSelectVideoThumbnail
+                  }
+                  onRemoveFile={
+                    videoThumbnailUrl.length > 0
+                      ? handleRemoveVideoThumbnail
+                      : undefined
+                  }
                   imageUrl={videoThumbnailUrl}
                 />
                 <Stack gap={'0'} w={'75%'}>
@@ -635,7 +716,7 @@ export default function AdminPageDetailPageContentContainer({
                       ref={videoUrlInputRef}
                       w={'100%'}
                       classNames={{
-                        input: classes.videoUrlInput
+                        input: classes.videoUrlInput,
                       }}
                       variant="unstyled"
                       placeholder="https://www.youtube.com/watch?v=..."
@@ -646,16 +727,27 @@ export default function AdminPageDetailPageContentContainer({
                         handleUpdateVideoUrl(e.target.value);
                       }}
                     />
-                    <ActionIcon size="md" variant="transparent" onClick={() => handleFocusAndSelectInput(videoUrlInputRef)}>
+                    <ActionIcon
+                      size="md"
+                      variant="transparent"
+                      onClick={() => handleFocusAndSelectInput(videoUrlInputRef)}
+                    >
                       <PenIcon width={24} height={24} />
                     </ActionIcon>
                   </Group>
-                  <Text size="sm" c="dimmed">← Auto or Upload thumbnail</Text>
+                  <Text size="sm" c="dimmed">
+                    ← Auto or Upload thumbnail
+                  </Text>
                 </Stack>
               </Group>
             </Stack>
           </Paper>
-          <Paper p={'xs'} radius={'md'} mt={'sm'} classNames={{ root: classes.paperBlock + ' ' + classes.videoSection }}>
+          <Paper
+            p={'xs'}
+            radius={'md'}
+            mt={'sm'}
+            classNames={{ root: classes.paperBlock + ' ' + classes.videoSection }}
+          >
             <Stack gap={'0'}>
               <Text size="xl">Feature Image:</Text>
               <Group justify="center">
@@ -664,20 +756,35 @@ export default function AdminPageDetailPageContentContainer({
                   icon={<UploadIconV3 width={200} height={200} />}
                   isLoading={mainImageLoading}
                   imageUrl={mainImageUrl}
-                  onImageSelect={mainImageUrl.length > 0 ? undefined : handleSelectMainImage}
-                  onRemoveFile={mainImageUrl.length > 0 ? handleRemoveMainImage : undefined}
+                  onImageSelect={
+                    mainImageUrl.length > 0 ? undefined : handleSelectMainImage
+                  }
+                  onRemoveFile={
+                    mainImageUrl.length > 0 ? handleRemoveMainImage : undefined
+                  }
                 />
               </Group>
               <Group justify="center">
-                <Text size="md" c="dimmed">(png, jpg; jpeg; Size ≤ 2M)</Text>
+                <Text size="md" c="dimmed">
+                  (png, jpg; jpeg; Size ≤ 2M)
+                </Text>
               </Group>
             </Stack>
           </Paper>
         </GridCol>
       </Grid>
-      <Paper p={'md'} radius={'md'} mt={'md'} withBorder classNames={{ root: classes.paperBlock }} bg={'var(--vinaup-soft-gray)'}>
+      <Paper
+        p={'md'}
+        radius={'md'}
+        mt={'md'}
+        withBorder
+        classNames={{ root: classes.paperBlock }}
+        bg={'var(--vinaup-soft-gray)'}
+      >
         <Stack gap={4}>
-          <div className={classes.seoBlockTitle}><b>S</b>earch <b>E</b>ngine <b>O</b>ptimization</div>
+          <div className={classes.seoBlockTitle}>
+            <b>S</b>earch <b>E</b>ngine <b>O</b>ptimization
+          </div>
           <div className={classes.seoDivider} />
           <Stack gap={4}>
             <Text
@@ -700,7 +807,7 @@ export default function AdminPageDetailPageContentContainer({
               https://smashtravelvietnam.com/{endpoint}
             </Text>
             <Text size="sm">
-              {dayjs(currentPageData.updatedAt).format("MMM DD, YYYY")}
+              {dayjs(currentPageData.updatedAt).format('MMM DD, YYYY')}
             </Text>
             <div
               dangerouslySetInnerHTML={{ __html: seoContent || '' }}
@@ -710,11 +817,13 @@ export default function AdminPageDetailPageContentContainer({
           <div className={classes.seoDivider} />
           <Stack gap={4}>
             <Group justify="space-between" align="center">
-              <Text size="md" fw={500}>Seo title</Text>
+              <Text size="md" fw={500}>
+                Seo title
+              </Text>
             </Group>
             <TextInput
               classNames={{
-                input: classes.seoTextInput
+                input: classes.seoTextInput,
               }}
               size="md"
               placeholder="Name title (Suggest < 72 characters)"
@@ -725,10 +834,12 @@ export default function AdminPageDetailPageContentContainer({
           </Stack>
           <div className={classes.seoDivider} />
           <Stack gap={4}>
-            <Text size="md" fw={500}>Seo description</Text>
+            <Text size="md" fw={500}>
+              Seo description
+            </Text>
             <TextInput
               classNames={{
-                input: classes.seoTextInput
+                input: classes.seoTextInput,
               }}
               size="md"
               placeholder="..."
@@ -754,16 +865,12 @@ export default function AdminPageDetailPageContentContainer({
             >
               Cancel
             </Button>
-            <Button
-              color="red"
-              onClick={handleDeletePage}
-              loading={isDeleting}
-            >
+            <Button color="red" onClick={handleDeletePage} loading={isDeleting}>
               Delete
             </Button>
           </Group>
         </Stack>
       </Modal>
     </div>
-  )
+  );
 }

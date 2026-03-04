@@ -1,17 +1,30 @@
 'use client';
 
-import { ActionIcon, Button, Grid, GridCol, Group, Modal, Paper, Select, SelectProps, Stack, Text, TextInput } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import classes from "./admin-menu-detail-page-content-container.module.scss";
-import { useEffect, useMemo, useState } from "react";
-import { deleteMenuAction, updateMenuAction } from "@/actions/menu-action";
-import { IMenuResponse } from "@/interfaces/menu-interface";
-import { ITourCategoryResponse } from "@/interfaces/tour-category-interface";
-import { useDebouncedCallback } from "use-debounce";
-import { FaCaretDown } from "react-icons/fa6";
-import { GrTrash } from "react-icons/gr";
-import { TreeManager } from "@/helpers/tree-manager-helper";
-import { useRouter } from "next/navigation";
+import {
+  ActionIcon,
+  Button,
+  Grid,
+  GridCol,
+  Group,
+  Modal,
+  Paper,
+  Select,
+  SelectProps,
+  Stack,
+  Text,
+  TextInput,
+} from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import classes from './admin-menu-detail-page-content-container.module.scss';
+import { useEffect, useMemo, useState } from 'react';
+import { deleteMenuAction, updateMenuAction } from '@/actions/menu-action';
+import { IMenuResponse } from '@/interfaces/menu-interface';
+import { ITourCategoryResponse } from '@/interfaces/tour-category-interface';
+import { useDebouncedCallback } from 'use-debounce';
+import { FaCaretDown } from 'react-icons/fa6';
+import { GrTrash } from 'react-icons/gr';
+import { TreeManager } from '@/utils/tree-manager';
+import { useRouter } from 'next/navigation';
 
 interface AdminMenuDetailPageContentContainerProps {
   currentMenu: IMenuResponse;
@@ -26,12 +39,17 @@ export default function AdminMenuDetailPageContentContainer({
   availableSortOrdersData,
   tourCategoriesData,
 }: AdminMenuDetailPageContentContainerProps) {
-
   const [title, setTitle] = useState<string>(currentMenu.title);
-  const [parentId, setParentId] = useState<string | null>(currentMenu.parent?.id || null);
+  const [parentId, setParentId] = useState<string | null>(
+    currentMenu.parent?.id || null
+  );
   const [sortOrder, setSortOrder] = useState<number>(currentMenu.sortOrder || 0);
-  const [targetType, setTargetType] = useState<string | null>(currentMenu.targetType || null);
-  const [targetId, setTargetId] = useState<string | null>(currentMenu.targetId || null);
+  const [targetType, setTargetType] = useState<string | null>(
+    currentMenu.targetType || null
+  );
+  const [targetId, setTargetId] = useState<string | null>(
+    currentMenu.targetId || null
+  );
   const [customUrl, setCustomUrl] = useState<string>(currentMenu.customUrl || '');
 
   const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -49,28 +67,34 @@ export default function AdminMenuDetailPageContentContainer({
       return null;
     }
     return new TreeManager(menusData);
-  }, [menusData])
+  }, [menusData]);
 
   const tourCategoryTreeManager = useMemo(() => {
     if (tourCategoriesData.length === 0) {
       return null;
     }
     return new TreeManager(tourCategoriesData);
-  }, [tourCategoriesData])
+  }, [tourCategoriesData]);
 
   // Filter out current menu and its children from parent options
-  const excludedIds = menuTreeManager?.toIds(menuTreeManager?.getDescendants(currentMenu.id) ?? []);
+  const excludedIds = menuTreeManager?.toIds(
+    menuTreeManager?.toFlatList(currentMenu.id) ?? []
+  );
   excludedIds?.add(currentMenu.id);
 
   const parentOptions = menusData
-    .filter(menu => !excludedIds?.has(menu.id))
-    .map(menu => ({ value: menu.id, label: menu.title }));
+    .filter((menu) => !excludedIds?.has(menu.id))
+    .map((menu) => ({ value: menu.id, label: menu.title }));
 
   // Tour category options record for renderTourCategoryOption
-  const tourCategoryOptionsData: Record<string, ITourCategoryResponse> = tourCategoriesData.reduce((acc, tourCategory) => {
-    acc[tourCategory.id] = tourCategory;
-    return acc;
-  }, {} as Record<string, ITourCategoryResponse>);
+  const tourCategoryOptionsData: Record<string, ITourCategoryResponse> =
+    tourCategoriesData.reduce(
+      (acc, tourCategory) => {
+        acc[tourCategory.id] = tourCategory;
+        return acc;
+      },
+      {} as Record<string, ITourCategoryResponse>
+    );
 
   // Helper function to get parent chain recursively
   const getOptionChain = (tourCategoryId: string): ITourCategoryResponse[] => {
@@ -82,7 +106,9 @@ export default function AdminMenuDetailPageContentContainer({
     return [tourCategoryChain];
   };
 
-  const getOptionChainWithoutRoot = (tourCategoryId: string): ITourCategoryResponse[] => {
+  const getOptionChainWithoutRoot = (
+    tourCategoryId: string
+  ): ITourCategoryResponse[] => {
     const parentChain = getOptionChain(tourCategoryId);
     return parentChain.slice(1);
   };
@@ -99,12 +125,14 @@ export default function AdminMenuDetailPageContentContainer({
               <Text
                 size="sm"
                 fw={index === parentChain.length - 1 ? 500 : 400}
-                c={index === parentChain.length - 1 ? undefined : "dark.3"}
+                c={index === parentChain.length - 1 ? undefined : 'dark.3'}
               >
                 {category.title}
               </Text>
               {index < parentChain.length - 1 && (
-                <Text size="sm" c="dark.3" fw={300}>›</Text>
+                <Text size="sm" c="dark.3" fw={300}>
+                  ›
+                </Text>
               )}
             </Group>
           ))}
@@ -114,15 +142,14 @@ export default function AdminMenuDetailPageContentContainer({
 
     // Root category (no parent)
     return (
-      <Text size="sm" fw={500}>{tourCategoryOptionsData[option.value]?.title || option.label}</Text>
+      <Text size="sm" fw={500}>
+        {tourCategoryOptionsData[option.value]?.title || option.label}
+      </Text>
     );
   };
 
   const handleUpdateTitle = useDebouncedCallback(async (newTitle: string) => {
-    await updateMenuAction(
-      currentMenu.id,
-      { title: newTitle }
-    );
+    await updateMenuAction(currentMenu.id, { title: newTitle });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',
@@ -171,20 +198,25 @@ export default function AdminMenuDetailPageContentContainer({
     });
   };
 
-  const handleUpdateCustomUrl = useDebouncedCallback(async (newCustomUrl: string) => {
-    await updateMenuAction(currentMenu.id, { customUrl: newCustomUrl });
-    notifications.show({
-      message: 'Custom URL saved successfully',
-      color: 'green',
-      position: 'top-right',
-      autoClose: 900,
-    });
-    setIsSaving(false);
-  }, 1500);
+  const handleUpdateCustomUrl = useDebouncedCallback(
+    async (newCustomUrl: string) => {
+      await updateMenuAction(currentMenu.id, { customUrl: newCustomUrl });
+      notifications.show({
+        message: 'Custom URL saved successfully',
+        color: 'green',
+        position: 'top-right',
+        autoClose: 900,
+      });
+      setIsSaving(false);
+    },
+    1500
+  );
 
   const handleUpdateTourCategory = async (tourCategoryId: string | null) => {
     setTargetId(tourCategoryId);
-    await updateMenuAction(currentMenu.id, { targetId: tourCategoryId || undefined });
+    await updateMenuAction(currentMenu.id, {
+      targetId: tourCategoryId || undefined,
+    });
     notifications.show({
       message: 'Tour category updated successfully',
       color: 'green',
@@ -271,7 +303,8 @@ export default function AdminMenuDetailPageContentContainer({
                   onChange={(value) => {
                     if (value === targetType) return;
                     handleUpdateTargetType(value);
-                  }} />
+                  }}
+                />
               </Stack>
 
               {targetType === 'tour-category' && (
@@ -281,10 +314,12 @@ export default function AdminMenuDetailPageContentContainer({
                     size="md"
                     placeholder="Select tour category"
                     data={
-                      tourCategoryTreeManager?.toFlatListWithoutRoot().map((tourCategory) => ({
-                        value: tourCategory.id,
-                        label: tourCategory.title,
-                      })) ?? []
+                      tourCategoryTreeManager
+                        ?.toFlatListWithoutRoot()
+                        .map((tourCategory) => ({
+                          value: tourCategory.id,
+                          label: tourCategory.title,
+                        })) ?? []
                     }
                     value={targetId}
                     searchable
@@ -316,7 +351,12 @@ export default function AdminMenuDetailPageContentContainer({
         </GridCol>
 
         <GridCol span={{ base: 12, sm: 12, md: 5, lg: 5, xl: 4 }}>
-          <Paper pt={0} p={'xs'} radius={'md'} classNames={{ root: classes.menuConfiguration }}>
+          <Paper
+            pt={0}
+            p={'xs'}
+            radius={'md'}
+            classNames={{ root: classes.menuConfiguration }}
+          >
             <Stack gap={'0'}>
               <Group justify="space-between" wrap="nowrap">
                 <Text size="lg">Index</Text>
@@ -329,10 +369,15 @@ export default function AdminMenuDetailPageContentContainer({
                     option: classes.selectOption,
                   }}
                   size="md"
-                  data={availableSortOrdersData.map(order => ({ value: order.toString(), label: order.toString() }))}
+                  data={availableSortOrdersData.map((order) => ({
+                    value: order.toString(),
+                    label: order.toString(),
+                  }))}
                   value={sortOrder?.toString()}
                   variant="unstyled"
-                  rightSection={<FaCaretDown color="var(--vinaup-blue-link)" size={24} />}
+                  rightSection={
+                    <FaCaretDown color="var(--vinaup-blue-link)" size={24} />
+                  }
                   onChange={handleUpdateSortOrder}
                 />
               </Group>
@@ -346,12 +391,21 @@ export default function AdminMenuDetailPageContentContainer({
                   <GrTrash size={24} color="var(--vinaup-blue-link)" />
                 </ActionIcon>
                 <Group gap={'xs'}>
-                  <Text size="lg" c="dark.3" className={isSaving ? classes.savingText : classes.savedText}>
+                  <Text
+                    size="lg"
+                    c="dark.3"
+                    className={isSaving ? classes.savingText : classes.savedText}
+                  >
                     {isSaving ? 'Saving...' : 'Saved'}
                   </Text>
                   <Button
-                    onClick={() => { router.push('/adminup/menu') }}
-                    variant="filled" color="blue" size="xs" bg={'#01426e'}
+                    onClick={() => {
+                      router.push('/adminup/menu');
+                    }}
+                    variant="filled"
+                    color="blue"
+                    size="xs"
+                    bg={'#01426e'}
                   >
                     Exit
                   </Button>
@@ -378,11 +432,7 @@ export default function AdminMenuDetailPageContentContainer({
             >
               Cancel
             </Button>
-            <Button
-              color="red"
-              onClick={handleDeleteMenu}
-              loading={isDeleting}
-            >
+            <Button color="red" onClick={handleDeleteMenu} loading={isDeleting}>
               Delete
             </Button>
           </Group>

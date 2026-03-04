@@ -1,17 +1,17 @@
 'use client';
 
-import { ActionIcon, Group, Text, UnstyledButton } from "@mantine/core";
-import { useRouter } from "next/navigation";
-import AddNewIcon from "@/components/icons/vinaup-add-new-icon.svg";
-import BlogsTable from "@/components/tables/blogs-table/blogs-table";
-import { createBlogAction } from "@/actions/blog-action";
-import { Route } from "next";
-import { IBlogResponse } from "@/interfaces/blog-interface";
-import { IUserResponse } from "@/interfaces/user-interface";
-import { generateUniqueEndpoint } from "@/helpers/function-helpers";
-import { useState } from "react";
-import { notifications } from "@mantine/notifications";
-import classes from "./admin-blog-page-content-container.module.scss";
+import { ActionIcon, Group, Text, UnstyledButton } from '@mantine/core';
+import { useRouter } from 'next/navigation';
+import AddNewIcon from '@/components/icons/vinaup-add-new-icon.svg';
+import BlogsTable from '@/components/tables/blogs-table/blogs-table';
+import { createBlogAction } from '@/actions/blog-action';
+import { Route } from 'next';
+import { IBlogResponse } from '@/interfaces/blog-interface';
+import { IUserResponse } from '@/interfaces/user-interface';
+import { generateUniqueEndpoint } from '@/utils/function-helpers';
+import { useState } from 'react';
+import { notifications } from '@mantine/notifications';
+import classes from './admin-blog-page-content-container.module.scss';
 
 interface AdminBlogPageContentContainerProps {
   blogsData: IBlogResponse[];
@@ -20,7 +20,7 @@ interface AdminBlogPageContentContainerProps {
 
 export default function AdminBlogPageContentContainer({
   blogsData,
-  userData
+  userData,
 }: AdminBlogPageContentContainerProps) {
   const router = useRouter();
   const [isCreating, setIsCreating] = useState(false);
@@ -34,7 +34,7 @@ export default function AdminBlogPageContentContainer({
       title: newTitle,
       endpoint: endpoint,
       destinations: ['Ho Chi Minh'],
-      userId: userData.id
+      userId: userData.id,
     });
 
     if (!response.success || !response.data) {
@@ -57,7 +57,9 @@ export default function AdminBlogPageContentContainer({
       <Group className={classes.pageHeader} justify="space-between">
         <Text size="xl">Blog</Text>
         <Group gap="sm">
-          <UnstyledButton onClick={handleAddNewBlog} fz={'lg'}>Add new</UnstyledButton>
+          <UnstyledButton onClick={handleAddNewBlog} fz={'lg'}>
+            Add new
+          </UnstyledButton>
           <ActionIcon
             variant="transparent"
             onClick={handleAddNewBlog}

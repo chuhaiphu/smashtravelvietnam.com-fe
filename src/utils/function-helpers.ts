@@ -4,7 +4,7 @@ import { getTourCategoryByEndpointAction } from '../actions/tour-category-action
 import { getPageByEndpointAction } from '../actions/page-action';
 import { getBlogCategoryByEndpointAction } from '@/actions/blog-category-action';
 import { getBlogByEndpointAction } from '@/actions/blog-action';
-import { ParsedCookie } from './classes';
+import { ParsedCookie } from './api-error';
 
 export const stripHtmlAndTruncate = (html: string, maxLength: number) => {
   const text = html.replace(/<[^>]*>/g, '');
@@ -14,7 +14,7 @@ export const stripHtmlAndTruncate = (html: string, maxLength: number) => {
 export const validateImageFile = (file: File) => {
   const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
   return validTypes.includes(file.type);
-}
+};
 
 /**
  * Sanitize endpoint string to only allow URL-safe characters
@@ -27,14 +27,17 @@ export const sanitizeEndpoint = (input: string): string => {
     .replace(/[^a-z0-9-]/g, '') // Remove all except lowercase letters, numbers, hyphens
     .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
     .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
-}
+};
 
-export const generateUniqueEndpoint = async (title: string, model: 'tour' | 'blog' | 'landing', currentModelId?: string): Promise<string> => {
+export const generateUniqueEndpoint = async (
+  title: string,
+  model: 'tour' | 'blog' | 'landing',
+  currentModelId?: string
+): Promise<string> => {
   let slugifiedTitle = '';
   if (!title || title.trim().length === 0) {
     slugifiedTitle = 'no-title';
-  }
-  else {
+  } else {
     slugifiedTitle = title;
   }
   const baseEndpoint = slugify(slugifiedTitle, {
@@ -43,7 +46,7 @@ export const generateUniqueEndpoint = async (title: string, model: 'tour' | 'blo
     lower: true,
     strict: false,
     locale: 'vi',
-    trim: true
+    trim: true,
   });
 
   let endpoint = baseEndpoint;
@@ -53,7 +56,9 @@ export const generateUniqueEndpoint = async (title: string, model: 'tour' | 'blo
     if (model === 'tour') {
       // For tour model: only check Tour table
       const existingTour = await getTourByEndpointAction(endpoint);
-      const tourConflict = existingTour.success && existingTour.data &&
+      const tourConflict =
+        existingTour.success &&
+        existingTour.data &&
         existingTour.data.id !== currentModelId;
 
       if (tourConflict) {
@@ -65,7 +70,9 @@ export const generateUniqueEndpoint = async (title: string, model: 'tour' | 'blo
     } else if (model === 'blog') {
       // For blog model: only check Blog table
       const existingBlog = await getBlogByEndpointAction(endpoint);
-      const blogConflict = existingBlog.success && existingBlog.data &&
+      const blogConflict =
+        existingBlog.success &&
+        existingBlog.data &&
         existingBlog.data.id !== currentModelId;
 
       if (blogConflict) {
@@ -76,19 +83,26 @@ export const generateUniqueEndpoint = async (title: string, model: 'tour' | 'blo
       }
     } else {
       // For landing model: check both TourCategory and Page
-      const [existingTourCategory, existingPage, existingBlogCategory] = await Promise.all([
-        getTourCategoryByEndpointAction(endpoint),
-        getPageByEndpointAction(endpoint),
-        getBlogCategoryByEndpointAction(endpoint)
-      ]);
+      const [existingTourCategory, existingPage, existingBlogCategory] =
+        await Promise.all([
+          getTourCategoryByEndpointAction(endpoint),
+          getPageByEndpointAction(endpoint),
+          getBlogCategoryByEndpointAction(endpoint),
+        ]);
 
-      const categoryConflict = existingTourCategory.success && existingTourCategory.data &&
+      const categoryConflict =
+        existingTourCategory.success &&
+        existingTourCategory.data &&
         existingTourCategory.data.id !== currentModelId;
 
-      const pageConflict = existingPage.success && existingPage.data &&
+      const pageConflict =
+        existingPage.success &&
+        existingPage.data &&
         existingPage.data.id !== currentModelId;
 
-      const blogCategoryConflict = existingBlogCategory.success && existingBlogCategory.data &&
+      const blogCategoryConflict =
+        existingBlogCategory.success &&
+        existingBlogCategory.data &&
         existingBlogCategory.data.id !== currentModelId;
 
       if (categoryConflict || pageConflict || blogCategoryConflict) {
@@ -101,37 +115,37 @@ export const generateUniqueEndpoint = async (title: string, model: 'tour' | 'blo
   }
 
   return endpoint;
-}
+};
 
 export const formatPrice = (price: number): string => {
-  return price.toLocaleString("vi-VN");
-}
+  return price.toLocaleString('vi-VN');
+};
 
 export function getEmbeddedVideoUrl(url: string): string | null {
   try {
     const parsed = new URL(url);
-    const hostname = parsed.hostname.replace("www.", "");
+    const hostname = parsed.hostname.replace('www.', '');
 
     // --- YouTube ---
     // Using youtube-nocookie.com (privacy-enhanced mode) to avoid third-party cookies
     // Cookies are only set when the user clicks play
-    if (hostname === "youtube.com" || hostname === "youtu.be") {
+    if (hostname === 'youtube.com' || hostname === 'youtu.be') {
       // Case: youtu.be/<id>
-      if (hostname === "youtu.be") {
+      if (hostname === 'youtu.be') {
         return `https://www.youtube-nocookie.com/embed/${parsed.pathname.slice(1)}`;
       }
 
       // Case: youtube.com/watch?v=<id>
-      const videoId = parsed.searchParams.get("v");
+      const videoId = parsed.searchParams.get('v');
       if (videoId) {
         return `https://www.youtube-nocookie.com/embed/${videoId}`;
       }
 
       // Case: youtube.com/embed/<id> or youtube-nocookie.com/embed/<id>
-      if (parsed.pathname.startsWith("/embed/")) {
+      if (parsed.pathname.startsWith('/embed/')) {
         // Convert existing youtube.com embeds to nocookie version
-        if (hostname === "youtube.com" || hostname === "www.youtube.com") {
-          const videoId = parsed.pathname.split("/embed/")[1]?.split("?")[0];
+        if (hostname === 'youtube.com' || hostname === 'www.youtube.com') {
+          const videoId = parsed.pathname.split('/embed/')[1]?.split('?')[0];
           if (videoId) {
             return `https://www.youtube-nocookie.com/embed/${videoId}${parsed.search}`;
           }
@@ -142,8 +156,8 @@ export function getEmbeddedVideoUrl(url: string): string | null {
     }
 
     // --- Vimeo ---
-    if (hostname === "vimeo.com") {
-      const videoId = parsed.pathname.split("/")[1];
+    if (hostname === 'vimeo.com') {
+      const videoId = parsed.pathname.split('/')[1];
       if (videoId) {
         return `https://player.vimeo.com/video/${videoId}`;
       }
@@ -173,7 +187,7 @@ export const renderDurationDays = (durationDays: number) => {
     return '1 day';
   }
   return `${durationDays} days`;
-}
+};
 
 export function parseSetCookie(setCookie: string | null): ParsedCookie {
   if (!setCookie) {
@@ -183,7 +197,7 @@ export function parseSetCookie(setCookie: string | null): ParsedCookie {
       options: {},
     };
   }
-  const parts = setCookie.split(';').map(p => p.trim());
+  const parts = setCookie.split(';').map((p) => p.trim());
   const [nameValue, ...attrs] = parts;
   const [name, value] = nameValue.split('=');
   const options: ParsedCookie['options'] = {};

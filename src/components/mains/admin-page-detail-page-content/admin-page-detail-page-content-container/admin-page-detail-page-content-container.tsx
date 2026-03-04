@@ -69,7 +69,7 @@ export default function AdminPageDetailPageContentContainer({
 
   const handleAddNewPage = async () => {
     setIsCreating(true);
-    const newTitle = '';
+    const newTitle = 'Untitled';
     const endpoint = await generateUniqueEndpoint(newTitle, 'landing');
 
     const response = await createPageAction({
@@ -120,7 +120,6 @@ export default function AdminPageDetailPageContentContainer({
 
   const handleRemoveAdditionalImage = async (imageIndex: number) => {
     setLoadingImageIndex(imageIndex);
-    const imageUrl = additionalImageUrls[imageIndex];
     const newImages = additionalImageUrls.filter((_, idx) => idx !== imageIndex);
 
     setAdditionalImageUrls(newImages);

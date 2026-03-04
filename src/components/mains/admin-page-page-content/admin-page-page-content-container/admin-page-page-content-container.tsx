@@ -27,7 +27,7 @@ export default function AdminPagePageContentContainer({
 
   const handleAddNewPage = async () => {
     setIsCreating(true);
-    const newTitle = '';
+    const newTitle = 'Untitled';
     const endpoint = await generateUniqueEndpoint(newTitle, 'landing');
 
     const response = await createPageAction({

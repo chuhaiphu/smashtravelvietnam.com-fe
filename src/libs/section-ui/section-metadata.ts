@@ -43,4 +43,13 @@ export const SECTION_METADATA = {
       },
     },
   },
+  [SECTION_KEYS.VIDEO_SECTION_V1]: {
+    name: 'Video Section',
+    properties: {
+      url: null,
+      title: null,
+      height: null,
+      thumbnailUrl: null,
+    },
+  },
 };

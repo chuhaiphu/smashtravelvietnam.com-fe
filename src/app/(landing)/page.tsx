@@ -1,7 +1,6 @@
 import SearchBar from '@/components/primitives/search-bar/search-bar';
 import classes from './page.module.scss';
 import { Container, Group, Loader, Stack, Text } from '@mantine/core';
-import VideoSection from '@/components/primitives/video-section/video-section';
 import { AutoScrollCarousel } from '@/components/primitives/auto-scroll-carousel/auto-scroll-carousel';
 import GridItemsContainerV1 from '@/components/grids/grid-items-container/v1/grid-items-container-v1';
 import GridItemsContainerV2 from '@/components/grids/grid-items-container/v2/grid-items-container-v2';
@@ -79,7 +78,8 @@ export default async function LandingPage() {
         </Stack>
       </Container>
       <AutoScrollCarousel />
-      <VideoSection url="https://www.youtube.com/watch?v=iVIbnK94x4Y" />
+      {/* Position 14: Video Section - uses DynamicSection */}
+      <DynamicSection position={14} />
       {/* Position 15: Footer - uses DynamicSection */}
       <DynamicSection position={15} />
     </>

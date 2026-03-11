@@ -3,6 +3,7 @@
 export const SECTION_KEYS = {
   LANDING_CAROUSEL_V1: 'LANDING_CAROUSEL_V1',
   LANDING_FOOTER_V1: 'LANDING_FOOTER_V1',
+  VIDEO_SECTION_V1: 'VIDEO_SECTION_V1',
 } as const;
 
 export type SectionKey = (typeof SECTION_KEYS)[keyof typeof SECTION_KEYS];

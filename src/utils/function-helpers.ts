@@ -121,8 +121,11 @@ export const formatPrice = (price: number): string => {
   return price.toLocaleString('vi-VN');
 };
 
-export function getEmbeddedVideoUrl(url: string): string | null {
+export function getEmbeddedVideoUrl(url: string | null | undefined): string | null {
   try {
+    if (!url) {
+      return null;
+    }
     const parsed = new URL(url);
     const hostname = parsed.hostname.replace('www.', '');
 
@@ -178,7 +181,6 @@ export function isPathActive(pathname: string, itemPath: string, isRoot = false)
   if (pathname === itemPath) return true;
   return pathname.startsWith(itemPath + '/');
 }
-
 export const renderDurationDays = (durationDays: number) => {
   if (durationDays === 0.5) {
     return 'Half day';

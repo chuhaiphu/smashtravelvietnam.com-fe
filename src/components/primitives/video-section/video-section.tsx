@@ -2,12 +2,12 @@
 
 import { getEmbeddedVideoUrl } from '@/utils/function-helpers';
 import classes from './video-section.module.scss';
-import { ActionIcon, Text } from '@mantine/core';
+import { ActionIcon } from '@mantine/core';
 import { useState } from 'react';
 import { BsPlayBtnFill } from 'react-icons/bs';
 
 interface VideoPlayerProps {
-  url: string;
+  url?: string;
   title?: string;
   height?: number;
   thumbnailUrl?: string;
@@ -24,7 +24,7 @@ export default function VideoSection({
   const embedUrl = getEmbeddedVideoUrl(url);
 
   if (!embedUrl) {
-    return <Text>Video URL not valid or not supported.</Text>;
+    return null;
   }
 
   const autoplayEmbedUrl = isPlaying

@@ -18,4 +18,29 @@ export const SECTION_METADATA = {
       orientation: null,
     },
   },
+  [SECTION_KEYS.LANDING_FOOTER_V1]: {
+    name: 'Footer',
+    properties: {
+      title: null,
+      info: {
+        phoneWhatsapp: null,
+        email: null,
+        address: null,
+        websiteUrl: null,
+        facebookUrl: null,
+        tiktokUrl: null,
+        youtubeUrl: null,
+        instagramUrl: null,
+      },
+      logoUrl: null,
+      testimonials: null,
+      bottomBar: {
+        brandName: null,
+        brandUrl: null,
+        copyrightYear: null,
+        poweredByLabel: null,
+        poweredByUrl: null,
+      },
+    },
+  },
 };

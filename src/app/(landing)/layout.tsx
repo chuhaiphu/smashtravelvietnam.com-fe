@@ -2,7 +2,6 @@ import { MaintenanceGuard } from '@/components/guards/maintenance-guard';
 import classes from './layout.module.scss';
 import { LandingHeader } from '@/components/headers/landing-header/landing-header';
 import { Container } from '@mantine/core';
-import LandingFooter from '@/components/footers/landing-footer/landing-footer';
 import { getAppConfigAction } from '@/actions/app-config-action';
 import { Metadata } from 'next';
 
@@ -79,7 +78,6 @@ export default async function LandingLayout({ children }: { children: React.Reac
           <LandingHeader />
         </Container>
         {children}
-        <LandingFooter />
       </div >
     </MaintenanceGuard>
   );

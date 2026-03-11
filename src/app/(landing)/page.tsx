@@ -80,6 +80,8 @@ export default async function LandingPage() {
       </Container>
       <AutoScrollCarousel />
       <VideoSection url="https://www.youtube.com/watch?v=iVIbnK94x4Y" />
+      {/* Position 15: Footer - uses DynamicSection */}
+      <DynamicSection position={15} />
     </>
   );
 }

@@ -1,8 +1,6 @@
 import { ITourResponse } from "@/interfaces/tour-interface";
-import { Grid, GridCol, Text } from "@mantine/core";
-import TourItem from "./tour-item/tour-item";
-import Link from "next/link";
-import classes from "./tour-grid.module.scss";
+import { Text } from "@mantine/core";
+import TourGridContent from "./tour-grid-content";
 
 export default function TourGrid(
   { queryParams, toursData }: {
@@ -65,14 +63,6 @@ export default function TourGrid(
   }
 
   return (
-    <Grid mt={'lg'} mb={'md'} gutter="lg">
-      {filtered.map((item) => (
-        <GridCol span={{ base: 12, sm: 6, md: 3 }} key={item.id}>
-          <Link href={`/tours/${item.endpoint}`} className={classes.cardLink}>
-            <TourItem item={item} />
-          </Link>
-        </GridCol>
-      ))}
-    </Grid>
+    <TourGridContent toursData={filtered} />
   );
 }

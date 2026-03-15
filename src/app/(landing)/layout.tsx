@@ -4,6 +4,7 @@ import { LandingHeader } from '@/components/headers/landing-header/landing-heade
 import { Container } from '@mantine/core';
 import { getAppConfigAction } from '@/actions/app-config-action';
 import { Metadata } from 'next';
+import DynamicSection from '@/libs/section-ui/dynamic-section';
 
 // Force dynamic rendering because MaintenanceGuard uses getServerSession() and redirect()
 export const dynamic = 'force-dynamic';
@@ -78,6 +79,7 @@ export default async function LandingLayout({ children }: { children: React.Reac
           <LandingHeader />
         </Container>
         {children}
+        <DynamicSection position={15} />
       </div >
     </MaintenanceGuard>
   );

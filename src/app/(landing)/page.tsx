@@ -80,8 +80,6 @@ export default async function LandingPage() {
       <AutoScrollCarousel />
       {/* Position 14: Video Section - uses DynamicSection */}
       <DynamicSection position={14} />
-      {/* Position 15: Footer - uses DynamicSection */}
-      <DynamicSection position={15} />
     </>
   );
 }

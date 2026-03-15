@@ -15,7 +15,7 @@ interface TourItemProps {
   };
 }
 
-export default async function TourItem({ item }: TourItemProps) {
+export default function TourItem({ item }: TourItemProps) {
   const renderPrice = (price: number, discountPrice: number) => {
     // Case 1: price === 0 -> Ask for Price
     if (price === 0) {

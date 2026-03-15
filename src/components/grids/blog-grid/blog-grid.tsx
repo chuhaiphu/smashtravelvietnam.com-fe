@@ -1,8 +1,6 @@
 import { IBlogResponse } from "@/interfaces/blog-interface";
-import { Grid, GridCol, Text } from "@mantine/core";
-import BlogItem from "./blog-item/blog-item";
-import Link from "next/link";
-import classes from "./blog-grid.module.scss";
+import { Text } from "@mantine/core";
+import BlogGridContent from "./blog-grid-content";
 
 export default function BlogGrid(
   { queryParams, blogsData }: {
@@ -56,15 +54,7 @@ export default function BlogGrid(
   }
 
   return (
-    <Grid mt={'lg'} mb={'md'} gutter="lg">
-      {filtered.map((item) => (
-        <GridCol span={{ base: 12, sm: 6, md: 3 }} key={item.id}>
-          <Link href={`/blogs/${item.endpoint}`} className={classes.cardLink}>
-            <BlogItem item={item} />
-          </Link>
-        </GridCol>
-      ))}
-    </Grid>
+    <BlogGridContent blogsData={filtered} />
   );
 }
 

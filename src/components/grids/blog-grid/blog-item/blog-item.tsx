@@ -18,7 +18,7 @@ interface BlogItemProps {
   };
 }
 
-export default async function BlogItem({ item }: BlogItemProps) {
+export default function BlogItem({ item }: BlogItemProps) {
   // const renderCategories = () => {
   //   if (!item.blogCategoryBlogs || item.blogCategoryBlogs.length === 0) {
   //     return null;

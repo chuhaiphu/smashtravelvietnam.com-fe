@@ -1,9 +1,9 @@
 import { Grid, GridCol, Group, Stack, Text } from '@mantine/core';
-import classes from './grid-items-container-v2.module.scss';
+import classes from './static-our-locations-grid.module.scss';
 import ImageCard from '@/components/primitives/image-card/image-card';
 import ExploreDestinationsButton from './explore-destinations-button';
 
-export default function GridItemsContainerV2() {
+export default function StaticOurLocationsGrid() {
   return (
     <Grid
       classNames={{

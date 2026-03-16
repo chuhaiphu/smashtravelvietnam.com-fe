@@ -2,13 +2,13 @@ import SearchBar from '@/components/primitives/search-bar/search-bar';
 import classes from './page.module.scss';
 import { Container, Group, Loader, Stack, Text } from '@mantine/core';
 import { AutoScrollCarousel } from '@/components/primitives/auto-scroll-carousel/auto-scroll-carousel';
-import GridItemsContainerV1 from '@/components/grids/grid-items-container/v1/grid-items-container-v1';
-import GridItemsContainerV2 from '@/components/grids/grid-items-container/v2/grid-items-container-v2';
+import StaticOurServicesGrid from '@/components/grids/static-our-services-grid/static-our-services-grid';
 import Link from 'next/link';
 import TourGrid from '@/components/grids/tour-grid/tour-grid';
 import { getAllPublicToursPinnedToHomeAction } from '@/actions/tour-action';
 import { Suspense } from 'react';
 import DynamicSection from '@/libs/section-ui/dynamic-section';
+import StaticOurLocationsGrid from '@/components/grids/grid-items-container/static-our-locations-grid';
 
 async function LandingPageTourContent() {
   const toursResponse = await getAllPublicToursPinnedToHomeAction();
@@ -62,7 +62,7 @@ export default async function LandingPage() {
             Vietnam has many beautiful landscapes
           </h3>
         </Stack>
-        <GridItemsContainerV2 />
+        <StaticOurLocationsGrid />
       </Container>
       <Container size="xl" classNames={{ root: classes.landingContainer }}>
         <Stack gap={6} mb={'xl'}>
@@ -71,7 +71,7 @@ export default async function LandingPage() {
             Beside choosing your favorite destinations and tour packages
           </h3>
         </Stack>
-        <GridItemsContainerV1 />
+        <StaticOurServicesGrid />
         <Stack gap={6} mb={'xl'}>
           <h2 className={classes.sectionTitle}>We have the best partners</h2>
           <h3 className={classes.sectionSubTitle}>We have the best partners</h3>

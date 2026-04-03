@@ -157,8 +157,9 @@ export default function SmtpPageContentContainer({ smtpConfig }: SmtpPageContent
             <Stack gap={2}>
               <Text fw={500}>Password</Text>
               <PasswordInput
-                placeholder="********"
+                placeholder="Leave blank to keep current password"
                 onChange={(e) => setPassword(e.currentTarget.value)}
+                autoComplete="new-password"
               />
             </Stack>
           </Group>

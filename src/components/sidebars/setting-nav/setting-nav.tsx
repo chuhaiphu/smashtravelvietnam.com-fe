@@ -1,9 +1,9 @@
 'use client';
 
-import { Group, Paper, Stack, Text } from "@mantine/core";
-import { usePathname, useRouter } from "next/navigation";
-import { Route } from "next";
-import classes from "./setting-nav.module.scss";
+import { Group, Paper, Stack, Text } from '@mantine/core';
+import { usePathname, useRouter } from 'next/navigation';
+import { Route } from 'next';
+import classes from './setting-nav.module.scss';
 
 type SettingNavItem = {
   label: string;
@@ -13,8 +13,7 @@ type SettingNavItem = {
 const SETTING_NAV_ITEMS: SettingNavItem[] = [
   { label: 'Overview', path: '/adminup/setting/overview' },
   { label: 'SEO', path: '/adminup/setting/seo' },
-  { label: 'Email SMTP', path: '/adminup/setting/email-smtp' }
-  // { label: 'Backup', path: '/adminup/setting/backup' },
+  { label: 'Email SMTP', path: '/adminup/setting/email-smtp' },
 ];
 
 export default function SettingNav() {

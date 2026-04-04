@@ -29,7 +29,7 @@ import dayjs from 'dayjs';
 import type { ITourCategoryResponse } from '@/interfaces/tour-category-interface';
 import { TreeManager } from '@/utils/tree-manager';
 import { IoChevronDownOutline } from 'react-icons/io5';
-import ReCAPTCHA from 'react-google-recaptcha';
+import ReCaptchaEnterprise, { ReCaptchaEnterpriseHandle } from '@/components/primitives/recaptcha-enterprise/recaptcha-enterprise';
 
 interface CustomizedTourPageContainerProps {
   tourCategoriesData: ITourCategoryResponse[];
@@ -39,7 +39,7 @@ export default function CustomizedTourPageContainer({
   tourCategoriesData,
 }: CustomizedTourPageContainerProps) {
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const recaptchaRef = useRef<ReCaptchaEnterpriseHandle>(null);
 
   // Form state
   const [startDate, setStartDate] = useState<Date | null>(
@@ -399,10 +399,11 @@ export default function CustomizedTourPageContainer({
             <input type="hidden" name="captchaToken" value={captchaToken ?? ''} />
 
             <Group justify="space-between">
-              <ReCAPTCHA
+              <ReCaptchaEnterprise
                 ref={recaptchaRef}
                 sitekey={RECAPTCHA_SITE_KEY}
                 onChange={(token) => setCaptchaToken(token)}
+                action="custom_tour_request_submit"
               />
               <Group>
                 {captchaToken && <Text>Send</Text>}

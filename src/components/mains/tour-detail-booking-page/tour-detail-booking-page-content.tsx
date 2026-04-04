@@ -4,7 +4,7 @@ import { submitBookingAction } from "@/actions/booking-action";
 import BookingTable, { BookingItem } from "@/components/tables/booking-table/booking-table";
 import { Grid, GridCol, Group, Image, Paper, Stack, Text, TextInput, Textarea, ActionIcon } from "@mantine/core";
 import { useState, useRef } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
+import ReCaptchaEnterprise, { ReCaptchaEnterpriseHandle } from "@/components/primitives/recaptcha-enterprise/recaptcha-enterprise";
 import type { ITourResponse } from "@/interfaces/tour-interface";
 import SubmitFormIcon from "@/components/icons/submit-form-icon.svg";
 import classes from './tour-detail-booking-page-content.module.scss';
@@ -16,7 +16,7 @@ interface TourDetailBookingPageContentProps {
 
 export default function TourDetailBookingPageContent({ tourData }: TourDetailBookingPageContentProps) {
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const recaptchaRef = useRef<ReCaptchaEnterpriseHandle>(null);
 
   const [bookingItems, setBookingItems] = useState<BookingItem[]>([
     {
@@ -165,10 +165,11 @@ export default function TourDetailBookingPageContent({ tourData }: TourDetailBoo
             <input type="hidden" name="captchaToken" value={captchaToken ?? ''} />
 
             <Group justify="space-between">
-              <ReCAPTCHA
+              <ReCaptchaEnterprise
                 ref={recaptchaRef}
                 sitekey={RECAPTCHA_SITE_KEY}
                 onChange={(token) => setCaptchaToken(token)}
+                action="booking_submit"
               />
               <Group>
                 {captchaToken && (

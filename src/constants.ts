@@ -114,4 +114,7 @@ export const TOUR_BADGE_TYPES = [
 
 export const UPDATE_SORT_ORDER_OFFSET = 9999;
 export const OPEN_DESTINATIONS_POPOVER_EVENT = "stv:searchbar:open-destinations";
-export const RECAPTCHA_SITE_KEY = "6LfRIjMsAAAAAAZn_uNvfpJzMvZBbRfAaFlf3iC2";
+if (!process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY) {
+  throw new Error('Missing NEXT_PUBLIC_RECAPTCHA_SITE_KEY env variable');
+}
+export const RECAPTCHA_SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;

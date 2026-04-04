@@ -12,7 +12,7 @@ import {
   ActionIcon,
 } from "@mantine/core";
 import { useState, useRef, ReactNode } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
+import ReCaptchaEnterprise, { ReCaptchaEnterpriseHandle } from "@/components/primitives/recaptcha-enterprise/recaptcha-enterprise";
 import SubmitFormIcon from "@/components/icons/submit-form-icon.svg";
 import classes from './contact-form.module.scss';
 
@@ -45,7 +45,7 @@ export default function ContactForm({
 }: ContactFormProps) {
 
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const recaptchaRef = useRef<ReCaptchaEnterpriseHandle>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   const handleSubmit = async (formData: FormData) => {
@@ -135,10 +135,11 @@ export default function ContactForm({
         <input type="hidden" name="captchaToken" value={captchaToken ?? ''} />
 
         <Group justify="space-between">
-          <ReCAPTCHA
+          <ReCaptchaEnterprise
             ref={recaptchaRef}
             sitekey={RECAPTCHA_SITE_KEY}
             onChange={(token) => setCaptchaToken(token)}
+            action="contact_form_submit"
           />
           <Group>
             {captchaToken && (

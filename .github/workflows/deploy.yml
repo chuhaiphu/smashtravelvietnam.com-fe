@@ -9,6 +9,7 @@ env:
   DOCKER_IMAGE: ${{ vars.DOCKER_IMAGE }}
   DOCKER_CONTAINER_NAME: smashtravelvietnam.com-fe
   SMASH_API_URL: ${{ vars.SMASH_API_URL }}
+  NEXT_PUBLIC_RECAPTCHA_SITE_KEY: ${{ secrets.NEXT_PUBLIC_RECAPTCHA_SITE_KEY }}
 
 jobs:
   build-and-deploy:
@@ -42,6 +43,8 @@ jobs:
           build-args: |
             VERSION=${{ steps.version.outputs.VERSION }}
             SMASH_API_URL=${{ env.SMASH_API_URL }}
+            # NEXT_PUBLIC only need at build time
+            NEXT_PUBLIC_RECAPTCHA_SITE_KEY=${{ env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY }}
 
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.0.3

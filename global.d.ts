@@ -9,6 +9,11 @@ declare module '*.css' {
   export default content;
 }
 
+declare module '*.scss' {
+  const content: void;
+  export default content;
+}
+
 declare module '*.module.css' {
   const classes: { [key: string]: string };
   export default classes;
@@ -48,4 +53,3 @@ declare module '*.webm' {
   };
   export default value;
 }
-

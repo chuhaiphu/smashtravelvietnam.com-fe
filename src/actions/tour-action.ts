@@ -58,7 +58,7 @@ export async function getAllToursActionPublic(): Promise<ActionResponse<ITourRes
   cacheLife('hours');
   cacheTag('tours');
   return executeApi(
-    async () => getAllToursApiPublic({ visibility: 'PUBLIC' })
+    async () => getAllToursApiPublic({ visibility: 'public' })
   );
 }
 
@@ -67,7 +67,7 @@ export async function getAllToursPinnedToHomeActionPublic(): Promise<ActionRespo
   cacheLife('hours');
   cacheTag('tours');
   return executeApi(
-    async () => getAllToursApiPublic({ visibility: 'PUBLIC', pinnedToHome: true })
+    async () => getAllToursApiPublic({ visibility: 'public', pinnedToHome: true })
   );
 }
 

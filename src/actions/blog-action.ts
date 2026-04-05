@@ -58,7 +58,7 @@ export async function getAllBlogsActionPublic(): Promise<ActionResponse<IBlogRes
   cacheLife('hours');
   cacheTag('blogs');
   return executeApi(
-    async () => getAllBlogsApiPublic({ visibility: 'PUBLIC' })
+    async () => getAllBlogsApiPublic({ visibility: 'public' })
   );
 }
 

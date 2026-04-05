@@ -56,7 +56,7 @@ export async function getAllPagesVisibleActionPrivate(): Promise<
   if (result.success && result.data) {
     return {
       success: true,
-      data: result.data.filter((page) => page.visibility === 'PUBLIC'),
+      data: result.data.filter((page) => page.visibility.toLowerCase() === 'public'),
     };
   }
   return result;

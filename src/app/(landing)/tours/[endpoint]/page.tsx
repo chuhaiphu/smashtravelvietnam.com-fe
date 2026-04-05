@@ -30,6 +30,8 @@ import type { Metadata } from 'next';
 import { getAppConfigActionPublic } from '@/actions/app-config-action';
 import Image from 'next/image';
 
+const TOUR_ENDPOINT_PLACEHOLDER = '__placeholder__';
+
 export async function generateMetadata({
   params,
 }: {
@@ -65,11 +67,14 @@ export async function generateMetadata({
 
 export async function generateStaticParams() {
   const toursResponse = await getAllToursActionPublic();
-  return toursResponse.success && toursResponse.data
-    ? toursResponse.data.map((tour) => ({
-        endpoint: tour.endpoint,
-      }))
-    : [];
+  const params =
+    toursResponse.success && toursResponse.data
+      ? toursResponse.data.map((tour) => ({
+          endpoint: tour.endpoint,
+        }))
+      : [];
+
+  return params.length > 0 ? params : [{ endpoint: TOUR_ENDPOINT_PLACEHOLDER }];
 }
 
 export default async function TourDetailPage({
@@ -78,6 +83,11 @@ export default async function TourDetailPage({
   params: Promise<{ endpoint: string }>;
 }) {
   const { endpoint } = await params;
+
+  if (endpoint === TOUR_ENDPOINT_PLACEHOLDER) {
+    notFound();
+  }
+
   const tourData = await getTourByEndpointActionPublic(endpoint);
   const configData = await getAppConfigActionPublic();
 

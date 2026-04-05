@@ -1,5 +1,5 @@
 import { getAllMenusActionPrivate, getAvailableSortOrdersActionPrivate, getMenuByIdActionPrivate } from "@/actions/menu-action";
-import { getAllTourCategoriesActionPrivate } from "@/actions/tour-category-action";
+import { getAllTourCategoriesActionPublic } from "@/actions/tour-category-action";
 import { notFound } from "next/navigation";
 import AdminMenuDetailPageContentContainer from "./admin-menu-detail-page-content-container/admin-menu-detail-page-content-container";
 
@@ -15,7 +15,7 @@ export default async function AdminMenuDetailPageContent({
   const [currentMenuResponse, menusResponse, tourCategoriesResponse] = await Promise.all([
     getMenuByIdActionPrivate(id),
     getAllMenusActionPrivate(),
-    getAllTourCategoriesActionPrivate(),
+    getAllTourCategoriesActionPublic(),
   ]);
   const availableSortOrdersResponse = await getAvailableSortOrdersActionPrivate(currentMenuResponse.data?.parent?.id || '');
 

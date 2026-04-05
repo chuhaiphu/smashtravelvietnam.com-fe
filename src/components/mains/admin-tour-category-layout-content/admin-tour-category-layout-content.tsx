@@ -1,4 +1,4 @@
-import { getAllTourCategoriesActionPrivate } from "@/actions/tour-category-action";
+import { getAllTourCategoriesActionPublic } from "@/actions/tour-category-action";
 import AdminTourCategoryLayoutContentContainer from "./admin-tour-category-layout-content-container/admin-tour-category-layout-content-container";
 import classes from "./admin-tour-category-layout-content.module.scss";
 
@@ -7,7 +7,7 @@ interface AdminTourCategoryLayoutContentProps {
 }
 
 export default async function AdminTourCategoryLayoutContent({ children }: AdminTourCategoryLayoutContentProps) {
-  const tourCategoriesData = await getAllTourCategoriesActionPrivate();
+  const tourCategoriesData = await getAllTourCategoriesActionPublic();
 
   return (
     <div className={classes.adminTourCategoryLayoutRoot}>

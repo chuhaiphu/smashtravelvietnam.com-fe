@@ -18,6 +18,8 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 
+const BLOG_ENDPOINT_PLACEHOLDER = '__placeholder__';
+
 export async function generateMetadata({
   params,
 }: {
@@ -53,11 +55,14 @@ export async function generateMetadata({
 
 export async function generateStaticParams() {
   const blogsResponse = await getAllBlogsActionPublic();
-  return blogsResponse.success && blogsResponse.data
-    ? blogsResponse.data.map((blog) => ({
-        endpoint: blog.endpoint,
-      }))
-    : [];
+  const params =
+    blogsResponse.success && blogsResponse.data
+      ? blogsResponse.data.map((blog) => ({
+          endpoint: blog.endpoint,
+        }))
+      : [];
+
+  return params.length > 0 ? params : [{ endpoint: BLOG_ENDPOINT_PLACEHOLDER }];
 }
 
 export default async function BlogDetailPage({
@@ -66,6 +71,11 @@ export default async function BlogDetailPage({
   params: Promise<{ endpoint: string }>;
 }) {
   const { endpoint } = await params;
+
+  if (endpoint === BLOG_ENDPOINT_PLACEHOLDER) {
+    notFound();
+  }
+
   const blogResponse = await getBlogByEndpointActionPublic(endpoint);
 
   if (!blogResponse.success || !blogResponse.data) {

@@ -8,7 +8,6 @@ import {
   createTourCategoryApiPrivate,
   getTourCategoryByIdApiPrivate,
   getTourCategoryByEndpointApiPublic,
-  getAllTourCategoriesAdminApiPrivate,
   getAllTourCategoriesApiPublic,
   getAvailableSortOrdersApiPrivate,
   updateTourCategoryApiPrivate,
@@ -43,12 +42,6 @@ export async function getTourCategoryByEndpointActionPublic(
   cacheTag('tour-categories', `tour-category:${endpoint}`);
   return executeApi(
     async () => getTourCategoryByEndpointApiPublic(endpoint)
-  );
-}
-
-export async function getAllTourCategoriesActionPrivate(): Promise<ActionResponse<ITourCategoryResponse[]>> {
-  return executeApi(
-    async () => getAllTourCategoriesAdminApiPrivate()
   );
 }
 

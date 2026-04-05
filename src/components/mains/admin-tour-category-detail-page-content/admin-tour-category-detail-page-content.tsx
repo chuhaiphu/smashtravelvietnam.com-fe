@@ -1,4 +1,4 @@
-import { getAllTourCategoriesActionPrivate, getAvailableSortOrdersActionPrivate, getTourCategoryByIdActionPrivate } from "@/actions/tour-category-action";
+import { getAllTourCategoriesActionPublic, getAvailableSortOrdersActionPrivate, getTourCategoryByIdActionPrivate } from "@/actions/tour-category-action";
 import { notFound } from "next/navigation";
 import AdminTourCategoryDetailPageContentContainer from "./admin-tour-category-detail-page-content-container/admin-tour-category-detail-page-content-container";
 
@@ -13,7 +13,7 @@ export default async function AdminTourCategoryDetailPageContent({
 
   const [currentTourCategoryResponse, tourCategoriesResponse] = await Promise.all([
     getTourCategoryByIdActionPrivate(id),
-    getAllTourCategoriesActionPrivate(),
+    getAllTourCategoriesActionPublic(),
   ]);
   const availableSortOrdersResponse = await getAvailableSortOrdersActionPrivate(currentTourCategoryResponse.data?.parent?.id || '');
 

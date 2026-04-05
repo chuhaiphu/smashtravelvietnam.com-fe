@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { getAllToursActionPublic } from '../actions/tour-action';
 import { getAllBlogsActionPublic } from '../actions/blog-action';
 import { getAllPagesVisibleActionPrivate } from '../actions/page-action';
-import { getAllTourCategoriesActionPrivate } from '../actions/tour-category-action';
+import { getAllTourCategoriesActionPublic } from '../actions/tour-category-action';
 import { getAllBlogCategoriesActionPrivate } from '../actions/blog-category-action';
 import { SERVICE_ITEMS } from '@/constants';
 
@@ -92,7 +92,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     // Get all tour categories
-    const tourCategoriesResponse = await getAllTourCategoriesActionPrivate();
+    const tourCategoriesResponse = await getAllTourCategoriesActionPublic();
     if (tourCategoriesResponse.success && tourCategoriesResponse.data) {
       tourCategoriesResponse.data.forEach((category) => {
         dynamicRoutes.push({

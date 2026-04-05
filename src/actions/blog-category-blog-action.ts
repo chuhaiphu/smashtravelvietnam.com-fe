@@ -6,7 +6,7 @@ import {
   IBlogCategoryBlogResponse,
   IUpdateBlogCategoryBlog
 } from '@/interfaces/blog-category-blog-interface';
-import { revalidatePath } from 'next/cache';
+import { updateTag, cacheLife, cacheTag } from 'next/cache';
 import { executeApi } from '@/actions/_base';
 import {
   createBlogCategoryBlogApiPrivate,
@@ -20,19 +20,44 @@ import {
   deleteBlogCategoryBlogsByBlogCategoryIdApiPrivate,
 } from '@/apis/blog-category-blog-apis';
 
+function invalidateBlogCategoryBlogTags(args?: {
+  blogId?: string;
+  blogCategoryId?: string;
+}) {
+  updateTag('blogs');
+  updateTag('blog-categories');
+  updateTag('blog-category-blogs');
+
+  if (args?.blogId) {
+    updateTag(`blog-category-blogs:blog:${args.blogId}`);
+  }
+
+  if (args?.blogCategoryId) {
+    updateTag(`blog-category-blogs:category:${args.blogCategoryId}`);
+  }
+}
+
 export async function createBlogCategoryBlogActionPrivate(
   input: ICreateBlogCategoryBlog
 ): Promise<ActionResponse<IBlogCategoryBlogResponse>> {
   const result = await executeApi(
     async () => createBlogCategoryBlogApiPrivate(input)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    invalidateBlogCategoryBlogTags({
+      blogId: input.blogId,
+      blogCategoryId: input.blogCategoryId,
+    });
+  }
   return result;
 }
 
 export async function getBlogCategoryBlogByIdActionPublic(
   id: string
 ): Promise<ActionResponse<IBlogCategoryBlogResponse>> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('blog-category-blogs');
   return executeApi(
     async () => getBlogCategoryBlogByIdApiPublic(id)
   );
@@ -41,6 +66,9 @@ export async function getBlogCategoryBlogByIdActionPublic(
 export async function getBlogCategoryBlogsByBlogIdActionPublic(
   blogId: string
 ): Promise<ActionResponse<IBlogCategoryBlogResponse[]>> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('blog-category-blogs', `blog-category-blogs:blog:${blogId}`);
   return executeApi(
     async () => getBlogCategoryBlogsByBlogIdApiPublic(blogId)
   );
@@ -49,12 +77,18 @@ export async function getBlogCategoryBlogsByBlogIdActionPublic(
 export async function getBlogCategoryBlogsByBlogCategoryIdActionPublic(
   blogCategoryId: string
 ): Promise<ActionResponse<IBlogCategoryBlogResponse[]>> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('blog-category-blogs', `blog-category-blogs:category:${blogCategoryId}`);
   return executeApi(
     async () => getBlogCategoryBlogsByBlogCategoryIdApiPublic(blogCategoryId)
   );
 }
 
 export async function getAllBlogCategoryBlogsActionPublic(): Promise<ActionResponse<IBlogCategoryBlogResponse[]>> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('blog-category-blogs');
   return executeApi(
     async () => getAllBlogCategoryBlogsApiPublic()
   );
@@ -64,20 +98,40 @@ export async function updateBlogCategoryBlogActionPrivate(
   id: string,
   input: IUpdateBlogCategoryBlog
 ): Promise<ActionResponse<IBlogCategoryBlogResponse>> {
+  const relation = await getBlogCategoryBlogByIdActionPublic(id);
   const result = await executeApi(
     async () => updateBlogCategoryBlogApiPrivate(id, input)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    let args: { blogId?: string; blogCategoryId?: string } | undefined;
+    if (relation.success && relation.data) {
+      args = {
+        blogId: relation.data.blogId,
+        blogCategoryId: relation.data.blogCategoryId,
+      };
+    }
+    invalidateBlogCategoryBlogTags(args);
+  }
   return result;
 }
 
 export async function deleteBlogCategoryBlogActionPrivate(
   id: string
 ): Promise<ActionResponse<void>> {
+  const relation = await getBlogCategoryBlogByIdActionPublic(id);
   const result = await executeApi(
     async () => deleteBlogCategoryBlogApiPrivate(id)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    let args: { blogId?: string; blogCategoryId?: string } | undefined;
+    if (relation.success && relation.data) {
+      args = {
+        blogId: relation.data.blogId,
+        blogCategoryId: relation.data.blogCategoryId,
+      };
+    }
+    invalidateBlogCategoryBlogTags(args);
+  }
   return result;
 }
 
@@ -87,7 +141,9 @@ export async function deleteBlogCategoryBlogsByBlogIdActionPrivate(
   const result = await executeApi(
     async () => deleteBlogCategoryBlogsByBlogIdApiPrivate(blogId)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    invalidateBlogCategoryBlogTags({ blogId });
+  }
   return result;
 }
 
@@ -97,6 +153,8 @@ export async function deleteBlogCategoryBlogsByBlogCategoryIdActionPrivate(
   const result = await executeApi(
     async () => deleteBlogCategoryBlogsByBlogCategoryIdApiPrivate(blogCategoryId)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    invalidateBlogCategoryBlogTags({ blogCategoryId });
+  }
   return result;
 }

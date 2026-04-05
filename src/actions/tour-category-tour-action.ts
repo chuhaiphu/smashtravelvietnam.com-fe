@@ -6,7 +6,7 @@ import {
   ITourCategoryTourResponse,
   IUpdateTourCategoryTour
 } from '@/interfaces/tour-category-tour-interface';
-import { revalidatePath } from 'next/cache';
+import { updateTag, cacheLife, cacheTag } from 'next/cache';
 import { executeApi } from '@/actions/_base';
 import {
   createTourCategoryTourApiPrivate,
@@ -20,19 +20,44 @@ import {
   deleteTourCategoryToursByTourCategoryIdApiPrivate,
 } from '@/apis/tour-category-tour-apis';
 
+function invalidateTourCategoryTourTags(args?: {
+  tourId?: string;
+  tourCategoryId?: string;
+}) {
+  updateTag('tours');
+  updateTag('tour-categories');
+  updateTag('tour-category-tours');
+
+  if (args?.tourId) {
+    updateTag(`tour-category-tours:tour:${args.tourId}`);
+  }
+
+  if (args?.tourCategoryId) {
+    updateTag(`tour-category-tours:category:${args.tourCategoryId}`);
+  }
+}
+
 export async function createTourCategoryTourActionPrivate(
   input: ICreateTourCategoryTour
 ): Promise<ActionResponse<ITourCategoryTourResponse>> {
   const result = await executeApi(
     async () => createTourCategoryTourApiPrivate(input)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    invalidateTourCategoryTourTags({
+      tourId: input.tourId,
+      tourCategoryId: input.tourCategoryId,
+    });
+  }
   return result;
 }
 
 export async function getTourCategoryTourByIdActionPublic(
   id: string
 ): Promise<ActionResponse<ITourCategoryTourResponse>> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('tour-category-tours');
   return executeApi(
     async () => getTourCategoryTourByIdApiPublic(id)
   );
@@ -41,6 +66,9 @@ export async function getTourCategoryTourByIdActionPublic(
 export async function getTourCategoryToursByTourIdActionPublic(
   tourId: string
 ): Promise<ActionResponse<ITourCategoryTourResponse[]>> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('tour-category-tours', `tour-category-tours:tour:${tourId}`);
   return executeApi(
     async () => getTourCategoryToursByTourIdApiPublic(tourId)
   );
@@ -49,12 +77,18 @@ export async function getTourCategoryToursByTourIdActionPublic(
 export async function getTourCategoryToursByTourCategoryIdActionPublic(
   tourCategoryId: string
 ): Promise<ActionResponse<ITourCategoryTourResponse[]>> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('tour-category-tours', `tour-category-tours:category:${tourCategoryId}`);
   return executeApi(
     async () => getTourCategoryToursByTourCategoryIdApiPublic(tourCategoryId)
   );
 }
 
 export async function getAllTourCategoryToursActionPublic(): Promise<ActionResponse<ITourCategoryTourResponse[]>> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('tour-category-tours');
   return executeApi(
     async () => getAllTourCategoryToursApiPublic()
   );
@@ -64,20 +98,40 @@ export async function updateTourCategoryTourActionPrivate(
   id: string,
   input: IUpdateTourCategoryTour
 ): Promise<ActionResponse<ITourCategoryTourResponse>> {
+  const relation = await getTourCategoryTourByIdActionPublic(id);
   const result = await executeApi(
     async () => updateTourCategoryTourApiPrivate(id, input)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    let args: { tourId?: string; tourCategoryId?: string } | undefined;
+    if (relation.success && relation.data) {
+      args = {
+        tourId: relation.data.tourId,
+        tourCategoryId: relation.data.tourCategoryId,
+      };
+    }
+    invalidateTourCategoryTourTags(args);
+  }
   return result;
 }
 
 export async function deleteTourCategoryTourActionPrivate(
   id: string
 ): Promise<ActionResponse<void>> {
+  const relation = await getTourCategoryTourByIdActionPublic(id);
   const result = await executeApi(
     async () => deleteTourCategoryTourApiPrivate(id)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    let args: { tourId?: string; tourCategoryId?: string } | undefined;
+    if (relation.success && relation.data) {
+      args = {
+        tourId: relation.data.tourId,
+        tourCategoryId: relation.data.tourCategoryId,
+      };
+    }
+    invalidateTourCategoryTourTags(args);
+  }
   return result;
 }
 
@@ -87,7 +141,9 @@ export async function deleteTourCategoryToursByTourIdActionPrivate(
   const result = await executeApi(
     async () => deleteTourCategoryToursByTourIdApiPrivate(tourId)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    invalidateTourCategoryTourTags({ tourId });
+  }
   return result;
 }
 
@@ -97,6 +153,8 @@ export async function deleteTourCategoryToursByTourCategoryIdActionPrivate(
   const result = await executeApi(
     async () => deleteTourCategoryToursByTourCategoryIdApiPrivate(tourCategoryId)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    invalidateTourCategoryTourTags({ tourCategoryId });
+  }
   return result;
 }

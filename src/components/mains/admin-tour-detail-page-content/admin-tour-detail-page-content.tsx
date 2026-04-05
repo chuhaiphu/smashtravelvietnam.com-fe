@@ -1,5 +1,5 @@
 import { getTourByIdActionPrivate } from "@/actions/tour-action";
-import { getAllTourCategoriesActionPrivate } from "@/actions/tour-category-action";
+import { getAllTourCategoriesActionPublic } from "@/actions/tour-category-action";
 import { getMeActionPrivate } from "@/actions/auth-action";
 import { redirect } from "next/navigation";
 import AdminTourDetailPageContentContainer from "./admin-tour-detail-page-content-container/admin-tour-detail-page-content-container";
@@ -20,7 +20,7 @@ export default async function AdminTourDetailPageContent({
 
   const [currentTourResponse, tourCategoriesResponse] = await Promise.all([
     getTourByIdActionPrivate(id),
-    getAllTourCategoriesActionPrivate(),
+    getAllTourCategoriesActionPublic(),
   ]);
 
   if (!currentTourResponse.success || !currentTourResponse.data) {

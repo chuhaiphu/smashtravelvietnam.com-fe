@@ -24,12 +24,6 @@ export async function createTourCategoryApiPrivate(data: ICreateTourCategory) {
   });
 }
 
-export async function getAllTourCategoriesAdminApiPrivate() {
-  return apiPrivate<ITourCategoryResponse[]>('/tour-categories/admin/list', {
-    method: 'GET',
-  });
-}
-
 export async function getAvailableSortOrdersApiPrivate(parentId: string) {
   return apiPrivate<number[]>(`/tour-categories/admin/available-sort-orders/${parentId}`, {
     method: 'GET',

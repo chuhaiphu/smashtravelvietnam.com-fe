@@ -1,5 +1,5 @@
 'use client';
-import { updateAppConfigAction } from "@/actions/app-config-action";
+import { updateAppConfigActionPrivate } from "@/actions/app-config-action";
 import { ToggleSection } from "@/components/primitives/toggle-section/toggle-section";
 import { Group, Paper, Stack, Text, TextInput } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
@@ -24,7 +24,7 @@ export default function AdminSettingOverviewPageContentContainer({ appConfig }: 
   const handleSelectFaviconUrl = async (imageUrl: string) => {
     setIsUpdatingFaviconUrl(true);
     try {
-      await updateAppConfigAction({ faviconUrl: imageUrl });
+      await updateAppConfigActionPrivate({ faviconUrl: imageUrl });
       setFaviconUrl(imageUrl);
     } catch (error) {
       notifications.show({
@@ -42,14 +42,14 @@ export default function AdminSettingOverviewPageContentContainer({ appConfig }: 
     // Optimistic update UI
     setFaviconUrl('');
     // Update database
-    await updateAppConfigAction({ faviconUrl: '' });
+    await updateAppConfigActionPrivate({ faviconUrl: '' });
     setIsUpdatingFaviconUrl(false);
   };
 
   const handleSelectLogoUrl = async (imageUrl: string) => {
     setIsUpdatingLogoUrl(true);
     try {
-      await updateAppConfigAction({ logoUrl: imageUrl });
+      await updateAppConfigActionPrivate({ logoUrl: imageUrl });
       setLogoUrl(imageUrl);
     } catch (error) {
       notifications.show({
@@ -67,12 +67,12 @@ export default function AdminSettingOverviewPageContentContainer({ appConfig }: 
     // Optimistic update UI
     setLogoUrl('');
     // Update database
-    await updateAppConfigAction({ logoUrl: '' });
+    await updateAppConfigActionPrivate({ logoUrl: '' });
     setIsUpdatingLogoUrl(false);
   };
 
   const handleToggleMaintenanceMode = async (checked: boolean) => {
-    const result = await updateAppConfigAction({ maintenanceMode: checked });
+    const result = await updateAppConfigActionPrivate({ maintenanceMode: checked });
 
     if (result.success) {
       setIsMaintenanceMode(checked);
@@ -91,7 +91,7 @@ export default function AdminSettingOverviewPageContentContainer({ appConfig }: 
   };
 
   const handleUpdatePhoneContact = useDebouncedCallback(async (newPhoneContact: string) => {
-    await updateAppConfigAction({ phoneContact: newPhoneContact });
+    await updateAppConfigActionPrivate({ phoneContact: newPhoneContact });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',

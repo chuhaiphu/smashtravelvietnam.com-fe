@@ -1,4 +1,4 @@
-import { getAllTourCategoriesAction } from "@/actions/tour-category-action";
+import { getAllTourCategoriesActionPrivate } from "@/actions/tour-category-action";
 import CustomizedTourPageContainer from "@/components/mains/customized-tour-page/customize-tour-page-container";
 import SearchBar from "@/components/primitives/search-bar/search-bar";
 import { Box, Group, Title, Loader } from "@mantine/core";
@@ -8,7 +8,7 @@ import classes from './page.module.scss';
 import { Suspense } from "react";
 
 export default async function CustomizedTourPage() {
-  const tourCategoriesResponse = await getAllTourCategoriesAction();
+  const tourCategoriesResponse = await getAllTourCategoriesActionPrivate();
   const tourCategoriesData = tourCategoriesResponse.success && tourCategoriesResponse.data
     ? tourCategoriesResponse.data
     : [];

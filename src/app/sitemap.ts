@@ -1,9 +1,9 @@
 import { MetadataRoute } from 'next';
-import { getAllPublicToursAction } from '../actions/tour-action';
-import { getAllPublicBlogsAction } from '../actions/blog-action';
-import { getAllPublicPagesAction } from '../actions/page-action';
-import { getAllTourCategoriesAction } from '../actions/tour-category-action';
-import { getAllBlogCategoriesAction } from '../actions/blog-category-action';
+import { getAllToursActionPublic } from '../actions/tour-action';
+import { getAllBlogsActionPublic } from '../actions/blog-action';
+import { getAllPagesVisibleActionPrivate } from '../actions/page-action';
+import { getAllTourCategoriesActionPrivate } from '../actions/tour-category-action';
+import { getAllBlogCategoriesActionPrivate } from '../actions/blog-category-action';
 import { SERVICE_ITEMS } from '@/constants';
 
 const BASE_URL = 'https://smashtravelvietnam.com';
@@ -46,7 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   try {
     // Get all public tours
-    const toursResponse = await getAllPublicToursAction();
+    const toursResponse = await getAllToursActionPublic();
     if (toursResponse.success && toursResponse.data) {
       toursResponse.data.forEach((tour) => {
         dynamicRoutes.push({
@@ -66,7 +66,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     // Get all public blogs
-    const blogsResponse = await getAllPublicBlogsAction();
+    const blogsResponse = await getAllBlogsActionPublic();
     if (blogsResponse.success && blogsResponse.data) {
       blogsResponse.data.forEach((blog) => {
         dynamicRoutes.push({
@@ -79,7 +79,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     // Get all public pages
-    const pagesResponse = await getAllPublicPagesAction();
+    const pagesResponse = await getAllPagesVisibleActionPrivate();
     if (pagesResponse.success && pagesResponse.data) {
       pagesResponse.data.forEach((page) => {
         dynamicRoutes.push({
@@ -92,7 +92,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     // Get all tour categories
-    const tourCategoriesResponse = await getAllTourCategoriesAction();
+    const tourCategoriesResponse = await getAllTourCategoriesActionPrivate();
     if (tourCategoriesResponse.success && tourCategoriesResponse.data) {
       tourCategoriesResponse.data.forEach((category) => {
         dynamicRoutes.push({
@@ -105,7 +105,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     // Get all blog categories
-    const blogCategoriesResponse = await getAllBlogCategoriesAction();
+    const blogCategoriesResponse = await getAllBlogCategoriesActionPrivate();
     if (blogCategoriesResponse.success && blogCategoriesResponse.data) {
       blogCategoriesResponse.data.forEach((category) => {
         dynamicRoutes.push({
@@ -122,4 +122,3 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [...staticRoutes, ...dynamicRoutes];
 }
-

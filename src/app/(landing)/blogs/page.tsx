@@ -1,4 +1,4 @@
-import { getAllPublicBlogsAction } from "@/actions/blog-action";
+import { getAllBlogsActionPublic } from "@/actions/blog-action";
 import BlogGrid from "@/components/grids/blog-grid/blog-grid";
 import { Group, Stack, Loader } from "@mantine/core";
 import classes from "./page.module.scss";
@@ -11,7 +11,7 @@ async function BlogPageContent({
   searchParams: Promise<{ q?: string; destinations?: string }>;
 }) {
   const queryParams = await searchParams;
-  const blogsResponse = await getAllPublicBlogsAction();
+  const blogsResponse = await getAllBlogsActionPublic();
   const blogsData = blogsResponse.data || [];
 
   return (

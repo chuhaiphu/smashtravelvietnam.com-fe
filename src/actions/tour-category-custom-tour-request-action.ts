@@ -8,81 +8,81 @@ import {
 import { revalidatePath } from 'next/cache';
 import { executeApi } from '@/actions/_base';
 import {
-  createTourCategoryCustomTourRequestApi,
-  getTourCategoryCustomTourRequestByIdApi,
-  getTourCategoryCustomTourRequestsByCustomTourRequestIdApi,
-  getTourCategoryCustomTourRequestsByTourCategoryIdApi,
-  getAllTourCategoryCustomTourRequestsApi,
-  deleteTourCategoryCustomTourRequestApi,
-  deleteTourCategoryCustomTourRequestsByCustomTourRequestIdApi,
-  deleteTourCategoryCustomTourRequestsByTourCategoryIdApi,
+  createTourCategoryCustomTourRequestApiPrivate,
+  getTourCategoryCustomTourRequestByIdApiPrivate,
+  getTourCategoryCustomTourRequestsByCustomTourRequestIdApiPrivate,
+  getTourCategoryCustomTourRequestsByTourCategoryIdApiPrivate,
+  getAllTourCategoryCustomTourRequestsApiPrivate,
+  deleteTourCategoryCustomTourRequestApiPrivate,
+  deleteTourCategoryCustomTourRequestsByCustomTourRequestIdApiPrivate,
+  deleteTourCategoryCustomTourRequestsByTourCategoryIdApiPrivate,
 } from '@/apis/tour-category-custom-tour-request-apis';
 
-export async function createTourCategoryCustomTourRequestAction(
+export async function createTourCategoryCustomTourRequestActionPrivate(
   input: ICreateTourCategoryCustomTourRequest
 ): Promise<ActionResponse<ITourCategoryCustomTourRequestResponse>> {
   const result = await executeApi(
-    async () => createTourCategoryCustomTourRequestApi(input)
+    async () => createTourCategoryCustomTourRequestApiPrivate(input)
   );
   revalidatePath('/', 'layout');
   return result;
 }
 
-export async function getTourCategoryCustomTourRequestByIdAction(
+export async function getTourCategoryCustomTourRequestByIdActionPrivate(
   id: string
 ): Promise<ActionResponse<ITourCategoryCustomTourRequestResponse>> {
   return executeApi(
-    async () => getTourCategoryCustomTourRequestByIdApi(id)
+    async () => getTourCategoryCustomTourRequestByIdApiPrivate(id)
   );
 }
 
-export async function getTourCategoryCustomTourRequestsByCustomTourRequestIdAction(
+export async function getTourCategoryCustomTourRequestsByCustomTourRequestIdActionPrivate(
   customTourRequestId: string
 ): Promise<ActionResponse<ITourCategoryCustomTourRequestResponse[]>> {
   return executeApi(
-    async () => getTourCategoryCustomTourRequestsByCustomTourRequestIdApi(customTourRequestId)
+    async () => getTourCategoryCustomTourRequestsByCustomTourRequestIdApiPrivate(customTourRequestId)
   );
 }
 
-export async function getTourCategoryCustomTourRequestsByTourCategoryIdAction(
+export async function getTourCategoryCustomTourRequestsByTourCategoryIdActionPrivate(
   tourCategoryId: string
 ): Promise<ActionResponse<ITourCategoryCustomTourRequestResponse[]>> {
   return executeApi(
-    async () => getTourCategoryCustomTourRequestsByTourCategoryIdApi(tourCategoryId)
+    async () => getTourCategoryCustomTourRequestsByTourCategoryIdApiPrivate(tourCategoryId)
   );
 }
 
-export async function getAllTourCategoryCustomTourRequestsAction(): Promise<ActionResponse<ITourCategoryCustomTourRequestResponse[]>> {
+export async function getAllTourCategoryCustomTourRequestsActionPrivate(): Promise<ActionResponse<ITourCategoryCustomTourRequestResponse[]>> {
   return executeApi(
-    async () => getAllTourCategoryCustomTourRequestsApi()
+    async () => getAllTourCategoryCustomTourRequestsApiPrivate()
   );
 }
 
-export async function deleteTourCategoryCustomTourRequestAction(
+export async function deleteTourCategoryCustomTourRequestActionPrivate(
   id: string
 ): Promise<ActionResponse<void>> {
   const result = await executeApi(
-    async () => deleteTourCategoryCustomTourRequestApi(id)
+    async () => deleteTourCategoryCustomTourRequestApiPrivate(id)
   );
   revalidatePath('/', 'layout');
   return result;
 }
 
-export async function deleteTourCategoryCustomTourRequestsByCustomTourRequestIdAction(
+export async function deleteTourCategoryCustomTourRequestsByCustomTourRequestIdActionPrivate(
   customTourRequestId: string
 ): Promise<ActionResponse<void>> {
   const result = await executeApi(
-    async () => deleteTourCategoryCustomTourRequestsByCustomTourRequestIdApi(customTourRequestId)
+    async () => deleteTourCategoryCustomTourRequestsByCustomTourRequestIdApiPrivate(customTourRequestId)
   );
   revalidatePath('/', 'layout');
   return result;
 }
 
-export async function deleteTourCategoryCustomTourRequestsByTourCategoryIdAction(
+export async function deleteTourCategoryCustomTourRequestsByTourCategoryIdActionPrivate(
   tourCategoryId: string
 ): Promise<ActionResponse<void>> {
   const result = await executeApi(
-    async () => deleteTourCategoryCustomTourRequestsByTourCategoryIdApi(tourCategoryId)
+    async () => deleteTourCategoryCustomTourRequestsByTourCategoryIdApiPrivate(tourCategoryId)
   );
   revalidatePath('/', 'layout');
   return result;

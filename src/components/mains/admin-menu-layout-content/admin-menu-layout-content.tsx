@@ -1,4 +1,4 @@
-import { getAllMenusAction } from "@/actions/menu-action";
+import { getAllMenusActionPrivate } from "@/actions/menu-action";
 import AdminMenuLayoutContentContainer from "./admin-menu-layout-content-container/admin-menu-layout-content-container";
 import classes from "./admin-menu-layout-content.module.scss";
 
@@ -7,7 +7,7 @@ interface AdminMenuLayoutContentProps {
 }
 
 export default async function AdminMenuLayoutContent({ children }: AdminMenuLayoutContentProps) {
-  const menusData = await getAllMenusAction();
+  const menusData = await getAllMenusActionPrivate();
 
   return (
     <div className={classes.adminMenuLayoutRoot}>

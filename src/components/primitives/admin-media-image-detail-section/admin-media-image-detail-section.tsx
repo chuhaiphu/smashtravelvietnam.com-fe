@@ -2,12 +2,15 @@
 
 import '@vinaup/media-ui/dist/index.css';
 import { MediaDetail, type IMedia, type IUpdateMedia } from '@vinaup/media-ui';
-import { IMediaResponse } from "@/interfaces/media-interface";
-import { Button, Group, Modal, Stack, Text } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
-import { useState } from "react";
-import { deleteMediaAction, updateMediaAction } from "@/actions/media-action";
-import { useRouter } from "next/navigation";
+import { IMediaResponse } from '@/interfaces/media-interface';
+import { Button, Group, Modal, Stack, Text } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+import { useState } from 'react';
+import {
+  deleteMediaActionPrivate,
+  updateMediaActionPrivate,
+} from '@/actions/media-action';
+import { useRouter } from 'next/navigation';
 
 interface AdminMediaImageDetailSectionProps {
   image: IMediaResponse;
@@ -21,9 +24,9 @@ export default function AdminMediaImageDetailSection({
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleUpdate = async (id: string, data: IUpdateMedia) => {
-    const result = await updateMediaAction(id, data);
+    const result = await updateMediaActionPrivate(id, data);
     if (!result.success) {
-      throw new Error(result.error || "Failed to update media");
+      throw new Error(result.error || 'Failed to update media');
     }
   };
 
@@ -34,7 +37,7 @@ export default function AdminMediaImageDetailSection({
   const handleConfirmDelete = async () => {
     setIsDeleting(true);
     try {
-      const result = await deleteMediaAction(initialImage.id);
+      const result = await deleteMediaActionPrivate(initialImage.id);
       if (result.success) {
         notifications.show({
           message: 'Image has been successfully deleted',
@@ -82,7 +85,10 @@ export default function AdminMediaImageDetailSection({
         centered
       >
         <Stack>
-          <Text>Are you sure you want to delete this image? This action cannot be undone.</Text>
+          <Text>
+            Are you sure you want to delete this image? This action cannot be
+            undone.
+          </Text>
           <Group justify="flex-end" mt="sm">
             <Button
               variant="default"
@@ -91,11 +97,7 @@ export default function AdminMediaImageDetailSection({
             >
               Cancel
             </Button>
-            <Button
-              color="red"
-              onClick={handleConfirmDelete}
-              loading={isDeleting}
-            >
+            <Button color="red" onClick={handleConfirmDelete} loading={isDeleting}>
               Delete
             </Button>
           </Group>

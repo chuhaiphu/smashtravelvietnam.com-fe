@@ -2,75 +2,71 @@
 
 import { updateTag, cacheLife, cacheTag } from 'next/cache';
 import { ActionResponse } from '@/interfaces/_base-interface';
-import { ICreatePage, IPageResponse, IUpdatePage } from '@/interfaces/page-interface';
+import {
+  ICreatePage,
+  IPageResponse,
+  IUpdatePage,
+} from '@/interfaces/page-interface';
 import { executeApi } from '@/actions/_base';
 import {
-  createPageApi,
-  getPageByIdApi,
-  getPageByEndpointApi,
-  getAllPagesAdminApi,
-  updatePageApi,
-  deletePageApi,
+  createPageApiPrivate,
+  getPageByIdApiPrivate,
+  getPageByEndpointApiPublic,
+  getAllPagesAdminApiPrivate,
+  updatePageApiPrivate,
+  deletePageApiPrivate,
 } from '@/apis/page-apis';
 
-export async function createPageAction(
+export async function createPageActionPrivate(
   input: ICreatePage
 ): Promise<ActionResponse<IPageResponse>> {
-  const result = await executeApi(
-    async () => createPageApi(input)
-  );
+  const result = await executeApi(async () => createPageApiPrivate(input));
   if (result.success) {
     updateTag('pages');
   }
   return result;
 }
 
-export async function getPageByIdAction(
+export async function getPageByIdActionPrivate(
   id: string
 ): Promise<ActionResponse<IPageResponse>> {
-  return executeApi(
-    async () => getPageByIdApi(id)
-  );
+  return executeApi(async () => getPageByIdApiPrivate(id));
 }
 
-export async function getPageByEndpointAction(
+export async function getPageByEndpointActionPublic(
   endpoint: string
 ): Promise<ActionResponse<IPageResponse>> {
   'use cache';
   cacheLife('hours');
   cacheTag('pages', `page:${endpoint}`);
-  return executeApi(
-    async () => getPageByEndpointApi(endpoint)
-  );
+  return executeApi(async () => getPageByEndpointApiPublic(endpoint));
 }
 
-export async function getAllPagesAction(): Promise<ActionResponse<IPageResponse[]>> {
-  return executeApi(
-    async () => getAllPagesAdminApi()
-  );
+export async function getAllPagesAdminActionPrivate(): Promise<
+  ActionResponse<IPageResponse[]>
+> {
+  return executeApi(async () => getAllPagesAdminApiPrivate());
 }
 
-export async function getAllPublicPagesAction(): Promise<ActionResponse<IPageResponse[]>> {
+export async function getAllPagesVisibleActionPrivate(): Promise<
+  ActionResponse<IPageResponse[]>
+> {
   // Note: This may need a backend filter endpoint
-  const result = await executeApi(
-    async () => getAllPagesAdminApi()
-  );
+  const result = await executeApi(async () => getAllPagesAdminApiPrivate());
   if (result.success && result.data) {
     return {
       success: true,
-      data: result.data.filter(page => page.visibility === 'PUBLIC'),
+      data: result.data.filter((page) => page.visibility === 'PUBLIC'),
     };
   }
   return result;
 }
 
-export async function updatePageAction(
+export async function updatePageActionPrivate(
   id: string,
   input: IUpdatePage
 ): Promise<ActionResponse<IPageResponse>> {
-  const result = await executeApi(
-    async () => updatePageApi(id, input)
-  );
+  const result = await executeApi(async () => updatePageApiPrivate(id, input));
   if (result.success) {
     updateTag('pages');
     if (input.endpoint) {
@@ -80,12 +76,10 @@ export async function updatePageAction(
   return result;
 }
 
-export async function deletePageAction(
+export async function deletePageActionPrivate(
   id: string
 ): Promise<ActionResponse<void>> {
-  const result = await executeApi(
-    async () => deletePageApi(id)
-  );
+  const result = await executeApi(async () => deletePageApiPrivate(id));
   if (result.success) {
     updateTag('pages');
   }

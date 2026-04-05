@@ -1,6 +1,6 @@
 import {
-  getAllPublicToursAction,
-  getTourByEndpointAction,
+  getAllToursActionPublic,
+  getTourByEndpointActionPublic,
 } from '@/actions/tour-action';
 import {
   Grid,
@@ -27,7 +27,7 @@ import IncrementView from '@/components/primitives/social-tab/increment-view';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { getAppConfigAction } from '@/actions/app-config-action';
+import { getAppConfigActionPublic } from '@/actions/app-config-action';
 import Image from 'next/image';
 
 export async function generateMetadata({
@@ -36,7 +36,7 @@ export async function generateMetadata({
   params: Promise<{ endpoint: string }>;
 }): Promise<Metadata> {
   const { endpoint } = await params;
-  const tourResponse = await getTourByEndpointAction(endpoint);
+  const tourResponse = await getTourByEndpointActionPublic(endpoint);
 
   if (!tourResponse.success || !tourResponse.data) {
     return {
@@ -64,7 +64,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const toursResponse = await getAllPublicToursAction();
+  const toursResponse = await getAllToursActionPublic();
   return toursResponse.success && toursResponse.data
     ? toursResponse.data.map((tour) => ({
         endpoint: tour.endpoint,
@@ -78,8 +78,8 @@ export default async function TourDetailPage({
   params: Promise<{ endpoint: string }>;
 }) {
   const { endpoint } = await params;
-  const tourData = await getTourByEndpointAction(endpoint);
-  const configData = await getAppConfigAction();
+  const tourData = await getTourByEndpointActionPublic(endpoint);
+  const configData = await getAppConfigActionPublic();
 
   if (!tourData.success || !tourData.data) {
     notFound();

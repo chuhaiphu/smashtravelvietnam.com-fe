@@ -22,9 +22,9 @@ import { TextEditor } from '@/components/editors/text-editor/text-editor';
 import UploadImageSection from '@/components/primitives/upload-image-section/upload-image-section';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  createBlogAction,
-  deleteBlogAction,
-  updateBlogAction,
+  createBlogActionPrivate,
+  deleteBlogActionPrivate,
+  updateBlogActionPrivate,
 } from '@/actions/blog-action';
 import { IBlogResponse } from '@/interfaces/blog-interface';
 import { useDebouncedCallback } from 'use-debounce';
@@ -43,8 +43,8 @@ import { useRouter } from 'next/navigation';
 import { IBlogCategoryResponse } from '@/interfaces/blog-category-interface';
 import { IBlogCategoryBlogResponse } from '@/interfaces/blog-category-blog-interface';
 import {
-  createBlogCategoryBlogAction,
-  deleteBlogCategoryBlogAction,
+  createBlogCategoryBlogActionPrivate,
+  deleteBlogCategoryBlogActionPrivate,
 } from '@/actions/blog-category-blog-action';
 import { TreeManager } from '@/utils/tree-manager';
 import { Route } from 'next';
@@ -124,7 +124,7 @@ export default function AdminBlogDetailPageContentContainer({
     setIsCreating(true);
     const newTitle = '';
     const endpoint = await generateUniqueEndpoint(newTitle, 'blog');
-    const response = await createBlogAction({
+    const response = await createBlogActionPrivate({
       title: newTitle,
       endpoint: endpoint,
       destinations: ['Ho Chi Minh'],
@@ -157,7 +157,7 @@ export default function AdminBlogDetailPageContentContainer({
   ) => {
     setLoadingImageIndex(imageIndex);
     try {
-      await updateBlogAction(currentBlogData.id, {
+      await updateBlogActionPrivate(currentBlogData.id, {
         additionalImageUrls: [...additionalImageUrls, imageUrl],
       });
       setAdditionalImageUrls([...additionalImageUrls, imageUrl]);
@@ -179,7 +179,7 @@ export default function AdminBlogDetailPageContentContainer({
     // Optimistic update UI
     setAdditionalImageUrls(newImages);
     // Update database
-    await updateBlogAction(currentBlogData.id, {
+    await updateBlogActionPrivate(currentBlogData.id, {
       additionalImageUrls: newImages,
     });
     setLoadingImageIndex(null);
@@ -188,7 +188,7 @@ export default function AdminBlogDetailPageContentContainer({
   const handleSelectVideoThumbnail = async (imageUrl: string) => {
     setVideoThumbnailLoading(true);
     try {
-      await updateBlogAction(currentBlogData.id, { videoThumbnailUrl: imageUrl });
+      await updateBlogActionPrivate(currentBlogData.id, { videoThumbnailUrl: imageUrl });
       setVideoThumbnailUrl(imageUrl);
     } catch (error) {
       notifications.show({
@@ -206,7 +206,7 @@ export default function AdminBlogDetailPageContentContainer({
     // Optimistic update UI
     setVideoThumbnailUrl('');
     // Update database
-    await updateBlogAction(currentBlogData.id, {
+    await updateBlogActionPrivate(currentBlogData.id, {
       videoThumbnailUrl: '',
     });
     setVideoThumbnailLoading(false);
@@ -215,7 +215,7 @@ export default function AdminBlogDetailPageContentContainer({
   const handleSelectMainImage = async (imageUrl: string) => {
     setMainImageLoading(true);
     try {
-      await updateBlogAction(currentBlogData.id, { mainImageUrl: imageUrl });
+      await updateBlogActionPrivate(currentBlogData.id, { mainImageUrl: imageUrl });
       setMainImageUrl(imageUrl);
     } catch (error) {
       notifications.show({
@@ -233,7 +233,7 @@ export default function AdminBlogDetailPageContentContainer({
     // Optimistic update UI
     setMainImageUrl('');
     // Update database
-    await updateBlogAction(currentBlogData.id, {
+    await updateBlogActionPrivate(currentBlogData.id, {
       mainImageUrl: '',
     });
     setMainImageLoading(false);
@@ -246,7 +246,7 @@ export default function AdminBlogDetailPageContentContainer({
       currentBlogData.id
     );
 
-    await updateBlogAction(currentBlogData.id, {
+    await updateBlogActionPrivate(currentBlogData.id, {
       title: newTitle,
       endpoint: endpoint,
     });
@@ -260,7 +260,7 @@ export default function AdminBlogDetailPageContentContainer({
   }, 1500);
 
   // const handleUpdateDescription = useDebouncedCallback(async (newDescription: string) => {
-  //   await updateBlogAction(
+  //   await updateBlogActionPrivate(
   //     currentBlogData.id,
   //     { description: newDescription }
   //   );
@@ -268,13 +268,13 @@ export default function AdminBlogDetailPageContentContainer({
   // }, 1500)
 
   const handleUpdateContent = useDebouncedCallback(async (newContent: string) => {
-    await updateBlogAction(currentBlogData.id, { content: newContent });
+    await updateBlogActionPrivate(currentBlogData.id, { content: newContent });
     setIsSaving(false);
   }, 1500);
 
   const handleUpdateAdditionalImagesPosition = (newPosition: string) => {
     setAdditionalImagesPosition(newPosition);
-    updateBlogAction(currentBlogData.id, { additionalImagesPosition: newPosition });
+    updateBlogActionPrivate(currentBlogData.id, { additionalImagesPosition: newPosition });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',
@@ -285,7 +285,7 @@ export default function AdminBlogDetailPageContentContainer({
 
   const handleUpdateDestinations = (newDestinations: string[]) => {
     setDestinations(newDestinations);
-    updateBlogAction(currentBlogData.id, { destinations: newDestinations });
+    updateBlogActionPrivate(currentBlogData.id, { destinations: newDestinations });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',
@@ -296,7 +296,7 @@ export default function AdminBlogDetailPageContentContainer({
 
   const handleUpdateStatus = (newStatus: string) => {
     setStatus(newStatus);
-    updateBlogAction(currentBlogData.id, { visibility: newStatus });
+    updateBlogActionPrivate(currentBlogData.id, { visibility: newStatus });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',
@@ -308,7 +308,7 @@ export default function AdminBlogDetailPageContentContainer({
   const handleUpdateSortOrder = (newSortOrder: string) => {
     const sortOrderNumber = Number(newSortOrder);
     setSortOrder(sortOrderNumber);
-    updateBlogAction(currentBlogData.id, { sortOrder: sortOrderNumber });
+    updateBlogActionPrivate(currentBlogData.id, { sortOrder: sortOrderNumber });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',
@@ -319,7 +319,7 @@ export default function AdminBlogDetailPageContentContainer({
 
   const handleUpdateVideoPosition = (newPosition: string) => {
     setVideoPosition(newPosition);
-    updateBlogAction(currentBlogData.id, { videoPosition: newPosition });
+    updateBlogActionPrivate(currentBlogData.id, { videoPosition: newPosition });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',
@@ -329,7 +329,7 @@ export default function AdminBlogDetailPageContentContainer({
   };
 
   const handleUpdateVideoUrl = useDebouncedCallback(async (newUrl: string) => {
-    await updateBlogAction(currentBlogData.id, { videoUrl: newUrl });
+    await updateBlogActionPrivate(currentBlogData.id, { videoUrl: newUrl });
     setIsSaving(false);
     notifications.show({
       message: 'Saved successfully',
@@ -363,7 +363,7 @@ export default function AdminBlogDetailPageContentContainer({
   const handleDeleteBlog = async () => {
     setIsDeleting(true);
     try {
-      const result = await deleteBlogAction(currentBlogData.id);
+      const result = await deleteBlogActionPrivate(currentBlogData.id);
       if (result.success) {
         router.replace('/adminup/blog');
         notifications.show({
@@ -475,7 +475,7 @@ export default function AdminBlogDetailPageContentContainer({
 
     // Add new blog categories
     for (const blogCategoryId of toAdd) {
-      await createBlogCategoryBlogAction({
+      await createBlogCategoryBlogActionPrivate({
         blogId: currentBlogData.id,
         blogCategoryId: blogCategoryId,
         sortOrder: 0,
@@ -488,7 +488,7 @@ export default function AdminBlogDetailPageContentContainer({
         (bcb) => bcb.blogCategoryId === blogCategoryId
       );
       if (blogCategoryBlog) {
-        await deleteBlogCategoryBlogAction(blogCategoryBlog.id);
+        await deleteBlogCategoryBlogActionPrivate(blogCategoryBlog.id);
       }
     }
     notifications.show({

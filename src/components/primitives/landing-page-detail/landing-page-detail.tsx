@@ -12,7 +12,7 @@ import VideoSection from '@/components/primitives/video-section/video-section';
 import { RiCheckDoubleFill } from 'react-icons/ri';
 import { SERVICE_ITEMS } from '@/constants';
 import ContactForm from '@/components/forms/contact-form/contact-form';
-import { submitCustomerContactAction } from '@/actions/customer-contact-action';
+import { submitCustomerContactActionPublic } from '@/actions/customer-contact-action';
 
 interface LandingPageDetailProps {
   page: IPageResponse;
@@ -32,7 +32,7 @@ export default function LandingPageDetail({ page }: LandingPageDetailProps) {
   }));
 
   const handleContactSubmit = async (formData: FormData) => {
-    const result = await submitCustomerContactAction(formData);
+    const result = await submitCustomerContactActionPublic(formData);
 
     if (result.success) {
       alert('Your contact request has been submitted successfully!');

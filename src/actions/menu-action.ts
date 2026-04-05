@@ -5,20 +5,20 @@ import { ActionResponse } from '@/interfaces/_base-interface';
 import { ICreateMenu, IMenuResponse, IUpdateMenu } from '@/interfaces/menu-interface';
 import { executeApi } from '@/actions/_base';
 import {
-  createMenuApi,
-  getMenuByIdApi,
-  getAllMenusAdminApi,
-  getAvailableSortOrdersApi,
-  updateMenuApi,
-  deleteMenuApi,
-  getAllPublicMenusApi,
+  createMenuApiPrivate,
+  getMenuByIdApiPrivate,
+  getAllMenusAdminApiPrivate,
+  getAvailableSortOrdersApiPrivate,
+  updateMenuApiPrivate,
+  deleteMenuApiPrivate,
+  getAllMenusApiPublic,
 } from '@/apis/menu-apis';
 
-export async function createMenuAction(
+export async function createMenuActionPrivate(
   input: ICreateMenu
 ): Promise<ActionResponse<IMenuResponse>> {
   const result = await executeApi(
-    async () => createMenuApi(input)
+    async () => createMenuApiPrivate(input)
   );
   if (result.success) {
     updateTag('menu');
@@ -26,43 +26,43 @@ export async function createMenuAction(
   return result;
 }
 
-export async function getMenuByIdAction(
+export async function getMenuByIdActionPrivate(
   id: string
 ): Promise<ActionResponse<IMenuResponse>> {
   return executeApi(
-    async () => getMenuByIdApi(id)
+    async () => getMenuByIdApiPrivate(id)
   );
 }
 
-export async function getAllMenusAction(): Promise<ActionResponse<IMenuResponse[]>> {
+export async function getAllMenusActionPrivate(): Promise<ActionResponse<IMenuResponse[]>> {
   return executeApi(
-    async () => getAllMenusAdminApi()
+    async () => getAllMenusAdminApiPrivate()
   );
 }
 
-export async function getAllPublicMenusAction(): Promise<ActionResponse<IMenuResponse[]>> {
+export async function getAllMenusActionPublic(): Promise<ActionResponse<IMenuResponse[]>> {
   'use cache';
   cacheLife('hours');
   cacheTag('menu');
   return executeApi(
-    async () => getAllPublicMenusApi()
+    async () => getAllMenusApiPublic()
   );
 }
 
-export async function getAvailableSortOrdersAction(
+export async function getAvailableSortOrdersActionPrivate(
   parentId: string
 ): Promise<ActionResponse<number[]>> {
   return executeApi(
-    async () => getAvailableSortOrdersApi(parentId)
+    async () => getAvailableSortOrdersApiPrivate(parentId)
   );
 }
 
-export async function updateMenuAction(
+export async function updateMenuActionPrivate(
   id: string,
   input: IUpdateMenu
 ): Promise<ActionResponse<IMenuResponse>> {
   const result = await executeApi(
-    async () => updateMenuApi(id, input)
+    async () => updateMenuApiPrivate(id, input)
   );
   if (result.success) {
     updateTag('menu');
@@ -70,11 +70,11 @@ export async function updateMenuAction(
   return result;
 }
 
-export async function deleteMenuAction(
+export async function deleteMenuActionPrivate(
   id: string
 ): Promise<ActionResponse<void>> {
   const result = await executeApi(
-    async () => deleteMenuApi(id)
+    async () => deleteMenuApiPrivate(id)
   );
   if (result.success) {
     updateTag('menu');

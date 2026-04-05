@@ -19,8 +19,8 @@ import { TextEditor } from '@/components/editors/text-editor/text-editor';
 import UploadImageSection from '@/components/primitives/upload-image-section/upload-image-section';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  deleteBlogCategoryAction,
-  updateBlogCategoryAction,
+  deleteBlogCategoryActionPrivate,
+  updateBlogCategoryActionPrivate,
 } from '@/actions/blog-category-action';
 import { IBlogCategoryResponse } from '@/interfaces/blog-category-interface';
 import { useDebouncedCallback } from 'use-debounce';
@@ -114,7 +114,7 @@ export default function AdminBlogCategoryDetailPageContentContainer({
       currentBlogCategory.id
     );
 
-    await updateBlogCategoryAction(currentBlogCategory.id, {
+    await updateBlogCategoryActionPrivate(currentBlogCategory.id, {
       title: newTitle,
       endpoint: endpoint,
     });
@@ -129,7 +129,7 @@ export default function AdminBlogCategoryDetailPageContentContainer({
 
   const handleUpdateDescription = useDebouncedCallback(
     async (newDescription: string) => {
-      await updateBlogCategoryAction(currentBlogCategory.id, {
+      await updateBlogCategoryActionPrivate(currentBlogCategory.id, {
         description: newDescription,
       });
       setIsSaving(false);
@@ -142,7 +142,7 @@ export default function AdminBlogCategoryDetailPageContentContainer({
       return;
     }
     setParentId(newParentId);
-    await updateBlogCategoryAction(currentBlogCategory.id, {
+    await updateBlogCategoryActionPrivate(currentBlogCategory.id, {
       parentId: newParentId,
     });
   };
@@ -151,7 +151,7 @@ export default function AdminBlogCategoryDetailPageContentContainer({
     if (!newSortOrder) return;
     const newValue = parseInt(newSortOrder);
     setSortOrder(newValue);
-    await updateBlogCategoryAction(currentBlogCategory.id, { sortOrder: newValue });
+    await updateBlogCategoryActionPrivate(currentBlogCategory.id, { sortOrder: newValue });
     notifications.show({
       message: 'Sort order updated successfully',
       color: 'green',
@@ -162,13 +162,13 @@ export default function AdminBlogCategoryDetailPageContentContainer({
 
   const handleUpdateVideoPosition = (newPosition: string) => {
     setVideoPosition(newPosition);
-    updateBlogCategoryAction(currentBlogCategory.id, {
+    updateBlogCategoryActionPrivate(currentBlogCategory.id, {
       videoPosition: newPosition,
     });
   };
 
   const handleUpdateVideoUrl = useDebouncedCallback(async (newUrl: string) => {
-    await updateBlogCategoryAction(currentBlogCategory.id, { videoUrl: newUrl });
+    await updateBlogCategoryActionPrivate(currentBlogCategory.id, { videoUrl: newUrl });
     setIsSaving(false);
     notifications.show({
       message: 'Saved successfully',
@@ -181,7 +181,7 @@ export default function AdminBlogCategoryDetailPageContentContainer({
   const handleSelectVideoThumbnail = async (imageUrl: string) => {
     setVideoThumbnailLoading(true);
     try {
-      await updateBlogCategoryAction(currentBlogCategory.id, {
+      await updateBlogCategoryActionPrivate(currentBlogCategory.id, {
         videoThumbnailUrl: imageUrl,
       });
       setVideoThumbnailUrl(imageUrl);
@@ -199,7 +199,7 @@ export default function AdminBlogCategoryDetailPageContentContainer({
   const handleRemoveVideoThumbnail = async () => {
     setVideoThumbnailLoading(true);
     setVideoThumbnailUrl('');
-    await updateBlogCategoryAction(currentBlogCategory.id, {
+    await updateBlogCategoryActionPrivate(currentBlogCategory.id, {
       videoThumbnailUrl: '',
     });
     setVideoThumbnailLoading(false);
@@ -208,7 +208,7 @@ export default function AdminBlogCategoryDetailPageContentContainer({
   const handleSelectMainImage = async (imageUrl: string) => {
     setMainImageLoading(true);
     try {
-      await updateBlogCategoryAction(currentBlogCategory.id, {
+      await updateBlogCategoryActionPrivate(currentBlogCategory.id, {
         mainImageUrl: imageUrl,
       });
       setMainImageUrl(imageUrl);
@@ -226,7 +226,7 @@ export default function AdminBlogCategoryDetailPageContentContainer({
   const handleRemoveMainImage = async () => {
     setMainImageLoading(true);
     setMainImageUrl('');
-    await updateBlogCategoryAction(currentBlogCategory.id, { mainImageUrl: '' });
+    await updateBlogCategoryActionPrivate(currentBlogCategory.id, { mainImageUrl: '' });
     setMainImageLoading(false);
   };
 
@@ -248,7 +248,7 @@ export default function AdminBlogCategoryDetailPageContentContainer({
   const handleDeleteBlogCategory = async () => {
     setIsDeleting(true);
     try {
-      const result = await deleteBlogCategoryAction(currentBlogCategory.id);
+      const result = await deleteBlogCategoryActionPrivate(currentBlogCategory.id);
       if (result.success) {
         router.replace('/adminup/blog-category');
         notifications.show({

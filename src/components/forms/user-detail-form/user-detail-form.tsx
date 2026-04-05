@@ -4,7 +4,7 @@ import { Button, PasswordInput, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useState } from 'react';
-import { updateUserPasswordAction } from '@/actions/user-action';
+import { updateUserPasswordActionPrivate } from '@/actions/user-action';
 
 interface UserDetailFormProps {
   userId: string;
@@ -40,7 +40,7 @@ export default function UserDetailForm({ userId }: UserDetailFormProps) {
   const handleSubmit = async (values: PasswordFormValues) => {
     setIsLoading(true);
     try {
-      const result = await updateUserPasswordAction({
+      const result = await updateUserPasswordActionPrivate({
         userId,
         newPassword: values.newPassword,
       });

@@ -7,7 +7,7 @@ import EntitiesTable from '@/components/tables/entities-table/entities-table';
 import { EntitiesTableColumnProps } from '@/components/tables/entities-table/_props';
 import { IBookingResponse } from '@/interfaces/booking-interface';
 import { SlOptionsVertical } from 'react-icons/sl';
-import { deleteBookingAction } from '@/actions/booking-action';
+import { deleteBookingActionPrivate } from '@/actions/booking-action';
 import { notifications } from '@mantine/notifications';
 import { GrTrash } from 'react-icons/gr';
 import classes from './bookings-tab.module.scss';
@@ -50,7 +50,7 @@ export default function BookingsTab({ bookings }: BookingsTabProps) {
 
     setIsDeleting(true);
     try {
-      const result = await deleteBookingAction(bookingToDelete);
+      const result = await deleteBookingActionPrivate(bookingToDelete);
       if (result.success) {
         notifications.show({
           title: 'Success',

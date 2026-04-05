@@ -11,7 +11,7 @@ import { IUserResponse } from '@/interfaces/user-interface';
 import { EntitiesTableColumnProps } from '../entities-table/_props';
 import { DatePicker } from '@mantine/dates';
 import EntitiesTable from '../entities-table/entities-table';
-import { resetPasswordForUserAction } from '@/actions/auth-action';
+import { resetPasswordForUserActionPrivate } from '@/actions/auth-action';
 import { notifications } from '@mantine/notifications';
 
 interface UsersTableProps {
@@ -38,7 +38,7 @@ export default function UsersTable({
   const handleResetPassword = async () => {
     if (!selectedUser) return;
     setIsResetting(true);
-    const result = await resetPasswordForUserAction(selectedUser.id);
+    const result = await resetPasswordForUserActionPrivate(selectedUser.id);
     if (result.success) {
       notifications.show({
         title: 'Password Reset',

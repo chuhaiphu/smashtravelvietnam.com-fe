@@ -1,6 +1,6 @@
 'use client';
 
-import { submitCustomTourRequestAction } from '@/actions/custom-tour-request-action';
+import { submitCustomTourRequestActionPublic } from '@/actions/custom-tour-request-action';
 import {
   VN_PROVINCES,
   HOTEL_TYPES,
@@ -90,7 +90,7 @@ export default function CustomizedTourPageContainer({
   };
 
   const handleSubmit = async (formData: FormData) => {
-    const result = await submitCustomTourRequestAction(formData);
+    const result = await submitCustomTourRequestActionPublic(formData);
 
     if (result.success) {
       alert('Your custom tour request has been submitted successfully!');

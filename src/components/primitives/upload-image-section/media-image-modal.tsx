@@ -6,8 +6,8 @@ import {
   type UploadResult,
   type ICreateMedia,
 } from '@vinaup/media-ui';
-import { uploadImageAction } from '@/actions/upload-action';
-import { createManyMediaAction, getAllMediaAction } from '@/actions/media-action';
+import { uploadImageActionPrivate } from '@/actions/upload-action';
+import { createManyMediaActionPrivate, getAllMediaActionPrivate } from '@/actions/media-action';
 import { useState, useEffect, useEffectEvent } from 'react';
 import { notifications } from '@mantine/notifications';
 
@@ -25,7 +25,7 @@ export default function MediaImageModal({
   const [availableImages, setAvailableImages] = useState<IMedia[]>([]);
 
   const fetchAvailableImages = useEffectEvent(async () => {
-    const response = await getAllMediaAction();
+    const response = await getAllMediaActionPrivate();
     const imagesList = response.data?.filter(
       (media) => media.type === 'image'
     ) as IMedia[];
@@ -43,7 +43,7 @@ export default function MediaImageModal({
 
     // Upload sequentially to ensure unique file names
     for (const file of files) {
-      const uploadResponse = await uploadImageAction(file, 'media');
+      const uploadResponse = await uploadImageActionPrivate(file, 'media');
       if (uploadResponse.success && uploadResponse.data) {
         successResults.push({
           url: uploadResponse.data,
@@ -59,7 +59,7 @@ export default function MediaImageModal({
   };
 
   const handleSave = async (data: ICreateMedia[]): Promise<IMedia[]> => {
-    const response = await createManyMediaAction(data);
+    const response = await createManyMediaActionPrivate(data);
     if (!response.success || !response.data) {
       throw new Error(
         response.error || 'There was an error saving to the database'

@@ -5,18 +5,18 @@ import { ActionResponse } from '@/interfaces/_base-interface';
 import { revalidatePath } from 'next/cache';
 import { executeApi } from '@/actions/_base';
 import {
-  getAllBookingsAdminApi,
-  createBookingApi,
-  deleteBookingApi,
+  getAllBookingsAdminApiPrivate,
+  createBookingApiPublic,
+  deleteBookingApiPrivate,
 } from '@/apis/booking-apis';
 
-export async function getAllBookingsAction(): Promise<ActionResponse<IBookingResponse[]>> {
+export async function getAllBookingsActionPrivate(): Promise<ActionResponse<IBookingResponse[]>> {
   return executeApi(
-    async () => getAllBookingsAdminApi()
+    async () => getAllBookingsAdminApiPrivate()
   );
 }
 
-export async function submitBookingAction(formData: FormData): Promise<ActionResponse<void>> {
+export async function submitBookingActionPublic(formData: FormData): Promise<ActionResponse<void>> {
   try {
     // Extract form data
     const tourId = formData.get('tourId') as string;
@@ -61,7 +61,7 @@ export async function submitBookingAction(formData: FormData): Promise<ActionRes
     };
 
     const result = await executeApi(
-      async () => createBookingApi(bookingData)
+      async () => createBookingApiPublic(bookingData)
     );
 
     if (!result.success) {
@@ -78,9 +78,9 @@ export async function submitBookingAction(formData: FormData): Promise<ActionRes
   }
 }
 
-export async function deleteBookingAction(id: string): Promise<ActionResponse<void>> {
+export async function deleteBookingActionPrivate(id: string): Promise<ActionResponse<void>> {
   const result = await executeApi(
-    async () => deleteBookingApi(id)
+    async () => deleteBookingApiPrivate(id)
   );
   revalidatePath('/adminup', 'layout');
   return result;

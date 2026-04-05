@@ -1,4 +1,4 @@
-import { getMeAction } from "@/actions/auth-action";
+import { getMeActionPrivate } from "@/actions/auth-action";
 import AdminLayoutContainer from "@/components/mains/admin-layout-content/admin-layout-content-container/admin-layout-content-container";
 import { redirect } from "next/navigation";
 
@@ -7,7 +7,7 @@ interface AdminLayoutContentProps {
 }
 
 export default async function AdminLayoutContent({ children }: AdminLayoutContentProps) {
-  const result = await getMeAction();
+  const result = await getMeActionPrivate();
 
   if (!result.success || !result.data) {
     redirect('/login?invalid=1')

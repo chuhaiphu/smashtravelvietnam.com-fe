@@ -2,14 +2,14 @@ import { MaintenanceGuard } from '@/components/guards/maintenance-guard';
 import classes from './layout.module.scss';
 import { LandingHeader } from '@/components/headers/landing-header/landing-header';
 import { Container } from '@mantine/core';
-import { getAppConfigAction } from '@/actions/app-config-action';
+import { getAppConfigActionPublic } from '@/actions/app-config-action';
 import { Metadata } from 'next';
 import DynamicSection from '@/libs/section-ui/dynamic-section';
 import { Suspense } from 'react';
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
-    const configResponse = await getAppConfigAction();
+    const configResponse = await getAppConfigActionPublic();
     const config = configResponse.data;
 
     return {

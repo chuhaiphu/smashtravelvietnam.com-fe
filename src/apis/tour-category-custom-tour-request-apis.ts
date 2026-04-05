@@ -2,53 +2,53 @@ import {
   ICreateTourCategoryCustomTourRequest,
   ITourCategoryCustomTourRequestResponse
 } from "@/interfaces/tour-category-custom-tour-request-interface";
-import { api } from "./_base";
+import { apiPrivate } from "./_base";
 
-export async function createTourCategoryCustomTourRequestApi(data: ICreateTourCategoryCustomTourRequest) {
-  return api<ITourCategoryCustomTourRequestResponse>('/admin/tour-category-custom-tour-requests', {
+export async function createTourCategoryCustomTourRequestApiPrivate(data: ICreateTourCategoryCustomTourRequest) {
+  return apiPrivate<ITourCategoryCustomTourRequestResponse>('/admin/tour-category-custom-tour-requests', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
-export async function getTourCategoryCustomTourRequestByIdApi(id: string) {
-  return api<ITourCategoryCustomTourRequestResponse>(`/admin/tour-category-custom-tour-requests/${id}`, {
+export async function getTourCategoryCustomTourRequestByIdApiPrivate(id: string) {
+  return apiPrivate<ITourCategoryCustomTourRequestResponse>(`/admin/tour-category-custom-tour-requests/${id}`, {
     method: 'GET',
   });
 }
 
-export async function getTourCategoryCustomTourRequestsByCustomTourRequestIdApi(customTourRequestId: string) {
-  return api<ITourCategoryCustomTourRequestResponse[]>(`/admin/tour-category-custom-tour-requests/request/${customTourRequestId}`, {
+export async function getTourCategoryCustomTourRequestsByCustomTourRequestIdApiPrivate(customTourRequestId: string) {
+  return apiPrivate<ITourCategoryCustomTourRequestResponse[]>(`/admin/tour-category-custom-tour-requests/request/${customTourRequestId}`, {
     method: 'GET',
   });
 }
 
-export async function getTourCategoryCustomTourRequestsByTourCategoryIdApi(tourCategoryId: string) {
-  return api<ITourCategoryCustomTourRequestResponse[]>(`/admin/tour-category-custom-tour-requests/category/${tourCategoryId}`, {
+export async function getTourCategoryCustomTourRequestsByTourCategoryIdApiPrivate(tourCategoryId: string) {
+  return apiPrivate<ITourCategoryCustomTourRequestResponse[]>(`/admin/tour-category-custom-tour-requests/category/${tourCategoryId}`, {
     method: 'GET',
   });
 }
 
-export async function getAllTourCategoryCustomTourRequestsApi() {
-  return api<ITourCategoryCustomTourRequestResponse[]>('/admin/tour-category-custom-tour-requests', {
+export async function getAllTourCategoryCustomTourRequestsApiPrivate() {
+  return apiPrivate<ITourCategoryCustomTourRequestResponse[]>('/admin/tour-category-custom-tour-requests', {
     method: 'GET',
   });
 }
 
-export async function deleteTourCategoryCustomTourRequestApi(id: string) {
-  return api<void>(`/admin/tour-category-custom-tour-requests/${id}`, {
+export async function deleteTourCategoryCustomTourRequestApiPrivate(id: string) {
+  return apiPrivate<void>(`/admin/tour-category-custom-tour-requests/${id}`, {
     method: 'DELETE',
   });
 }
 
-export async function deleteTourCategoryCustomTourRequestsByCustomTourRequestIdApi(customTourRequestId: string) {
-  return api<void>(`/admin/tour-category-custom-tour-requests/request/${customTourRequestId}`, {
+export async function deleteTourCategoryCustomTourRequestsByCustomTourRequestIdApiPrivate(customTourRequestId: string) {
+  return apiPrivate<void>(`/admin/tour-category-custom-tour-requests/request/${customTourRequestId}`, {
     method: 'DELETE',
   });
 }
 
-export async function deleteTourCategoryCustomTourRequestsByTourCategoryIdApi(tourCategoryId: string) {
-  return api<void>(`/admin/tour-category-custom-tour-requests/category/${tourCategoryId}`, {
+export async function deleteTourCategoryCustomTourRequestsByTourCategoryIdApiPrivate(tourCategoryId: string) {
+  return apiPrivate<void>(`/admin/tour-category-custom-tour-requests/category/${tourCategoryId}`, {
     method: 'DELETE',
   });
 }

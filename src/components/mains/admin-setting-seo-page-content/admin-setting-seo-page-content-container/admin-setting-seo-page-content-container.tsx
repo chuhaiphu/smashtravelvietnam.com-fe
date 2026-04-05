@@ -5,7 +5,7 @@ import { Group, Paper, Stack, Text, Textarea, TextInput } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import classes from "./admin-setting-seo-page-content-container.module.scss";
 import { useState } from "react";
-import { updateAppConfigAction } from "@/actions/app-config-action";
+import { updateAppConfigActionPrivate } from "@/actions/app-config-action";
 import { useDebouncedCallback } from "use-debounce";
 import Link from "next/link";
 import { HiOutlineEye } from "react-icons/hi";
@@ -19,7 +19,7 @@ export default function AdminSettingSeoPageContentContainer({ appConfig }: Admin
   const [description, setDescription] = useState(appConfig?.websiteDescription || '');
 
   const handleUpdateTitle = useDebouncedCallback(async (newTitle: string) => {
-    await updateAppConfigAction({ websiteTitle: newTitle });
+    await updateAppConfigActionPrivate({ websiteTitle: newTitle });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',
@@ -29,7 +29,7 @@ export default function AdminSettingSeoPageContentContainer({ appConfig }: Admin
   }, 1500);
 
   const handleUpdateDescription = useDebouncedCallback(async (newDescription: string) => {
-    await updateAppConfigAction({ websiteDescription: newDescription });
+    await updateAppConfigActionPrivate({ websiteDescription: newDescription });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',

@@ -1,7 +1,7 @@
 'use client';
 import { ICreateMedia, IMedia, MediaUpload, type UploadResult } from '@vinaup/media-ui';
-import { uploadImageAction } from '@/actions/upload-action';
-import { createManyMediaAction } from '@/actions/media-action';
+import { uploadImageActionPrivate } from '@/actions/upload-action';
+import { createManyMediaActionPrivate } from '@/actions/media-action';
 import { notifications } from '@mantine/notifications';
 
 export default function MediaImageUploadSection() {
@@ -10,7 +10,7 @@ export default function MediaImageUploadSection() {
     const successResults: UploadResult[] = [];
   
     for (const file of files) {
-      const uploadResponse = await uploadImageAction(file, 'media');
+      const uploadResponse = await uploadImageActionPrivate(file, 'media');
       if (uploadResponse.success && uploadResponse.data) {
         successResults.push({
           url: uploadResponse.data,
@@ -26,7 +26,7 @@ export default function MediaImageUploadSection() {
   }
 
   const handleSave = async (data: ICreateMedia[]): Promise<IMedia[]> => {
-    const response = await createManyMediaAction(data);
+    const response = await createManyMediaActionPrivate(data);
     if (!response.success || !response.data) {
       throw new Error(response.error || "Lỗi khi lưu vào cơ sở dữ liệu");
     }

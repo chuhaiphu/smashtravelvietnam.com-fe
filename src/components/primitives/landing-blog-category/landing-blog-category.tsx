@@ -1,4 +1,4 @@
-import { getBlogCategoryBlogsByBlogCategoryIdAction } from '@/actions/blog-category-blog-action';
+import { getBlogCategoryBlogsByBlogCategoryIdActionPublic } from '@/actions/blog-category-blog-action';
 import BlogGrid from '@/components/grids/blog-grid/blog-grid';
 import { IBlogCategoryResponse } from '@/interfaces/blog-category-interface';
 import { IBlogResponse } from '@/interfaces/blog-interface';
@@ -20,7 +20,7 @@ export default async function LandingBlogCategory({
 }: LandingBlogCategoryProps) {
   // Get all blogs in this category
   const blogCategoryBlogsResponse =
-    await getBlogCategoryBlogsByBlogCategoryIdAction(category.id);
+    await getBlogCategoryBlogsByBlogCategoryIdActionPublic(category.id);
   // Extract blogs and filter only public ones
   const blogsFromBlogCategory: IBlogResponse[] =
     blogCategoryBlogsResponse.success && blogCategoryBlogsResponse.data

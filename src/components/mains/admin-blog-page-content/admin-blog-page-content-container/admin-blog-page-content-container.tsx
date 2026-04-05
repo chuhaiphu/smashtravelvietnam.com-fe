@@ -4,7 +4,7 @@ import { ActionIcon, Group, Text, UnstyledButton } from '@mantine/core';
 import { useRouter } from 'next/navigation';
 import AddNewIcon from '@/components/icons/vinaup-add-new-icon.svg';
 import BlogsTable from '@/components/tables/blogs-table/blogs-table';
-import { createBlogAction } from '@/actions/blog-action';
+import { createBlogActionPrivate } from '@/actions/blog-action';
 import { Route } from 'next';
 import { IBlogResponse } from '@/interfaces/blog-interface';
 import { IUserResponse } from '@/interfaces/user-interface';
@@ -30,7 +30,7 @@ export default function AdminBlogPageContentContainer({
     const newTitle = '';
     const endpoint = await generateUniqueEndpoint(newTitle, 'blog');
 
-    const response = await createBlogAction({
+    const response = await createBlogActionPrivate({
       title: newTitle,
       endpoint: endpoint,
       destinations: ['Ho Chi Minh'],

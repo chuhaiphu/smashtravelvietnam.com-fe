@@ -5,13 +5,13 @@ import { FiUser, FiLogOut } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
 import classes from './user-section.module.scss';
 import { IUserResponse } from '@/interfaces/user-interface';
-import { logoutAction } from '@/actions/auth-action';
+import { logoutActionPrivate } from '@/actions/auth-action';
 
 export function UserSection({ userData }: { userData: IUserResponse }) {
   const router = useRouter();
 
   const handleLogout = async () => {
-    await logoutAction();
+    await logoutActionPrivate();
     router.push('/login');
   };
 

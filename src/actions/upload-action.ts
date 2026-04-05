@@ -3,17 +3,17 @@
 import { ActionResponse } from '@/interfaces/_base-interface';
 import { executeApi } from '@/actions/_base';
 import {
-  uploadFileApi,
-  deleteUploadedFileApi,
+  uploadFileApiPrivate,
+  deleteUploadedFileApiPrivate,
 } from '@/apis/upload-apis';
 
-export async function uploadImageAction(
+export async function uploadImageActionPrivate(
   file: File,
   folder: string
 ): Promise<ActionResponse<string>> {
   // Upload via backend API
   const result = await executeApi(
-    async () => uploadFileApi(file, folder)
+    async () => uploadFileApiPrivate(file, folder)
   );
 
   if (!result.success || !result.data) {
@@ -29,7 +29,7 @@ export async function uploadImageAction(
 }
 
 
-export async function deleteLocalImageAction(
+export async function deleteLocalImageActionPrivate(
   relativePath: string
 ): Promise<ActionResponse<null>> {
 
@@ -38,7 +38,7 @@ export async function deleteLocalImageAction(
   }
 
   const result = await executeApi(
-    async () => deleteUploadedFileApi(relativePath)
+    async () => deleteUploadedFileApiPrivate(relativePath)
   );
 
   if (!result.success) {

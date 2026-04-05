@@ -5,22 +5,22 @@ import { ActionResponse } from '@/interfaces/_base-interface';
 import { ICreateBlog, IBlogResponse, IUpdateBlog } from '@/interfaces/blog-interface';
 import { executeApi } from '@/actions/_base';
 import {
-  createBlogApi,
-  getBlogByIdApi,
-  getBlogByEndpointApi,
-  getAllBlogsAdminApi,
-  getAllPublicBlogsApi,
-  updateBlogApi,
-  deleteBlogApi,
-  incrementBlogViewApi,
-  toggleBlogLikeApi,
+  createBlogApiPrivate,
+  getBlogByIdApiPrivate,
+  getBlogByEndpointApiPublic,
+  getAllBlogsAdminApiPrivate,
+  getAllBlogsApiPublic,
+  updateBlogApiPrivate,
+  deleteBlogApiPrivate,
+  incrementBlogViewApiPublic,
+  toggleBlogLikeApiPublic,
 } from '@/apis/blog-apis';
 
-export async function createBlogAction(
+export async function createBlogActionPrivate(
   input: ICreateBlog
 ): Promise<ActionResponse<IBlogResponse>> {
   const result = await executeApi(
-    async () => createBlogApi(input)
+    async () => createBlogApiPrivate(input)
   );
   if (result.success) {
     updateTag('blogs');
@@ -28,46 +28,46 @@ export async function createBlogAction(
   return result;
 }
 
-export async function getBlogByIdAction(
+export async function getBlogByIdActionPrivate(
   id: string
 ): Promise<ActionResponse<IBlogResponse>> {
   return executeApi(
-    async () => getBlogByIdApi(id)
+    async () => getBlogByIdApiPrivate(id)
   );
 }
 
-export async function getBlogByEndpointAction(
+export async function getBlogByEndpointActionPublic(
   endpoint: string
 ): Promise<ActionResponse<IBlogResponse>> {
   'use cache';
   cacheLife('hours');
   cacheTag('blogs', `blog:${endpoint}`);
   return executeApi(
-    async () => getBlogByEndpointApi(endpoint)
+    async () => getBlogByEndpointApiPublic(endpoint)
   );
 }
 
-export async function getAllBlogsAction(): Promise<ActionResponse<IBlogResponse[]>> {
+export async function getAllBlogsActionPrivate(): Promise<ActionResponse<IBlogResponse[]>> {
   return executeApi(
-    async () => getAllBlogsAdminApi()
+    async () => getAllBlogsAdminApiPrivate()
   );
 }
 
-export async function getAllPublicBlogsAction(): Promise<ActionResponse<IBlogResponse[]>> {
+export async function getAllBlogsActionPublic(): Promise<ActionResponse<IBlogResponse[]>> {
   'use cache';
   cacheLife('hours');
   cacheTag('blogs');
   return executeApi(
-    async () => getAllPublicBlogsApi({ visibility: 'PUBLIC' })
+    async () => getAllBlogsApiPublic({ visibility: 'PUBLIC' })
   );
 }
 
-export async function updateBlogAction(
+export async function updateBlogActionPrivate(
   id: string,
   input: IUpdateBlog
 ): Promise<ActionResponse<IBlogResponse>> {
   const result = await executeApi(
-    async () => updateBlogApi(id, input)
+    async () => updateBlogApiPrivate(id, input)
   );
   if (result.success) {
     updateTag('blogs');
@@ -78,11 +78,11 @@ export async function updateBlogAction(
   return result;
 }
 
-export async function deleteBlogAction(
+export async function deleteBlogActionPrivate(
   id: string
 ): Promise<ActionResponse<void>> {
   const result = await executeApi(
-    async () => deleteBlogApi(id)
+    async () => deleteBlogApiPrivate(id)
   );
   if (result.success) {
     updateTag('blogs');
@@ -90,11 +90,11 @@ export async function deleteBlogAction(
   return result;
 }
 
-export async function incrementBlogViewAction(
+export async function incrementBlogViewActionPublic(
   blogId: string
 ): Promise<ActionResponse<boolean>> {
   const result = await executeApi(
-    async () => incrementBlogViewApi(blogId)
+    async () => incrementBlogViewApiPublic(blogId)
   );
   return {
     success: result.success,
@@ -103,11 +103,11 @@ export async function incrementBlogViewAction(
   };
 }
 
-export async function incrementBlogLikeAction(
+export async function incrementBlogLikeActionPublic(
   blogId: string
 ): Promise<ActionResponse<boolean>> {
   const result = await executeApi(
-    async () => toggleBlogLikeApi(blogId)
+    async () => toggleBlogLikeApiPublic(blogId)
   );
   return {
     success: result.success,

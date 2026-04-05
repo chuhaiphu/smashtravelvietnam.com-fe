@@ -1,9 +1,9 @@
 import slugify from 'slugify';
-import { getTourByEndpointAction } from '../actions/tour-action';
-import { getTourCategoryByEndpointAction } from '../actions/tour-category-action';
-import { getPageByEndpointAction } from '../actions/page-action';
-import { getBlogCategoryByEndpointAction } from '@/actions/blog-category-action';
-import { getBlogByEndpointAction } from '@/actions/blog-action';
+import { getTourByEndpointActionPublic } from '../actions/tour-action';
+import { getTourCategoryByEndpointActionPublic } from '../actions/tour-category-action';
+import { getPageByEndpointActionPublic } from '../actions/page-action';
+import { getBlogCategoryByEndpointActionPublic } from '@/actions/blog-category-action';
+import { getBlogByEndpointActionPublic } from '@/actions/blog-action';
 import { ParsedCookie } from './api-error';
 
 export const stripHtmlAndTruncate = (html: string, maxLength: number) => {
@@ -55,7 +55,7 @@ export const generateUniqueEndpoint = async (
   while (!isUnique) {
     if (model === 'tour') {
       // For tour model: only check Tour table
-      const existingTour = await getTourByEndpointAction(endpoint);
+      const existingTour = await getTourByEndpointActionPublic(endpoint);
       const tourConflict =
         existingTour.success &&
         existingTour.data &&
@@ -69,7 +69,7 @@ export const generateUniqueEndpoint = async (
       }
     } else if (model === 'blog') {
       // For blog model: only check Blog table
-      const existingBlog = await getBlogByEndpointAction(endpoint);
+      const existingBlog = await getBlogByEndpointActionPublic(endpoint);
       const blogConflict =
         existingBlog.success &&
         existingBlog.data &&
@@ -85,9 +85,9 @@ export const generateUniqueEndpoint = async (
       // For landing model: check both TourCategory and Page
       const [existingTourCategory, existingPage, existingBlogCategory] =
         await Promise.all([
-          getTourCategoryByEndpointAction(endpoint),
-          getPageByEndpointAction(endpoint),
-          getBlogCategoryByEndpointAction(endpoint),
+          getTourCategoryByEndpointActionPublic(endpoint),
+          getPageByEndpointActionPublic(endpoint),
+          getBlogCategoryByEndpointActionPublic(endpoint),
         ]);
 
       const categoryConflict =

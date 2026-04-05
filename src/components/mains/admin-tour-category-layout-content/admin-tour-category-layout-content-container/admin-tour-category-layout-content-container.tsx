@@ -14,7 +14,7 @@ import AddNewIcon from '@/components/icons/vinaup-add-new-icon.svg';
 import { generateUniqueEndpoint } from '@/utils/function-helpers';
 import { useState } from 'react';
 import { ITourCategoryResponse } from '@/interfaces/tour-category-interface';
-import { createTourCategoryAction } from '@/actions/tour-category-action';
+import { createTourCategoryActionPrivate } from '@/actions/tour-category-action';
 import TourCategoryNav from '@/components/sidebars/tour-category-nav/tour-category-nav';
 import classes from './admin-tour-category-layout-content-container.module.scss';
 
@@ -35,7 +35,7 @@ export default function AdminTourCategoryLayoutContentContainer({
     const newTitle = 'New Tour Category';
     const endpoint = await generateUniqueEndpoint(newTitle, 'landing');
 
-    const response = await createTourCategoryAction({
+    const response = await createTourCategoryActionPrivate({
       title: newTitle,
       endpoint: endpoint,
     });

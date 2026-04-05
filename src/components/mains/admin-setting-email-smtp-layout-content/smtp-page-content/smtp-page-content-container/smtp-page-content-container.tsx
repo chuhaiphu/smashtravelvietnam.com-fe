@@ -5,7 +5,7 @@ import { Button, Divider, Group, NumberInput, Paper, PasswordInput, Stack, Switc
 import { notifications } from "@mantine/notifications";
 import classes from "./smtp-page-content-container.module.scss";
 import { useState } from "react";
-import { saveSmtpConfigAction, sendTestEmailAction, updateSmtpConfigAction } from "@/actions/smtp-config-action";
+import { saveSmtpConfigActionPrivate, sendTestEmailActionPrivate, updateSmtpConfigActionPrivate } from "@/actions/smtp-config-action";
 import { IUserResponse } from "@/interfaces/user-interface";
 import { ActionResponse } from "@/interfaces/_base-interface";
 
@@ -52,7 +52,7 @@ export default function SmtpPageContentContainer({ smtpConfig }: SmtpPageContent
           updatePayload.password = password;
         }
 
-        response = await updateSmtpConfigAction(smtpConfig.id, updatePayload);
+        response = await updateSmtpConfigActionPrivate(smtpConfig.id, updatePayload);
 
       } else {
         if (!password) {
@@ -70,7 +70,7 @@ export default function SmtpPageContentContainer({ smtpConfig }: SmtpPageContent
           fromEmail,
           receiveEmail: receiveEmail || null,
         };
-        response = await saveSmtpConfigAction(createPayload);
+        response = await saveSmtpConfigActionPrivate(createPayload);
       }
 
       if (response.success) {
@@ -103,7 +103,7 @@ export default function SmtpPageContentContainer({ smtpConfig }: SmtpPageContent
 
     setIsSendingTest(true);
     try {
-      const result = await sendTestEmailAction(receiveEmail);
+      const result = await sendTestEmailActionPrivate(receiveEmail);
       if (result.success) {
         notifications.show({ message: 'Test email sent successfully', color: 'green' });
       } else {

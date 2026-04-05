@@ -1,30 +1,33 @@
-import { ICreateCustomerContact, ICustomerContactResponse } from "@/interfaces/customer-contact-interface";
-import { api } from "./_base";
+import {
+  ICreateCustomerContact,
+  ICustomerContactResponse,
+} from '@/interfaces/customer-contact-interface';
+import { apiPrivate, apiPublic } from './_base';
 
 // ==================== PUBLIC ROUTES ====================
 
-export async function createCustomerContactApi(data: ICreateCustomerContact) {
-  return api<ICustomerContactResponse>('/contacts', {
+export async function createCustomerContactApiPublic(data: ICreateCustomerContact) {
+  return apiPublic<ICustomerContactResponse>('/contacts', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
 // ==================== ADMIN ROUTES ====================
-export async function getAllCustomerContactsAdminApi() {
-  return api<ICustomerContactResponse[]>(`/contacts/admin/list`, {
+export async function getAllCustomerContactsAdminApiPrivate() {
+  return apiPrivate<ICustomerContactResponse[]>(`/contacts/admin/list`, {
     method: 'GET',
   });
 }
 
-export async function getCustomerContactByIdApi(id: string) {
-  return api<ICustomerContactResponse>(`/contacts/admin/${id}`, {
+export async function getCustomerContactByIdApiPrivate(id: string) {
+  return apiPrivate<ICustomerContactResponse>(`/contacts/admin/${id}`, {
     method: 'GET',
   });
 }
 
-export async function deleteCustomerContactApi(id: string) {
-  return api<void>(`/contacts/admin/${id}`, {
+export async function deleteCustomerContactApiPrivate(id: string) {
+  return apiPrivate<void>(`/contacts/admin/${id}`, {
     method: 'DELETE',
   });
 }

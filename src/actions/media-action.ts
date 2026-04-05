@@ -1,35 +1,37 @@
 'use server';
 
 import { ActionResponse } from '@/interfaces/_base-interface';
-import { ICreateMedia, IMediaResponse, IUpdateMedia } from '@/interfaces/media-interface';
+import {
+  ICreateMedia,
+  IMediaResponse,
+  IUpdateMedia,
+} from '@/interfaces/media-interface';
 import { revalidatePath } from 'next/cache';
 import { executeApi } from '@/actions/_base';
 import {
-  createMediaApi,
-  getAllMediaApi,
-  getMediaByIdApi,
-  updateMediaApi,
-  deleteMediaApi,
+  createMediaApiPrivate,
+  getAllMediaApiPrivate,
+  getMediaByIdApiPrivate,
+  updateMediaApiPrivate,
+  deleteMediaApiPrivate,
 } from '@/apis/media-apis';
 
-export async function createMediaAction(
+export async function createMediaActionPrivate(
   input: ICreateMedia
 ): Promise<ActionResponse<IMediaResponse>> {
-  const result = await executeApi(
-    async () => createMediaApi(input)
-  );
+  const result = await executeApi(async () => createMediaApiPrivate(input));
   revalidatePath('/adminup/media');
   return result;
 }
 
-export async function createManyMediaAction(
+export async function createManyMediaActionPrivate(
   input: ICreateMedia[]
 ): Promise<ActionResponse<IMediaResponse[]>> {
   try {
     const results: IMediaResponse[] = [];
     for (const mediaInput of input) {
-      const result = await executeApi(
-        async () => createMediaApi(mediaInput)
+      const result = await executeApi(async () =>
+        createMediaApiPrivate(mediaInput)
       );
       if (result.success && result.data) {
         results.push(result.data);
@@ -40,62 +42,56 @@ export async function createManyMediaAction(
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to create media'
+      error: error instanceof Error ? error.message : 'Failed to create media',
     };
   }
 }
 
-export async function getMediaByIdAction(
+export async function getMediaByIdActionPrivate(
   id: string
 ): Promise<ActionResponse<IMediaResponse>> {
-  return executeApi(
-    async () => getMediaByIdApi(id)
-  );
+  return executeApi(async () => getMediaByIdApiPrivate(id));
 }
 
-export async function getAllMediaAction(): Promise<ActionResponse<IMediaResponse[]>> {
-  return executeApi(
-    async () => getAllMediaApi()
-  );
+export async function getAllMediaActionPrivate(): Promise<
+  ActionResponse<IMediaResponse[]>
+> {
+  return executeApi(async () => getAllMediaApiPrivate());
 }
 
-export async function updateMediaAction(
+export async function updateMediaActionPrivate(
   id: string,
   input: IUpdateMedia
 ): Promise<ActionResponse<IMediaResponse>> {
-  const result = await executeApi(
-    async () => updateMediaApi(id, input)
-  );
+  const result = await executeApi(async () => updateMediaApiPrivate(id, input));
   revalidatePath('/adminup/media');
   return result;
 }
 
-export async function deleteMediaAction(
+export async function deleteMediaActionPrivate(
   id: string
 ): Promise<ActionResponse<{ url: string } | null>> {
   // First get the media to have its URL
-  const mediaResult = await executeApi(
-    async () => getMediaByIdApi(id)
-  );
+  const mediaResult = await executeApi(async () => getMediaByIdApiPrivate(id));
 
-  const result = await executeApi(
-    async () => deleteMediaApi(id)
-  );
+  const result = await executeApi(async () => deleteMediaApiPrivate(id));
 
   if (result.success && mediaResult.success && mediaResult.data) {
-    const { deleteLocalImageAction } = await import('@/actions/upload-action');
+    const { deleteLocalImageActionPrivate } =
+      await import('@/actions/upload-action');
     const urlObj = new URL(mediaResult.data.url);
     const pathParts = urlObj.pathname.split('/');
     let domainIndex = -1;
     if (process.env.NODE_ENV === 'development') {
-      domainIndex = pathParts.findIndex(part => part === 'media');
-    }
-    else {
-      domainIndex = pathParts.findIndex(part => part === process.env.SMASH_API_URL);
+      domainIndex = pathParts.findIndex((part) => part === 'media');
+    } else {
+      domainIndex = pathParts.findIndex(
+        (part) => part === process.env.SMASH_API_URL
+      );
     }
     const relativePath = pathParts.slice(domainIndex + 1).join('/');
     if (relativePath) {
-      deleteLocalImageAction(relativePath);
+      deleteLocalImageActionPrivate(relativePath);
     }
     revalidatePath('/adminup/media');
     revalidatePath('/adminup/media/images');
@@ -107,18 +103,16 @@ export async function deleteMediaAction(
   return { success: result.success, data: null, error: result.error };
 }
 
-export async function upsertMediaAction(
+export async function upsertMediaActionPrivate(
   input: ICreateMedia
 ): Promise<ActionResponse<IMediaResponse>> {
   // Check if media with same URL exists, update or create
-  const allMedia = await executeApi(
-    async () => getAllMediaApi()
-  );
+  const allMedia = await executeApi(async () => getAllMediaApiPrivate());
 
   if (allMedia.success && allMedia.data) {
-    const existing = allMedia.data.find(m => m.url === input.url);
+    const existing = allMedia.data.find((m) => m.url === input.url);
     if (existing) {
-      return updateMediaAction(existing.id, {
+      return updateMediaActionPrivate(existing.id, {
         name: input.name,
         title: input.title,
         description: input.description,
@@ -127,5 +121,5 @@ export async function upsertMediaAction(
     }
   }
 
-  return createMediaAction(input);
+  return createMediaActionPrivate(input);
 }

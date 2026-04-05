@@ -1,9 +1,9 @@
 import { IAppConfigResponse, IUpdateAppConfig } from "@/interfaces/app-config-interface";
-import { api, apiPublic } from "./_base";
+import { apiPrivate, apiPublic } from "./_base";
 
 // ==================== PUBLIC ROUTES ====================
 
-export async function getPublicAppConfigApi() {
+export async function getAppConfigApiPublic() {
   return apiPublic<IAppConfigResponse>('/app-config', {
     method: 'GET',
   });
@@ -11,14 +11,14 @@ export async function getPublicAppConfigApi() {
 
 // ==================== ADMIN ROUTES ====================
 
-export async function getAppConfigAdminApi() {
-  return api<IAppConfigResponse>('/app-config/admin', {
+export async function getAppConfigAdminApiPrivate() {
+  return apiPrivate<IAppConfigResponse>('/app-config/admin', {
     method: 'GET',
   });
 }
 
-export async function updateAppConfigApi(data: IUpdateAppConfig) {
-  return api<IAppConfigResponse>('/app-config/admin', {
+export async function updateAppConfigApiPrivate(data: IUpdateAppConfig) {
+  return apiPrivate<IAppConfigResponse>('/app-config/admin', {
     method: 'PUT',
     body: JSON.stringify(data),
   });

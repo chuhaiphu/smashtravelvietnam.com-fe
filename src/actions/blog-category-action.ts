@@ -5,20 +5,20 @@ import { ActionResponse } from '@/interfaces/_base-interface';
 import { ICreateBlogCategory, IBlogCategoryResponse, IUpdateBlogCategory } from '@/interfaces/blog-category-interface';
 import { executeApi } from '@/actions/_base';
 import {
-  createBlogCategoryApi,
-  getBlogCategoryByIdApi,
-  getBlogCategoryByEndpointApi,
-  getAllBlogCategoriesAdminApi,
-  getAvailableSortOrdersApi,
-  updateBlogCategoryApi,
-  deleteBlogCategoryApi,
+  createBlogCategoryApiPrivate,
+  getBlogCategoryByIdApiPrivate,
+  getBlogCategoryByEndpointApiPublic,
+  getAllBlogCategoriesAdminApiPrivate,
+  getAvailableSortOrdersApiPrivate,
+  updateBlogCategoryApiPrivate,
+  deleteBlogCategoryApiPrivate,
 } from '@/apis/blog-category-apis';
 
-export async function createBlogCategoryAction(
+export async function createBlogCategoryActionPrivate(
   input: ICreateBlogCategory
 ): Promise<ActionResponse<IBlogCategoryResponse>> {
   const result = await executeApi(
-    async () => createBlogCategoryApi(input)
+    async () => createBlogCategoryApiPrivate(input)
   );
   if (result.success) {
     updateTag('blog-categories');
@@ -26,45 +26,45 @@ export async function createBlogCategoryAction(
   return result;
 }
 
-export async function getBlogCategoryByIdAction(
+export async function getBlogCategoryByIdActionPrivate(
   id: string
 ): Promise<ActionResponse<IBlogCategoryResponse>> {
   return executeApi(
-    async () => getBlogCategoryByIdApi(id)
+    async () => getBlogCategoryByIdApiPrivate(id)
   );
 }
 
-export async function getBlogCategoryByEndpointAction(
+export async function getBlogCategoryByEndpointActionPublic(
   endpoint: string
 ): Promise<ActionResponse<IBlogCategoryResponse>> {
   'use cache';
   cacheLife('hours');
   cacheTag('blog-categories', `blog-category:${endpoint}`);
   return executeApi(
-    async () => getBlogCategoryByEndpointApi(endpoint)
+    async () => getBlogCategoryByEndpointApiPublic(endpoint)
   );
 }
 
-export async function getAllBlogCategoriesAction(): Promise<ActionResponse<IBlogCategoryResponse[]>> {
+export async function getAllBlogCategoriesActionPrivate(): Promise<ActionResponse<IBlogCategoryResponse[]>> {
   return executeApi(
-    async () => getAllBlogCategoriesAdminApi()
+    async () => getAllBlogCategoriesAdminApiPrivate()
   );
 }
 
-export async function getAvailableSortOrdersAction(
+export async function getAvailableSortOrdersActionPrivate(
   parentId: string
 ): Promise<ActionResponse<number[]>> {
   return executeApi(
-    async () => getAvailableSortOrdersApi(parentId)
+    async () => getAvailableSortOrdersApiPrivate(parentId)
   );
 }
 
-export async function updateBlogCategoryAction(
+export async function updateBlogCategoryActionPrivate(
   id: string,
   input: IUpdateBlogCategory
 ): Promise<ActionResponse<IBlogCategoryResponse>> {
   const result = await executeApi(
-    async () => updateBlogCategoryApi(id, input)
+    async () => updateBlogCategoryApiPrivate(id, input)
   );
   if (result.success) {
     updateTag('blog-categories');
@@ -75,11 +75,11 @@ export async function updateBlogCategoryAction(
   return result;
 }
 
-export async function deleteBlogCategoryAction(
+export async function deleteBlogCategoryActionPrivate(
   id: string
 ): Promise<ActionResponse<void>> {
   const result = await executeApi(
-    async () => deleteBlogCategoryApi(id)
+    async () => deleteBlogCategoryApiPrivate(id)
   );
   if (result.success) {
     updateTag('blog-categories');

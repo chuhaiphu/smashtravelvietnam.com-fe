@@ -1,9 +1,9 @@
 import { ICreateMenu, IMenuResponse, IUpdateMenu } from "@/interfaces/menu-interface";
-import { api, apiPublic } from "./_base";
+import { apiPrivate, apiPublic } from "./_base";
 
 // ==================== PUBLIC ROUTES ====================
 
-export async function getRootMenusApi() {
+export async function getRootMenusApiPublic() {
   return apiPublic<IMenuResponse[]>('/menus', {
     method: 'GET',
   });
@@ -11,46 +11,46 @@ export async function getRootMenusApi() {
 
 // ==================== ADMIN ROUTES ====================
 
-export async function createMenuApi(data: ICreateMenu) {
-  return api<IMenuResponse>('/menus/admin', {
+export async function createMenuApiPrivate(data: ICreateMenu) {
+  return apiPrivate<IMenuResponse>('/menus/admin', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
-export async function getAllPublicMenusApi() {
+export async function getAllMenusApiPublic() {
   return apiPublic<IMenuResponse[]>('/menus/list', {
     method: 'GET',
   });
 }
 
-export async function getAllMenusAdminApi() {
-  return api<IMenuResponse[]>('/menus/admin/list', {
+export async function getAllMenusAdminApiPrivate() {
+  return apiPrivate<IMenuResponse[]>('/menus/admin/list', {
     method: 'GET',
   });
 }
 
-export async function getAvailableSortOrdersApi(parentId: string) {
-  return api<number[]>(`/menus/admin/available-sort-orders/${parentId}`, {
+export async function getAvailableSortOrdersApiPrivate(parentId: string) {
+  return apiPrivate<number[]>(`/menus/admin/available-sort-orders/${parentId}`, {
     method: 'GET',
   });
 }
 
-export async function getMenuByIdApi(id: string) {
-  return api<IMenuResponse>(`/menus/admin/${id}`, {
+export async function getMenuByIdApiPrivate(id: string) {
+  return apiPrivate<IMenuResponse>(`/menus/admin/${id}`, {
     method: 'GET',
   });
 }
 
-export async function updateMenuApi(id: string, data: IUpdateMenu) {
-  return api<IMenuResponse>(`/menus/admin/${id}`, {
+export async function updateMenuApiPrivate(id: string, data: IUpdateMenu) {
+  return apiPrivate<IMenuResponse>(`/menus/admin/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data),
   });
 }
 
-export async function deleteMenuApi(id: string) {
-  return api<void>(`/menus/admin/${id}`, {
+export async function deleteMenuApiPrivate(id: string) {
+  return apiPrivate<void>(`/menus/admin/${id}`, {
     method: 'DELETE',
   });
 }

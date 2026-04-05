@@ -19,8 +19,8 @@ import { TextEditor } from '@/components/editors/text-editor/text-editor';
 import UploadImageSection from '@/components/primitives/upload-image-section/upload-image-section';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  deleteTourCategoryAction,
-  updateTourCategoryAction,
+  deleteTourCategoryActionPrivate,
+  updateTourCategoryActionPrivate,
 } from '@/actions/tour-category-action';
 import { ITourCategoryResponse } from '@/interfaces/tour-category-interface';
 import { useDebouncedCallback } from 'use-debounce';
@@ -117,7 +117,7 @@ export default function AdminTourCategoryDetailPageContentContainer({
       currentTourCategory.id
     );
 
-    await updateTourCategoryAction(currentTourCategory.id, {
+    await updateTourCategoryActionPrivate(currentTourCategory.id, {
       title: newTitle,
       endpoint: endpoint,
     });
@@ -132,7 +132,7 @@ export default function AdminTourCategoryDetailPageContentContainer({
 
   const handleUpdateDescription = useDebouncedCallback(
     async (newDescription: string) => {
-      await updateTourCategoryAction(currentTourCategory.id, {
+      await updateTourCategoryActionPrivate(currentTourCategory.id, {
         description: newDescription,
       });
       setIsSaving(false);
@@ -145,7 +145,7 @@ export default function AdminTourCategoryDetailPageContentContainer({
       return;
     }
     setParentId(newParentId);
-    await updateTourCategoryAction(currentTourCategory.id, {
+    await updateTourCategoryActionPrivate(currentTourCategory.id, {
       parentId: newParentId,
     });
   };
@@ -154,7 +154,7 @@ export default function AdminTourCategoryDetailPageContentContainer({
     if (!newSortOrder) return;
     const newValue = parseInt(newSortOrder);
     setSortOrder(newValue);
-    await updateTourCategoryAction(currentTourCategory.id, { sortOrder: newValue });
+    await updateTourCategoryActionPrivate(currentTourCategory.id, { sortOrder: newValue });
     notifications.show({
       message: 'Sort order updated successfully',
       color: 'green',
@@ -165,13 +165,13 @@ export default function AdminTourCategoryDetailPageContentContainer({
 
   const handleUpdateVideoPosition = (newPosition: string) => {
     setVideoPosition(newPosition);
-    updateTourCategoryAction(currentTourCategory.id, {
+    updateTourCategoryActionPrivate(currentTourCategory.id, {
       videoPosition: newPosition,
     });
   };
 
   const handleUpdateVideoUrl = useDebouncedCallback(async (newUrl: string) => {
-    await updateTourCategoryAction(currentTourCategory.id, { videoUrl: newUrl });
+    await updateTourCategoryActionPrivate(currentTourCategory.id, { videoUrl: newUrl });
     setIsSaving(false);
     notifications.show({
       message: 'Saved successfully',
@@ -184,7 +184,7 @@ export default function AdminTourCategoryDetailPageContentContainer({
   const handleSelectVideoThumbnail = async (imageUrl: string) => {
     setVideoThumbnailLoading(true);
     try {
-      await updateTourCategoryAction(currentTourCategory.id, {
+      await updateTourCategoryActionPrivate(currentTourCategory.id, {
         videoThumbnailUrl: imageUrl,
       });
       setVideoThumbnailUrl(imageUrl);
@@ -203,7 +203,7 @@ export default function AdminTourCategoryDetailPageContentContainer({
     setVideoThumbnailLoading(true);
     const oldUrl = videoThumbnailUrl;
     setVideoThumbnailUrl('');
-    await updateTourCategoryAction(currentTourCategory.id, {
+    await updateTourCategoryActionPrivate(currentTourCategory.id, {
       videoThumbnailUrl: '',
     });
     setVideoThumbnailLoading(false);
@@ -212,7 +212,7 @@ export default function AdminTourCategoryDetailPageContentContainer({
   const handleSelectMainImage = async (imageUrl: string) => {
     setMainImageLoading(true);
     try {
-      await updateTourCategoryAction(currentTourCategory.id, {
+      await updateTourCategoryActionPrivate(currentTourCategory.id, {
         mainImageUrl: imageUrl,
       });
       setMainImageUrl(imageUrl);
@@ -231,7 +231,7 @@ export default function AdminTourCategoryDetailPageContentContainer({
     setMainImageLoading(true);
     const oldUrl = mainImageUrl;
     setMainImageUrl('');
-    await updateTourCategoryAction(currentTourCategory.id, { mainImageUrl: '' });
+    await updateTourCategoryActionPrivate(currentTourCategory.id, { mainImageUrl: '' });
     setMainImageLoading(false);
   };
 
@@ -253,7 +253,7 @@ export default function AdminTourCategoryDetailPageContentContainer({
   const handleDeleteTourCategory = async () => {
     setIsDeleting(true);
     try {
-      const result = await deleteTourCategoryAction(currentTourCategory.id);
+      const result = await deleteTourCategoryActionPrivate(currentTourCategory.id);
       if (result.success) {
         router.replace('/adminup/tour-category');
         notifications.show({

@@ -22,9 +22,9 @@ import { TextEditor } from '@/components/editors/text-editor/text-editor';
 import UploadImageSection from '@/components/primitives/upload-image-section/upload-image-section';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  createTourAction,
-  deleteTourAction,
-  updateTourAction,
+  createTourActionPrivate,
+  deleteTourActionPrivate,
+  updateTourActionPrivate,
 } from '@/actions/tour-action';
 import { ITourResponse } from '@/interfaces/tour-interface';
 import { useDebouncedCallback } from 'use-debounce';
@@ -46,8 +46,8 @@ import { useRouter } from 'next/navigation';
 import { ITourCategoryResponse } from '@/interfaces/tour-category-interface';
 import { ITourCategoryTourResponse } from '@/interfaces/tour-category-tour-interface';
 import {
-  createTourCategoryTourAction,
-  deleteTourCategoryTourAction,
+  createTourCategoryTourActionPrivate,
+  deleteTourCategoryTourActionPrivate,
 } from '@/actions/tour-category-tour-action';
 import { TreeManager } from '@/utils/tree-manager';
 import { Route } from 'next';
@@ -137,7 +137,7 @@ export default function AdminTourDetailPageContentContainer({
     const newTitle = '';
     const endpoint = await generateUniqueEndpoint(newTitle, 'tour');
 
-    const response = await createTourAction({
+    const response = await createTourActionPrivate({
       title: newTitle,
       endpoint: endpoint,
       destinations: ['Ho Chi Minh'],
@@ -170,7 +170,7 @@ export default function AdminTourDetailPageContentContainer({
   ) => {
     setLoadingImageIndex(imageIndex);
     try {
-      await updateTourAction(currentTourData.id, {
+      await updateTourActionPrivate(currentTourData.id, {
         additionalImageUrls: [...additionalImageUrls, imageUrl],
       });
       setAdditionalImageUrls([...additionalImageUrls, imageUrl]);
@@ -192,7 +192,7 @@ export default function AdminTourDetailPageContentContainer({
     // Optimistic update UI
     setAdditionalImageUrls(newImages);
     // Update database
-    await updateTourAction(currentTourData.id, {
+    await updateTourActionPrivate(currentTourData.id, {
       additionalImageUrls: newImages,
     });
     setLoadingImageIndex(null);
@@ -201,7 +201,7 @@ export default function AdminTourDetailPageContentContainer({
   const handleSelectVideoThumbnail = async (imageUrl: string) => {
     setVideoThumbnailLoading(true);
     try {
-      await updateTourAction(currentTourData.id, { videoThumbnailUrl: imageUrl });
+      await updateTourActionPrivate(currentTourData.id, { videoThumbnailUrl: imageUrl });
       setVideoThumbnailUrl(imageUrl);
     } catch (error) {
       notifications.show({
@@ -219,7 +219,7 @@ export default function AdminTourDetailPageContentContainer({
     // Optimistic update UI
     setVideoThumbnailUrl('');
     // Update database
-    await updateTourAction(currentTourData.id, {
+    await updateTourActionPrivate(currentTourData.id, {
       videoThumbnailUrl: '',
     });
     setVideoThumbnailLoading(false);
@@ -228,7 +228,7 @@ export default function AdminTourDetailPageContentContainer({
   const handleSelectMainImage = async (imageUrl: string) => {
     setMainImageLoading(true);
     try {
-      await updateTourAction(currentTourData.id, { mainImageUrl: imageUrl });
+      await updateTourActionPrivate(currentTourData.id, { mainImageUrl: imageUrl });
       setMainImageUrl(imageUrl);
     } catch (error) {
       notifications.show({
@@ -246,7 +246,7 @@ export default function AdminTourDetailPageContentContainer({
     // Optimistic update UI
     setMainImageUrl('');
     // Update database
-    await updateTourAction(currentTourData.id, {
+    await updateTourActionPrivate(currentTourData.id, {
       mainImageUrl: '',
     });
     setMainImageLoading(false);
@@ -259,7 +259,7 @@ export default function AdminTourDetailPageContentContainer({
       currentTourData.id
     );
 
-    await updateTourAction(currentTourData.id, {
+    await updateTourActionPrivate(currentTourData.id, {
       title: newTitle,
       endpoint: endpoint,
     });
@@ -274,20 +274,20 @@ export default function AdminTourDetailPageContentContainer({
 
   const handleUpdateDescription = useDebouncedCallback(
     async (newDescription: string) => {
-      await updateTourAction(currentTourData.id, { description: newDescription });
+      await updateTourActionPrivate(currentTourData.id, { description: newDescription });
       setIsSaving(false);
     },
     1500
   );
 
   const handleUpdateContent = useDebouncedCallback(async (newContent: string) => {
-    await updateTourAction(currentTourData.id, { content: newContent });
+    await updateTourActionPrivate(currentTourData.id, { content: newContent });
     setIsSaving(false);
   }, 1500);
 
   const handleUpdateAdditionalImagesPosition = (newPosition: string) => {
     setAdditionalImagesPosition(newPosition);
-    updateTourAction(currentTourData.id, { additionalImagesPosition: newPosition });
+    updateTourActionPrivate(currentTourData.id, { additionalImagesPosition: newPosition });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',
@@ -298,7 +298,7 @@ export default function AdminTourDetailPageContentContainer({
 
   const handleUpdateDestinations = (newDestinations: string[]) => {
     setDestinations(newDestinations);
-    updateTourAction(currentTourData.id, { destinations: newDestinations });
+    updateTourActionPrivate(currentTourData.id, { destinations: newDestinations });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',
@@ -309,7 +309,7 @@ export default function AdminTourDetailPageContentContainer({
 
   // const handleUpdateStartDate = (newDate: Date) => {
   //   setStartDate(newDate);
-  //   updateTourAction(currentTourData.id, { startDate: newDate });
+  //   updateTourActionPrivate(currentTourData.id, { startDate: newDate });
   // };
 
   // const handleChangeDate = (date: Date) => {
@@ -342,7 +342,7 @@ export default function AdminTourDetailPageContentContainer({
 
   const handleUpdateStatus = (newStatus: string) => {
     setStatus(newStatus);
-    updateTourAction(currentTourData.id, { visibility: newStatus });
+    updateTourActionPrivate(currentTourData.id, { visibility: newStatus });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',
@@ -354,7 +354,7 @@ export default function AdminTourDetailPageContentContainer({
   const handleUpdateSortOrder = (newSortOrder: string) => {
     const sortOrderNumber = Number(newSortOrder);
     setSortOrder(sortOrderNumber);
-    updateTourAction(currentTourData.id, { sortOrder: sortOrderNumber });
+    updateTourActionPrivate(currentTourData.id, { sortOrder: sortOrderNumber });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',
@@ -365,7 +365,7 @@ export default function AdminTourDetailPageContentContainer({
 
   const handleUpdateType = (newType: string) => {
     setType(newType);
-    updateTourAction(currentTourData.id, { type: newType });
+    updateTourActionPrivate(currentTourData.id, { type: newType });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',
@@ -375,7 +375,7 @@ export default function AdminTourDetailPageContentContainer({
   };
 
   const handleUpdateNormalPrice = useDebouncedCallback(async (newPrice: number) => {
-    await updateTourAction(currentTourData.id, { price: newPrice });
+    await updateTourActionPrivate(currentTourData.id, { price: newPrice });
     setIsSaving(false);
     notifications.show({
       message: 'Saved successfully',
@@ -387,7 +387,7 @@ export default function AdminTourDetailPageContentContainer({
 
   const handleUpdateDiscountPrice = useDebouncedCallback(
     async (newPrice: number) => {
-      await updateTourAction(currentTourData.id, { discountPrice: newPrice });
+      await updateTourActionPrivate(currentTourData.id, { discountPrice: newPrice });
       setIsSaving(false);
       notifications.show({
         message: 'Saved successfully',
@@ -400,7 +400,7 @@ export default function AdminTourDetailPageContentContainer({
   );
 
   const handleUpdateChildPrice = useDebouncedCallback(async (newPrice: number) => {
-    await updateTourAction(currentTourData.id, { childPrice: newPrice });
+    await updateTourActionPrivate(currentTourData.id, { childPrice: newPrice });
     setIsSaving(false);
     notifications.show({
       message: 'Saved successfully',
@@ -412,7 +412,7 @@ export default function AdminTourDetailPageContentContainer({
 
   const handleUpdateVideoPosition = (newPosition: string) => {
     setVideoPosition(newPosition);
-    updateTourAction(currentTourData.id, { videoPosition: newPosition });
+    updateTourActionPrivate(currentTourData.id, { videoPosition: newPosition });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',
@@ -422,7 +422,7 @@ export default function AdminTourDetailPageContentContainer({
   };
 
   const handleUpdateVideoUrl = useDebouncedCallback(async (newUrl: string) => {
-    await updateTourAction(currentTourData.id, { videoUrl: newUrl });
+    await updateTourActionPrivate(currentTourData.id, { videoUrl: newUrl });
     setIsSaving(false);
     notifications.show({
       message: 'Saved successfully',
@@ -435,7 +435,7 @@ export default function AdminTourDetailPageContentContainer({
   const handleUpdateDuration = (newDuration: string) => {
     const newDurationNumber = Number(newDuration);
     setDuration(newDurationNumber);
-    updateTourAction(currentTourData.id, { durationDays: newDurationNumber });
+    updateTourActionPrivate(currentTourData.id, { durationDays: newDurationNumber });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',
@@ -468,7 +468,7 @@ export default function AdminTourDetailPageContentContainer({
   const handleDeleteTour = async () => {
     setIsDeleting(true);
     try {
-      const result = await deleteTourAction(currentTourData.id);
+      const result = await deleteTourActionPrivate(currentTourData.id);
       if (result.success) {
         router.replace('/adminup/tour');
         notifications.show({
@@ -580,7 +580,7 @@ export default function AdminTourDetailPageContentContainer({
 
     // Add new tour categories
     for (const tourCategoryId of toAdd) {
-      await createTourCategoryTourAction({
+      await createTourCategoryTourActionPrivate({
         tourId: currentTourData.id,
         tourCategoryId: tourCategoryId,
         sortOrder: 0,
@@ -593,7 +593,7 @@ export default function AdminTourDetailPageContentContainer({
         (tct) => tct.tourCategoryId === tourCategoryId
       );
       if (tourCategoryTour) {
-        await deleteTourCategoryTourAction(tourCategoryTour.id);
+        await deleteTourCategoryTourActionPrivate(tourCategoryTour.id);
       }
     }
     notifications.show({

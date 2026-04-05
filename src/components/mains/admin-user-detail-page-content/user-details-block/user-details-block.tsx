@@ -3,7 +3,7 @@
 import { Button, Group, Modal, Paper, Stack, Text } from '@mantine/core';
 import { MdLockReset } from 'react-icons/md';
 import { useState } from 'react';
-import { resetMyPasswordAction } from '@/actions/auth-action';
+import { resetMyPasswordActionPrivate } from '@/actions/auth-action';
 import { notifications } from '@mantine/notifications';
 import { IUserResponse } from '@/interfaces/user-interface';
 
@@ -18,7 +18,7 @@ export default function UserDetailsBlock({ user }: UserDetailsBlockProps) {
   const handleResetPassword = async () => {
     setIsResetting(true);
 
-    const result = await resetMyPasswordAction();
+    const result = await resetMyPasswordActionPrivate();
     if (result.success) {
       notifications.show({
         title: 'Password Reset',

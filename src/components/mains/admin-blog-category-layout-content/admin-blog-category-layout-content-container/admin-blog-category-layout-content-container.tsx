@@ -14,7 +14,7 @@ import AddNewIcon from '@/components/icons/vinaup-add-new-icon.svg';
 import { generateUniqueEndpoint } from '@/utils/function-helpers';
 import { useState } from 'react';
 import { IBlogCategoryResponse } from '@/interfaces/blog-category-interface';
-import { createBlogCategoryAction } from '@/actions/blog-category-action';
+import { createBlogCategoryActionPrivate } from '@/actions/blog-category-action';
 import BlogCategoryNav from '@/components/sidebars/blog-category-nav/blog-category-nav';
 import classes from './admin-blog-category-layout-content-container.module.scss';
 
@@ -34,7 +34,7 @@ export default function AdminBlogCategoryLayoutContentContainer({
     setIsCreating(true);
     const newTitle = 'New Blog Category';
     const endpoint = await generateUniqueEndpoint(newTitle, 'landing');
-    const response = await createBlogCategoryAction({
+    const response = await createBlogCategoryActionPrivate({
       title: newTitle,
       endpoint: endpoint,
     });

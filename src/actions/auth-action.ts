@@ -3,14 +3,14 @@
 import { ActionResponse } from '@/interfaces/_base-interface';
 import { IUserResponse } from '@/interfaces/user-interface';
 import { executeApi } from '@/actions/_base';
-import { localSignInApi, logoutApi, getMeApi, AuthRequest, AuthResponse, resetPasswordForUserApi, resetMyPasswordApi } from '@/apis/auth-apis';
+import { localSignInApiPrivate, logoutApiPrivate, getMeApiPrivate, AuthRequest, AuthResponse, resetPasswordForUserApiPrivate, resetMyPasswordApiPrivate } from '@/apis/auth-apis';
 import { revalidatePath } from 'next/cache';
 
-export async function localSignInAction(
+export async function localSignInActionPrivate(
   credentials: AuthRequest
 ): Promise<ActionResponse<AuthResponse>> {
   const result = await executeApi(
-    async () => localSignInApi(credentials)
+    async () => localSignInApiPrivate(credentials)
   );
   if (result.success) {
     revalidatePath('/', 'layout');
@@ -18,9 +18,9 @@ export async function localSignInAction(
   return result;
 }
 
-export async function logoutAction(): Promise<ActionResponse<void>> {
+export async function logoutActionPrivate(): Promise<ActionResponse<void>> {
   const result = await executeApi(
-    async () => logoutApi()
+    async () => logoutApiPrivate()
   );
   if (result.success) {
     revalidatePath('/', 'layout');
@@ -28,22 +28,22 @@ export async function logoutAction(): Promise<ActionResponse<void>> {
   return result;
 }
 
-export async function getMeAction(): Promise<ActionResponse<IUserResponse>> {
+export async function getMeActionPrivate(): Promise<ActionResponse<IUserResponse>> {
   return executeApi(
-    async () => getMeApi()
+    async () => getMeApiPrivate()
   );
 }
 
-export async function resetPasswordForUserAction(
+export async function resetPasswordForUserActionPrivate(
   targetUserId: string
 ): Promise<ActionResponse<void>> {
   return executeApi(
-    async () => resetPasswordForUserApi(targetUserId)
+    async () => resetPasswordForUserApiPrivate(targetUserId)
   );
 }
 
-export async function resetMyPasswordAction(): Promise<ActionResponse<void>> {
+export async function resetMyPasswordActionPrivate(): Promise<ActionResponse<void>> {
   return executeApi(
-    async () => resetMyPasswordApi()
+    async () => resetMyPasswordApiPrivate()
   );
 }

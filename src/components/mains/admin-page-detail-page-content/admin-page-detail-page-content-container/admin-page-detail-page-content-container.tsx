@@ -20,9 +20,9 @@ import { TextEditor } from '@/components/editors/text-editor/text-editor';
 import UploadImageSection from '@/components/primitives/upload-image-section/upload-image-section';
 import { useEffect, useRef, useState } from 'react';
 import {
-  createPageAction,
-  deletePageAction,
-  updatePageAction,
+  createPageActionPrivate,
+  deletePageActionPrivate,
+  updatePageActionPrivate,
 } from '@/actions/page-action';
 import { IPageResponse } from '@/interfaces/page-interface';
 import { useDebouncedCallback } from 'use-debounce';
@@ -104,7 +104,7 @@ export default function AdminPageDetailPageContentContainer({
     const newTitle = 'Untitled';
     const endpoint = await generateUniqueEndpoint(newTitle, 'landing');
 
-    const response = await createPageAction({
+    const response = await createPageActionPrivate({
       title: newTitle,
       endpoint: endpoint,
       destinations: [],
@@ -137,7 +137,7 @@ export default function AdminPageDetailPageContentContainer({
   ) => {
     setLoadingImageIndex(imageIndex);
     try {
-      await updatePageAction(currentPageData.id, {
+      await updatePageActionPrivate(currentPageData.id, {
         additionalImageUrls: [...additionalImageUrls, imageUrl],
       });
       setAdditionalImageUrls([...additionalImageUrls, imageUrl]);
@@ -157,7 +157,7 @@ export default function AdminPageDetailPageContentContainer({
     const newImages = additionalImageUrls.filter((_, idx) => idx !== imageIndex);
 
     setAdditionalImageUrls(newImages);
-    await updatePageAction(currentPageData.id, {
+    await updatePageActionPrivate(currentPageData.id, {
       additionalImageUrls: newImages,
     });
     setLoadingImageIndex(null);
@@ -166,7 +166,7 @@ export default function AdminPageDetailPageContentContainer({
   const handleSelectVideoThumbnail = async (imageUrl: string) => {
     setVideoThumbnailLoading(true);
     try {
-      await updatePageAction(currentPageData.id, { videoThumbnailUrl: imageUrl });
+      await updatePageActionPrivate(currentPageData.id, { videoThumbnailUrl: imageUrl });
       setVideoThumbnailUrl(imageUrl);
     } catch (error) {
       notifications.show({
@@ -182,7 +182,7 @@ export default function AdminPageDetailPageContentContainer({
   const handleRemoveVideoThumbnail = async () => {
     setVideoThumbnailLoading(true);
     setVideoThumbnailUrl('');
-    await updatePageAction(currentPageData.id, {
+    await updatePageActionPrivate(currentPageData.id, {
       videoThumbnailUrl: '',
     });
     setVideoThumbnailLoading(false);
@@ -191,7 +191,7 @@ export default function AdminPageDetailPageContentContainer({
   const handleSelectMainImage = async (imageUrl: string) => {
     setMainImageLoading(true);
     try {
-      await updatePageAction(currentPageData.id, { mainImageUrl: imageUrl });
+      await updatePageActionPrivate(currentPageData.id, { mainImageUrl: imageUrl });
       setMainImageUrl(imageUrl);
     } catch (error) {
       notifications.show({
@@ -207,7 +207,7 @@ export default function AdminPageDetailPageContentContainer({
   const handleRemoveMainImage = async () => {
     setMainImageLoading(true);
     setMainImageUrl('');
-    await updatePageAction(currentPageData.id, {
+    await updatePageActionPrivate(currentPageData.id, {
       mainImageUrl: '',
     });
     setMainImageLoading(false);
@@ -220,7 +220,7 @@ export default function AdminPageDetailPageContentContainer({
       currentPageData.id
     );
 
-    await updatePageAction(currentPageData.id, {
+    await updatePageActionPrivate(currentPageData.id, {
       title: newTitle,
       endpoint: newEndpoint,
     });
@@ -241,7 +241,7 @@ export default function AdminPageDetailPageContentContainer({
       currentPageData.id
     );
 
-    await updatePageAction(currentPageData.id, { endpoint: uniqueEndpoint });
+    await updatePageActionPrivate(currentPageData.id, { endpoint: uniqueEndpoint });
     setEndpoint(uniqueEndpoint);
     setIsSaving(false);
     notifications.show({
@@ -253,7 +253,7 @@ export default function AdminPageDetailPageContentContainer({
   }, 1500);
 
   // const handleUpdateDescription = useDebouncedCallback(async (newDescription: string) => {
-  //   await updatePageAction(
+  //   await updatePageActionPrivate(
   //     currentPageData.id,
   //     { description: newDescription }
   //   );
@@ -261,13 +261,13 @@ export default function AdminPageDetailPageContentContainer({
   // }, 1500)
 
   const handleUpdateContent = useDebouncedCallback(async (newContent: string) => {
-    await updatePageAction(currentPageData.id, { content: newContent });
+    await updatePageActionPrivate(currentPageData.id, { content: newContent });
     setIsSaving(false);
   }, 1500);
 
   const handleUpdateAdditionalImagesPosition = (newPosition: string) => {
     setAdditionalImagesPosition(newPosition);
-    updatePageAction(currentPageData.id, { additionalImagesPosition: newPosition });
+    updatePageActionPrivate(currentPageData.id, { additionalImagesPosition: newPosition });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',
@@ -278,7 +278,7 @@ export default function AdminPageDetailPageContentContainer({
 
   // const handleUpdateDestinations = (newDestinations: string[]) => {
   //   setDestinations(newDestinations);
-  //   updatePageAction(currentPageData.id, { destinations: newDestinations });
+  //   updatePageActionPrivate(currentPageData.id, { destinations: newDestinations });
   //   notifications.show({
   //     message: 'Saved successfully',
   //     color: 'green',
@@ -289,7 +289,7 @@ export default function AdminPageDetailPageContentContainer({
 
   const handleUpdateStatus = (newStatus: string) => {
     setStatus(newStatus);
-    updatePageAction(currentPageData.id, { visibility: newStatus });
+    updatePageActionPrivate(currentPageData.id, { visibility: newStatus });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',
@@ -300,7 +300,7 @@ export default function AdminPageDetailPageContentContainer({
 
   const handleUpdatePageType = (newPageType: string) => {
     setPageType(newPageType);
-    updatePageAction(currentPageData.id, { type: newPageType });
+    updatePageActionPrivate(currentPageData.id, { type: newPageType });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',
@@ -311,7 +311,7 @@ export default function AdminPageDetailPageContentContainer({
 
   const handleUpdateVideoPosition = (newPosition: string) => {
     setVideoPosition(newPosition);
-    updatePageAction(currentPageData.id, { videoPosition: newPosition });
+    updatePageActionPrivate(currentPageData.id, { videoPosition: newPosition });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',
@@ -321,7 +321,7 @@ export default function AdminPageDetailPageContentContainer({
   };
 
   const handleUpdateVideoUrl = useDebouncedCallback(async (newUrl: string) => {
-    await updatePageAction(currentPageData.id, { videoUrl: newUrl });
+    await updatePageActionPrivate(currentPageData.id, { videoUrl: newUrl });
     setIsSaving(false);
     notifications.show({
       message: 'Saved successfully',
@@ -355,7 +355,7 @@ export default function AdminPageDetailPageContentContainer({
   const handleDeletePage = async () => {
     setIsDeleting(true);
     try {
-      const result = await deletePageAction(currentPageData.id);
+      const result = await deletePageActionPrivate(currentPageData.id);
       if (result.success) {
         router.replace('/adminup/page' as Route);
         notifications.show({

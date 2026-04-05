@@ -9,42 +9,42 @@ import {
 } from '@/interfaces/smtp-config-interface';
 import { executeApi } from '@/actions/_base';
 import {
-  getSmtpConfigApi,
-  updateSmtpConfigApi,
-  testSmtpEmailApi,
+  getSmtpConfigApiPrivate,
+  updateSmtpConfigApiPrivate,
+  testSmtpEmailApiPrivate,
 } from '@/apis/smtp-config-apis';
 
-export async function getSmtpConfigAction(): Promise<ActionResponse<ISmtpConfigResponse | null>> {
+export async function getSmtpConfigActionPrivate(): Promise<ActionResponse<ISmtpConfigResponse | null>> {
   const result = await executeApi(
-    async () => getSmtpConfigApi()
+    async () => getSmtpConfigApiPrivate()
   );
   return result as ActionResponse<ISmtpConfigResponse | null>;
 }
 
-export async function saveSmtpConfigAction(
+export async function saveSmtpConfigActionPrivate(
   input: ICreateSmtpConfig
 ): Promise<ActionResponse<ISmtpConfigResponse>> {
   const result = await executeApi(
-    async () => updateSmtpConfigApi(input)
+    async () => updateSmtpConfigApiPrivate(input)
   );
   revalidatePath('/adminup/settings', 'page');
   return result;
 }
 
-export async function updateSmtpConfigAction(
+export async function updateSmtpConfigActionPrivate(
   id: string,
   input: IUpdateSmtpConfig
 ): Promise<ActionResponse<ISmtpConfigResponse>> {
   const result = await executeApi(
-    async () => updateSmtpConfigApi(input)
+    async () => updateSmtpConfigApiPrivate(input)
   );
   revalidatePath('/adminup/settings', 'page');
   return result;
 }
 
-export async function hasSmtpConfigAction(): Promise<ActionResponse<boolean>> {
+export async function hasSmtpConfigActionPrivate(): Promise<ActionResponse<boolean>> {
   const result = await executeApi(
-    async () => getSmtpConfigApi()
+    async () => getSmtpConfigApiPrivate()
   );
   return {
     success: result.success,
@@ -53,9 +53,9 @@ export async function hasSmtpConfigAction(): Promise<ActionResponse<boolean>> {
   };
 }
 
-export async function sendTestEmailAction(email: string): Promise<ActionResponse<void>> {
+export async function sendTestEmailActionPrivate(email: string): Promise<ActionResponse<void>> {
   const result = await executeApi(
-    async () => testSmtpEmailApi(email)
+    async () => testSmtpEmailApiPrivate(email)
   );
   return {
     success: result.success && result.data?.success === true,

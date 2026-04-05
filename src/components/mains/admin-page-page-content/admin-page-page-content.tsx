@@ -1,11 +1,11 @@
-import { getAllPagesAction } from "@/actions/page-action";
-import { getMeAction } from "@/actions/auth-action";
-import { redirect } from "next/navigation";
-import AdminPagePageContentContainer from "./admin-page-page-content-container/admin-page-page-content-container";
+import { getAllPagesAdminActionPrivate } from '@/actions/page-action';
+import { getMeActionPrivate } from '@/actions/auth-action';
+import { redirect } from 'next/navigation';
+import AdminPagePageContentContainer from './admin-page-page-content-container/admin-page-page-content-container';
 
 export default async function AdminPagePageContent() {
-  const pagesData = await getAllPagesAction();
-  const meResult = await getMeAction();
+  const pagesData = await getAllPagesAdminActionPrivate();
+  const meResult = await getMeActionPrivate();
 
   if (!meResult.success || !meResult.data) {
     redirect('/login');

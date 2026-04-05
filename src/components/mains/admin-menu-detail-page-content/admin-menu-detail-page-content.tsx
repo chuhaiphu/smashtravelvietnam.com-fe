@@ -1,5 +1,5 @@
-import { getAllMenusAction, getAvailableSortOrdersAction, getMenuByIdAction } from "@/actions/menu-action";
-import { getAllTourCategoriesAction } from "@/actions/tour-category-action";
+import { getAllMenusActionPrivate, getAvailableSortOrdersActionPrivate, getMenuByIdActionPrivate } from "@/actions/menu-action";
+import { getAllTourCategoriesActionPrivate } from "@/actions/tour-category-action";
 import { notFound } from "next/navigation";
 import AdminMenuDetailPageContentContainer from "./admin-menu-detail-page-content-container/admin-menu-detail-page-content-container";
 
@@ -13,11 +13,11 @@ export default async function AdminMenuDetailPageContent({
   const { id } = await params;
 
   const [currentMenuResponse, menusResponse, tourCategoriesResponse] = await Promise.all([
-    getMenuByIdAction(id),
-    getAllMenusAction(),
-    getAllTourCategoriesAction(),
+    getMenuByIdActionPrivate(id),
+    getAllMenusActionPrivate(),
+    getAllTourCategoriesActionPrivate(),
   ]);
-  const availableSortOrdersResponse = await getAvailableSortOrdersAction(currentMenuResponse.data?.parent?.id || '');
+  const availableSortOrdersResponse = await getAvailableSortOrdersActionPrivate(currentMenuResponse.data?.parent?.id || '');
 
   if (!currentMenuResponse.success || !currentMenuResponse.data) {
     notFound();

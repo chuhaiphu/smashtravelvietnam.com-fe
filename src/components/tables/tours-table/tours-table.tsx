@@ -14,7 +14,7 @@ import { DatePicker } from '@mantine/dates';
 import EntitiesTable from '../entities-table/entities-table';
 import { StatusDisplayMap } from '@/constants';
 import { useRouter } from 'next/navigation';
-import { deleteTourAction } from '@/actions/tour-action';
+import { deleteTourActionPrivate } from '@/actions/tour-action';
 import { notifications } from '@mantine/notifications';
 
 interface ToursTableProps {
@@ -44,7 +44,7 @@ export default function ToursTable({
 
     setIsDeleting(true);
     try {
-      const result = await deleteTourAction(selectedTourId);
+      const result = await deleteTourActionPrivate(selectedTourId);
       if (result.success) {
         notifications.show({
           message: 'Tour has been successfully deleted',

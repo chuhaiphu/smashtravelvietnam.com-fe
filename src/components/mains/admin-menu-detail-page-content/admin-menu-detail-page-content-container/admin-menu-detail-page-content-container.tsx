@@ -17,7 +17,7 @@ import {
 import { notifications } from '@mantine/notifications';
 import classes from './admin-menu-detail-page-content-container.module.scss';
 import { useEffect, useMemo, useState } from 'react';
-import { deleteMenuAction, updateMenuAction } from '@/actions/menu-action';
+import { deleteMenuActionPrivate, updateMenuActionPrivate } from '@/actions/menu-action';
 import { IMenuResponse } from '@/interfaces/menu-interface';
 import { ITourCategoryResponse } from '@/interfaces/tour-category-interface';
 import { useDebouncedCallback } from 'use-debounce';
@@ -149,7 +149,7 @@ export default function AdminMenuDetailPageContentContainer({
   };
 
   const handleUpdateTitle = useDebouncedCallback(async (newTitle: string) => {
-    await updateMenuAction(currentMenu.id, { title: newTitle });
+    await updateMenuActionPrivate(currentMenu.id, { title: newTitle });
     notifications.show({
       message: 'Saved successfully',
       color: 'green',
@@ -164,14 +164,14 @@ export default function AdminMenuDetailPageContentContainer({
       return;
     }
     setParentId(newParentId);
-    await updateMenuAction(currentMenu.id, { parentId: newParentId });
+    await updateMenuActionPrivate(currentMenu.id, { parentId: newParentId });
   };
 
   const handleUpdateSortOrder = async (newSortOrder: string | null) => {
     if (!newSortOrder) return;
     const newValue = parseInt(newSortOrder);
     setSortOrder(newValue);
-    await updateMenuAction(currentMenu.id, { sortOrder: newValue });
+    await updateMenuActionPrivate(currentMenu.id, { sortOrder: newValue });
     notifications.show({
       message: 'Sort order updated successfully',
       color: 'green',
@@ -185,7 +185,7 @@ export default function AdminMenuDetailPageContentContainer({
     // Reset target values when type changes
     setTargetId(null);
     setCustomUrl('');
-    await updateMenuAction(currentMenu.id, {
+    await updateMenuActionPrivate(currentMenu.id, {
       targetType: newTargetType || undefined,
       targetId: undefined,
       customUrl: undefined,
@@ -200,7 +200,7 @@ export default function AdminMenuDetailPageContentContainer({
 
   const handleUpdateCustomUrl = useDebouncedCallback(
     async (newCustomUrl: string) => {
-      await updateMenuAction(currentMenu.id, { customUrl: newCustomUrl });
+      await updateMenuActionPrivate(currentMenu.id, { customUrl: newCustomUrl });
       notifications.show({
         message: 'Custom URL saved successfully',
         color: 'green',
@@ -214,7 +214,7 @@ export default function AdminMenuDetailPageContentContainer({
 
   const handleUpdateTourCategory = async (tourCategoryId: string | null) => {
     setTargetId(tourCategoryId);
-    await updateMenuAction(currentMenu.id, {
+    await updateMenuActionPrivate(currentMenu.id, {
       targetId: tourCategoryId || undefined,
     });
     notifications.show({
@@ -228,7 +228,7 @@ export default function AdminMenuDetailPageContentContainer({
   const handleDeleteMenu = async () => {
     setIsDeleting(true);
     try {
-      const result = await deleteMenuAction(currentMenu.id);
+      const result = await deleteMenuActionPrivate(currentMenu.id);
       if (result.success) {
         router.replace('/adminup/menu');
         notifications.show({

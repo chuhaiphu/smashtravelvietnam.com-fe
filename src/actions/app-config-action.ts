@@ -5,24 +5,24 @@ import { ActionResponse } from '@/interfaces/_base-interface';
 import { IAppConfigResponse, IUpdateAppConfig } from '@/interfaces/app-config-interface';
 import { executeApi } from '@/actions/_base';
 import {
-  getPublicAppConfigApi,
-  updateAppConfigApi,
+  getAppConfigApiPublic,
+  updateAppConfigApiPrivate,
 } from '@/apis/app-config-apis';
 
-export async function getAppConfigAction(): Promise<ActionResponse<IAppConfigResponse>> {
+export async function getAppConfigActionPublic(): Promise<ActionResponse<IAppConfigResponse>> {
   'use cache';
   cacheLife('hours');
   cacheTag('app-config');
   return executeApi(
-    async () => getPublicAppConfigApi()
+    async () => getAppConfigApiPublic()
   );
 }
 
-export async function updateAppConfigAction(
+export async function updateAppConfigActionPrivate(
   input: IUpdateAppConfig
 ): Promise<ActionResponse<IAppConfigResponse>> {
   const result = await executeApi(
-    async () => updateAppConfigApi(input)
+    async () => updateAppConfigApiPrivate(input)
   );
   if (result.success) {
     updateTag('app-config');

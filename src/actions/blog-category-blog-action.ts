@@ -9,93 +9,93 @@ import {
 import { revalidatePath } from 'next/cache';
 import { executeApi } from '@/actions/_base';
 import {
-  createBlogCategoryBlogApi,
-  getBlogCategoryBlogByIdApi,
-  getBlogCategoryBlogsByBlogIdApi,
-  getBlogCategoryBlogsByBlogCategoryIdApi,
-  getAllBlogCategoryBlogsApi,
-  updateBlogCategoryBlogApi,
-  deleteBlogCategoryBlogApi,
-  deleteBlogCategoryBlogsByBlogIdApi,
-  deleteBlogCategoryBlogsByBlogCategoryIdApi,
+  createBlogCategoryBlogApiPrivate,
+  getBlogCategoryBlogByIdApiPublic,
+  getBlogCategoryBlogsByBlogIdApiPublic,
+  getBlogCategoryBlogsByBlogCategoryIdApiPublic,
+  getAllBlogCategoryBlogsApiPublic,
+  updateBlogCategoryBlogApiPrivate,
+  deleteBlogCategoryBlogApiPrivate,
+  deleteBlogCategoryBlogsByBlogIdApiPrivate,
+  deleteBlogCategoryBlogsByBlogCategoryIdApiPrivate,
 } from '@/apis/blog-category-blog-apis';
 
-export async function createBlogCategoryBlogAction(
+export async function createBlogCategoryBlogActionPrivate(
   input: ICreateBlogCategoryBlog
 ): Promise<ActionResponse<IBlogCategoryBlogResponse>> {
   const result = await executeApi(
-    async () => createBlogCategoryBlogApi(input)
+    async () => createBlogCategoryBlogApiPrivate(input)
   );
   revalidatePath('/', 'layout');
   return result;
 }
 
-export async function getBlogCategoryBlogByIdAction(
+export async function getBlogCategoryBlogByIdActionPublic(
   id: string
 ): Promise<ActionResponse<IBlogCategoryBlogResponse>> {
   return executeApi(
-    async () => getBlogCategoryBlogByIdApi(id)
+    async () => getBlogCategoryBlogByIdApiPublic(id)
   );
 }
 
-export async function getBlogCategoryBlogsByBlogIdAction(
+export async function getBlogCategoryBlogsByBlogIdActionPublic(
   blogId: string
 ): Promise<ActionResponse<IBlogCategoryBlogResponse[]>> {
   return executeApi(
-    async () => getBlogCategoryBlogsByBlogIdApi(blogId)
+    async () => getBlogCategoryBlogsByBlogIdApiPublic(blogId)
   );
 }
 
-export async function getBlogCategoryBlogsByBlogCategoryIdAction(
+export async function getBlogCategoryBlogsByBlogCategoryIdActionPublic(
   blogCategoryId: string
 ): Promise<ActionResponse<IBlogCategoryBlogResponse[]>> {
   return executeApi(
-    async () => getBlogCategoryBlogsByBlogCategoryIdApi(blogCategoryId)
+    async () => getBlogCategoryBlogsByBlogCategoryIdApiPublic(blogCategoryId)
   );
 }
 
-export async function getAllBlogCategoryBlogsAction(): Promise<ActionResponse<IBlogCategoryBlogResponse[]>> {
+export async function getAllBlogCategoryBlogsActionPublic(): Promise<ActionResponse<IBlogCategoryBlogResponse[]>> {
   return executeApi(
-    async () => getAllBlogCategoryBlogsApi()
+    async () => getAllBlogCategoryBlogsApiPublic()
   );
 }
 
-export async function updateBlogCategoryBlogAction(
+export async function updateBlogCategoryBlogActionPrivate(
   id: string,
   input: IUpdateBlogCategoryBlog
 ): Promise<ActionResponse<IBlogCategoryBlogResponse>> {
   const result = await executeApi(
-    async () => updateBlogCategoryBlogApi(id, input)
+    async () => updateBlogCategoryBlogApiPrivate(id, input)
   );
   revalidatePath('/', 'layout');
   return result;
 }
 
-export async function deleteBlogCategoryBlogAction(
+export async function deleteBlogCategoryBlogActionPrivate(
   id: string
 ): Promise<ActionResponse<void>> {
   const result = await executeApi(
-    async () => deleteBlogCategoryBlogApi(id)
+    async () => deleteBlogCategoryBlogApiPrivate(id)
   );
   revalidatePath('/', 'layout');
   return result;
 }
 
-export async function deleteBlogCategoryBlogsByBlogIdAction(
+export async function deleteBlogCategoryBlogsByBlogIdActionPrivate(
   blogId: string
 ): Promise<ActionResponse<void>> {
   const result = await executeApi(
-    async () => deleteBlogCategoryBlogsByBlogIdApi(blogId)
+    async () => deleteBlogCategoryBlogsByBlogIdApiPrivate(blogId)
   );
   revalidatePath('/', 'layout');
   return result;
 }
 
-export async function deleteBlogCategoryBlogsByBlogCategoryIdAction(
+export async function deleteBlogCategoryBlogsByBlogCategoryIdActionPrivate(
   blogCategoryId: string
 ): Promise<ActionResponse<void>> {
   const result = await executeApi(
-    async () => deleteBlogCategoryBlogsByBlogCategoryIdApi(blogCategoryId)
+    async () => deleteBlogCategoryBlogsByBlogCategoryIdApiPrivate(blogCategoryId)
   );
   revalidatePath('/', 'layout');
   return result;

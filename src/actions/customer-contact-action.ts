@@ -5,19 +5,19 @@ import { ActionResponse } from '@/interfaces/_base-interface';
 import { revalidatePath } from 'next/cache';
 import { executeApi } from '@/actions/_base';
 import {
-  getAllCustomerContactsAdminApi,
-  createCustomerContactApi,
-  deleteCustomerContactApi,
+  getAllCustomerContactsAdminApiPrivate,
+  createCustomerContactApiPublic,
+  deleteCustomerContactApiPrivate,
 } from '@/apis/customer-contact-apis';
 
-export async function getAllCustomerContactsAction(): Promise<ActionResponse<ICustomerContactResponse[]>> {
+export async function getAllCustomerContactsActionPrivate(): Promise<ActionResponse<ICustomerContactResponse[]>> {
   const result = await executeApi(
-    async () => getAllCustomerContactsAdminApi()
+    async () => getAllCustomerContactsAdminApiPrivate()
   );
   return result;
 }
 
-export async function submitCustomerContactAction(formData: FormData): Promise<ActionResponse<void>> {
+export async function submitCustomerContactActionPublic(formData: FormData): Promise<ActionResponse<void>> {
   try {
     // Extract form data
     const name = formData.get('name') as string;
@@ -46,7 +46,7 @@ export async function submitCustomerContactAction(formData: FormData): Promise<A
     };
 
     const result = await executeApi(
-      async () => createCustomerContactApi(customerContactData)
+      async () => createCustomerContactApiPublic(customerContactData)
     );
 
     if (!result.success) {
@@ -65,9 +65,9 @@ export async function submitCustomerContactAction(formData: FormData): Promise<A
   }
 }
 
-export async function deleteCustomerContactAction(id: string): Promise<ActionResponse<void>> {
+export async function deleteCustomerContactActionPrivate(id: string): Promise<ActionResponse<void>> {
   const result = await executeApi(
-    async () => deleteCustomerContactApi(id)
+    async () => deleteCustomerContactApiPrivate(id)
   );
   revalidatePath('/adminup', 'layout');
   return result;

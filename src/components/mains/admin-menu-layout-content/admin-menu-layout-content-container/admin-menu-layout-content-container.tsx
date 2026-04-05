@@ -6,7 +6,7 @@ import { Route } from "next";
 import AddNewIcon from "@/components/icons/vinaup-add-new-icon.svg";
 import { useState } from "react";
 import { IMenuResponse } from "@/interfaces/menu-interface";
-import { createMenuAction } from "@/actions/menu-action";
+import { createMenuActionPrivate } from "@/actions/menu-action";
 import MenuNav from "@/components/sidebars/menu-nav/menu-nav";
 import classes from "./admin-menu-layout-content-container.module.scss";
 
@@ -26,7 +26,7 @@ export default function AdminMenuLayoutContentContainer({
     setIsCreating(true);
     const newTitle = 'New Menu';
 
-    const response = await createMenuAction({
+    const response = await createMenuActionPrivate({
       title: newTitle,
     });
 

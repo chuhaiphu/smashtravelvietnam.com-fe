@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { incrementTourViewAction } from '@/actions/tour-action';
-import { incrementBlogViewAction } from '@/actions/blog-action';
+import { incrementTourViewActionPublic } from '@/actions/tour-action';
+import { incrementBlogViewActionPublic } from '@/actions/blog-action';
 
 interface IncrementViewProps {
   tourId?: string;
@@ -14,9 +14,9 @@ export default function IncrementView({ tourId, blogId }: IncrementViewProps) {
     const incrementView = async () => {
       try {
         if (tourId) {
-          await incrementTourViewAction(tourId);
+          await incrementTourViewActionPublic(tourId);
         } else if (blogId) {
-          await incrementBlogViewAction(blogId);
+          await incrementBlogViewActionPublic(blogId);
         }
       } catch (error) {
         // Silently fail - view increment is not critical

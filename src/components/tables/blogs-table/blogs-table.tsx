@@ -14,7 +14,7 @@ import { DatePicker } from '@mantine/dates';
 import EntitiesTable from '../entities-table/entities-table';
 import { StatusDisplayMap } from '@/constants';
 import { useRouter } from 'next/navigation';
-import { deleteBlogAction } from '@/actions/blog-action';
+import { deleteBlogActionPrivate } from '@/actions/blog-action';
 import { notifications } from '@mantine/notifications';
 
 interface BlogsTableProps {
@@ -44,7 +44,7 @@ export default function BlogsTable({
 
     setIsDeleting(true);
     try {
-      const result = await deleteBlogAction(selectedBlogId);
+      const result = await deleteBlogActionPrivate(selectedBlogId);
       if (result.success) {
         notifications.show({
           message: 'Blog has been successfully deleted',

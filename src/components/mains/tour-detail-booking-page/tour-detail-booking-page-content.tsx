@@ -1,6 +1,6 @@
 'use client';
 
-import { submitBookingAction } from "@/actions/booking-action";
+import { submitBookingActionPublic } from "@/actions/booking-action";
 import BookingTable, { BookingItem } from "@/components/tables/booking-table/booking-table";
 import { Grid, GridCol, Group, Image, Paper, Stack, Text, TextInput, Textarea, ActionIcon } from "@mantine/core";
 import { useState, useRef } from "react";
@@ -47,7 +47,7 @@ export default function TourDetailBookingPageContent({ tourData }: TourDetailBoo
   };
 
   const handleSubmit = async (formData: FormData) => {
-    const result = await submitBookingAction(formData);
+    const result = await submitBookingActionPublic(formData);
 
     if (result.success) {
       alert('Booking submitted successfully!');

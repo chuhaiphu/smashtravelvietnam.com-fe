@@ -1,5 +1,5 @@
 import { IUserResponse } from "@/interfaces/user-interface";
-import { api } from "./_base";
+import { apiPrivate } from "./_base";
 
 export interface AuthRequest {
   email: string;
@@ -11,33 +11,33 @@ export interface AuthResponse {
   user: IUserResponse;
 }
 
-export async function localSignInApi(data: AuthRequest) {
-  return api<AuthResponse>('/auth/local', {
+export async function localSignInApiPrivate(data: AuthRequest) {
+  return apiPrivate<AuthResponse>('/auth/local', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
-export async function logoutApi() {
-  return api<void>('/auth/logout', {
+export async function logoutApiPrivate() {
+  return apiPrivate<void>('/auth/logout', {
     method: 'POST',
   });
 }
 
-export async function getMeApi() {
-  return api<IUserResponse>('/auth/me', {
+export async function getMeApiPrivate() {
+  return apiPrivate<IUserResponse>('/auth/me', {
     method: 'GET',
   });
 }
 
-export async function resetPasswordForUserApi(targetUserId: string) {
-  return api<void>(`/auth/reset-password/${targetUserId}`, {
+export async function resetPasswordForUserApiPrivate(targetUserId: string) {
+  return apiPrivate<void>(`/auth/reset-password/${targetUserId}`, {
     method: 'POST',
   });
 }
 
-export async function resetMyPasswordApi() {
-  return api<void>('/auth/reset-password', {
+export async function resetMyPasswordApiPrivate() {
+  return apiPrivate<void>('/auth/reset-password', {
     method: 'POST',
   });
 }

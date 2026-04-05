@@ -1,4 +1,4 @@
-import { getTourCategoryToursByTourCategoryIdAction } from '@/actions/tour-category-tour-action';
+import { getTourCategoryToursByTourCategoryIdActionPublic } from '@/actions/tour-category-tour-action';
 import TourGrid from '@/components/grids/tour-grid/tour-grid';
 import { ITourCategoryResponse } from '@/interfaces/tour-category-interface';
 import { ITourResponse } from '@/interfaces/tour-interface';
@@ -21,7 +21,7 @@ export default async function LandingTourCategory({
 }: LandingTourCategoryProps) {
   // Get all tours in this category
   const tourCategoryToursResponse =
-    await getTourCategoryToursByTourCategoryIdAction(category.id);
+    await getTourCategoryToursByTourCategoryIdActionPublic(category.id);
 
   // Extract tours and filter only public ones
   const toursFromTourCategory: ITourResponse[] =

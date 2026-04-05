@@ -1,4 +1,4 @@
-import { getAllTourCategoriesAction, getAvailableSortOrdersAction, getTourCategoryByIdAction } from "@/actions/tour-category-action";
+import { getAllTourCategoriesActionPrivate, getAvailableSortOrdersActionPrivate, getTourCategoryByIdActionPrivate } from "@/actions/tour-category-action";
 import { notFound } from "next/navigation";
 import AdminTourCategoryDetailPageContentContainer from "./admin-tour-category-detail-page-content-container/admin-tour-category-detail-page-content-container";
 
@@ -12,10 +12,10 @@ export default async function AdminTourCategoryDetailPageContent({
   const { id } = await params;
 
   const [currentTourCategoryResponse, tourCategoriesResponse] = await Promise.all([
-    getTourCategoryByIdAction(id),
-    getAllTourCategoriesAction(),
+    getTourCategoryByIdActionPrivate(id),
+    getAllTourCategoriesActionPrivate(),
   ]);
-  const availableSortOrdersResponse = await getAvailableSortOrdersAction(currentTourCategoryResponse.data?.parent?.id || '');
+  const availableSortOrdersResponse = await getAvailableSortOrdersActionPrivate(currentTourCategoryResponse.data?.parent?.id || '');
 
   if (!currentTourCategoryResponse.success || !currentTourCategoryResponse.data) {
     notFound();

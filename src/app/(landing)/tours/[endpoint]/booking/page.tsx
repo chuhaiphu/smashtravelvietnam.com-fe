@@ -1,4 +1,4 @@
-import { getTourByEndpointAction } from "@/actions/tour-action";
+import { getTourByEndpointActionPublic } from "@/actions/tour-action";
 import { notFound } from "next/navigation";
 import SearchBar from "@/components/primitives/search-bar/search-bar";
 import { Group, Title, Box, Loader } from "@mantine/core";
@@ -14,7 +14,7 @@ interface TourDetailBookingPageProps {
 
 export default async function TourDetailBookingPage({ params }: TourDetailBookingPageProps) {
   const { endpoint } = await params;
-  const tourResponse = await getTourByEndpointAction(endpoint);
+  const tourResponse = await getTourByEndpointActionPublic(endpoint);
 
   if (!tourResponse.success || !tourResponse.data) {
     notFound();

@@ -1,5 +1,9 @@
-import { ICreateBooking, IBookingResponse, IUpdateBooking } from "@/interfaces/booking-interface";
-import { api } from "./_base";
+import {
+  ICreateBooking,
+  IBookingResponse,
+  IUpdateBooking,
+} from '@/interfaces/booking-interface';
+import { apiPrivate, apiPublic } from './_base';
 
 export interface BookingFilterParams {
   status?: string;
@@ -15,8 +19,8 @@ function buildQueryString(filter?: BookingFilterParams): string {
 
 // ==================== PUBLIC ROUTES ====================
 
-export async function createBookingApi(data: ICreateBooking) {
-  return api<IBookingResponse>('/bookings', {
+export async function createBookingApiPublic(data: ICreateBooking) {
+  return apiPublic<IBookingResponse>('/bookings', {
     method: 'POST',
     body: JSON.stringify(data),
   });
@@ -24,28 +28,28 @@ export async function createBookingApi(data: ICreateBooking) {
 
 // ==================== ADMIN ROUTES ====================
 
-export async function getAllBookingsAdminApi(filter?: BookingFilterParams) {
+export async function getAllBookingsAdminApiPrivate(filter?: BookingFilterParams) {
   const queryString = buildQueryString(filter);
-  return api<IBookingResponse[]>(`/bookings/admin/list${queryString}`, {
+  return apiPrivate<IBookingResponse[]>(`/bookings/admin/list${queryString}`, {
     method: 'GET',
   });
 }
 
-export async function getBookingByIdApi(id: string) {
-  return api<IBookingResponse>(`/bookings/admin/${id}`, {
+export async function getBookingByIdApiPrivate(id: string) {
+  return apiPrivate<IBookingResponse>(`/bookings/admin/${id}`, {
     method: 'GET',
   });
 }
 
-export async function updateBookingApi(id: string, data: IUpdateBooking) {
-  return api<IBookingResponse>(`/bookings/admin/${id}`, {
+export async function updateBookingApiPrivate(id: string, data: IUpdateBooking) {
+  return apiPrivate<IBookingResponse>(`/bookings/admin/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data),
   });
 }
 
-export async function deleteBookingApi(id: string) {
-  return api<void>(`/bookings/admin/${id}`, {
+export async function deleteBookingApiPrivate(id: string) {
+  return apiPrivate<void>(`/bookings/admin/${id}`, {
     method: 'DELETE',
   });
 }

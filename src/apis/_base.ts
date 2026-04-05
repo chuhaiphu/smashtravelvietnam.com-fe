@@ -35,7 +35,7 @@ export async function apiPublic<T>(
   }
 }
 
-export async function api<T>(
+export async function apiPrivate<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<HttpResponse<T>> {

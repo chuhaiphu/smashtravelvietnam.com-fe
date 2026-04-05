@@ -2,7 +2,7 @@ import { Group, Stack, Loader } from "@mantine/core";
 import classes from "./page.module.scss";
 import SearchBar from "@/components/primitives/search-bar/search-bar";
 import TourGrid from "@/components/grids/tour-grid/tour-grid";
-import { getAllPublicToursAction } from "@/actions/tour-action";
+import { getAllToursActionPublic } from "@/actions/tour-action";
 import { Suspense } from "react";
 
 async function TourPageContent({
@@ -11,7 +11,7 @@ async function TourPageContent({
   searchParams: Promise<{ q?: string; type?: string; destinations?: string }>;
 }) {
   const queryParams = await searchParams;
-  const toursResponse = await getAllPublicToursAction();
+  const toursResponse = await getAllToursActionPublic();
   const toursData = toursResponse.data || [];
 
   return (

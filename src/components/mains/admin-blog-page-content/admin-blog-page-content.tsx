@@ -1,11 +1,11 @@
-import { getAllBlogsAction } from "@/actions/blog-action";
-import { getMeAction } from "@/actions/auth-action";
+import { getAllBlogsActionPrivate } from "@/actions/blog-action";
+import { getMeActionPrivate } from "@/actions/auth-action";
 import { redirect } from "next/navigation";
 import AdminBlogPageContentContainer from "./admin-blog-page-content-container/admin-blog-page-content-container";
 
 export default async function AdminBlogPageContent() {
-  const blogsData = await getAllBlogsAction();
-  const meResult = await getMeAction();
+  const blogsData = await getAllBlogsActionPrivate();
+  const meResult = await getMeActionPrivate();
 
   if (!meResult.success || !meResult.data) {
     redirect('/login');

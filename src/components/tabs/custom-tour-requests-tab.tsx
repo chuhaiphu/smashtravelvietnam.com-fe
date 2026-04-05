@@ -8,7 +8,7 @@ import { EntitiesTableColumnProps } from '@/components/tables/entities-table/_pr
 import { ICustomTourRequestResponse } from '@/interfaces/custom-tour-request-interface';
 import { HotelTypeDisplayMap, RoomTypeDisplayMap } from '@/constants';
 import { SlOptionsVertical } from 'react-icons/sl';
-import { deleteCustomTourRequestAction } from '@/actions/custom-tour-request-action';
+import { deleteCustomTourRequestActionPrivate } from '@/actions/custom-tour-request-action';
 import { notifications } from '@mantine/notifications';
 import { GrTrash } from 'react-icons/gr';
 import classes from './custom-tour-requests-tab.module.scss';
@@ -47,7 +47,7 @@ export default function CustomTourRequestsTab({ customTourRequests }: CustomTour
 
     setIsDeleting(true);
     try {
-      const result = await deleteCustomTourRequestAction(customTourToDelete);
+      const result = await deleteCustomTourRequestActionPrivate(customTourToDelete);
       if (result.success) {
         notifications.show({
           title: 'Success',

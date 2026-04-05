@@ -4,7 +4,7 @@ import { ActionIcon, Group, Text, UnstyledButton } from '@mantine/core';
 import { useRouter } from 'next/navigation';
 import AddNewIcon from '@/components/icons/vinaup-add-new-icon.svg';
 import ToursTable from '@/components/tables/tours-table/tours-table';
-import { createTourAction } from '@/actions/tour-action';
+import { createTourActionPrivate } from '@/actions/tour-action';
 import { Route } from 'next';
 import { ITourResponse } from '@/interfaces/tour-interface';
 import { IUserResponse } from '@/interfaces/user-interface';
@@ -30,7 +30,7 @@ export default function AdminTourPageContentContainer({
     const newTitle = '';
     const endpoint = await generateUniqueEndpoint(newTitle, 'tour');
 
-    const response = await createTourAction({
+    const response = await createTourActionPrivate({
       title: newTitle,
       endpoint: endpoint,
       destinations: ['Ho Chi Minh'],

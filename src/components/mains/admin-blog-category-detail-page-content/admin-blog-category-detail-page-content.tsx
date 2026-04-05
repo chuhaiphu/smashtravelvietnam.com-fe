@@ -1,4 +1,4 @@
-import { getAllBlogCategoriesAction, getAvailableSortOrdersAction, getBlogCategoryByIdAction } from "@/actions/blog-category-action";
+import { getAllBlogCategoriesActionPrivate, getAvailableSortOrdersActionPrivate, getBlogCategoryByIdActionPrivate } from "@/actions/blog-category-action";
 import { notFound } from "next/navigation";
 import AdminBlogCategoryDetailPageContentContainer from "./admin-blog-category-detail-page-content-container/admin-blog-category-detail-page-content-container";
 
@@ -12,10 +12,10 @@ export default async function AdminBlogCategoryDetailPageContent({
   const { id } = await params;
 
   const [currentBlogCategoryResponse, blogCategoriesResponse] = await Promise.all([
-    getBlogCategoryByIdAction(id),
-    getAllBlogCategoriesAction(),
+    getBlogCategoryByIdActionPrivate(id),
+    getAllBlogCategoriesActionPrivate(),
   ]);
-  const availableSortOrdersResponse = await getAvailableSortOrdersAction(currentBlogCategoryResponse.data?.parent?.id || '');
+  const availableSortOrdersResponse = await getAvailableSortOrdersActionPrivate(currentBlogCategoryResponse.data?.parent?.id || '');
 
   if (!currentBlogCategoryResponse.success || !currentBlogCategoryResponse.data) {
     notFound();

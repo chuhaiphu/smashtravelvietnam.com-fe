@@ -1,10 +1,10 @@
-import { getBlogCategoryByEndpointAction } from "@/actions/blog-category-action";
+import { getBlogCategoryByEndpointActionPublic } from "@/actions/blog-category-action";
 import LandingBlogCategory from "@/components/primitives/landing-blog-category/landing-blog-category";
 import SearchBar from "@/components/primitives/search-bar/search-bar";
 import LandingTourCategory from "@/components/primitives/landing-tour-category/landing-tour-category";
 import { notFound } from "next/navigation";
-import { getTourCategoryByEndpointAction } from "@/actions/tour-category-action";
-import { getPageByEndpointAction } from "@/actions/page-action";
+import { getTourCategoryByEndpointActionPublic } from "@/actions/tour-category-action";
+import { getPageByEndpointActionPublic } from "@/actions/page-action";
 import LandingPageDetail from "@/components/primitives/landing-page-detail/landing-page-detail";
 import { Suspense } from "react";
 import { Loader } from "@mantine/core";
@@ -14,7 +14,7 @@ export default async function DynamicPageContent({ params, searchParams }: { par
   const queryParams = await searchParams;
 
   // If endpoint is a blog category, return the blog category page
-  const blogCategoryResponse = await getBlogCategoryByEndpointAction(endpoint);
+  const blogCategoryResponse = await getBlogCategoryByEndpointActionPublic(endpoint);
   if (blogCategoryResponse.success && blogCategoryResponse.data) {
     return (
       <>
@@ -35,7 +35,7 @@ export default async function DynamicPageContent({ params, searchParams }: { par
   }
 
   // If endpoint is a tour category, return the tour category page
-  const tourCategoryResponse = await getTourCategoryByEndpointAction(endpoint);
+  const tourCategoryResponse = await getTourCategoryByEndpointActionPublic(endpoint);
   if (tourCategoryResponse.success && tourCategoryResponse.data) {
     return (
       <>
@@ -53,7 +53,7 @@ export default async function DynamicPageContent({ params, searchParams }: { par
   }
 
   // If endpoint is a page, return the page detail page
-  const pageResponse = await getPageByEndpointAction(endpoint);
+  const pageResponse = await getPageByEndpointActionPublic(endpoint);
   if (pageResponse.success && pageResponse.data) {
     return (
       <>

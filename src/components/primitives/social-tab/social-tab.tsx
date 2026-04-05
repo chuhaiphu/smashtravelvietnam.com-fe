@@ -6,8 +6,8 @@ import { FaRegEye } from "react-icons/fa";
 import { ImHeart } from "react-icons/im";
 import NetworkHubIcon from "@/components/icons/vinaup-network-hub-icon";
 import { useState } from "react";
-import { incrementTourLikeAction } from "@/actions/tour-action";
-import { incrementBlogLikeAction } from "@/actions/blog-action";
+import { incrementTourLikeActionPublic } from "@/actions/tour-action";
+import { incrementBlogLikeActionPublic } from "@/actions/blog-action";
 
 interface SocialTabProps {
   tourId?: string;
@@ -35,12 +35,12 @@ export default function SocialTab({ tourId, blogId, likes: initialLikes, views, 
   const handleLike = async () => {
     try {
       if (tourId) {
-        const result = await incrementTourLikeAction(tourId);
+        const result = await incrementTourLikeActionPublic(tourId);
         if (result.success && result.data) {
           setLikes(prev => prev + 1);
         }
       } else if (blogId) {
-        const result = await incrementBlogLikeAction(blogId);
+        const result = await incrementBlogLikeActionPublic(blogId);
         if (result.success && result.data) {
           setLikes(prev => prev + 1);
         }

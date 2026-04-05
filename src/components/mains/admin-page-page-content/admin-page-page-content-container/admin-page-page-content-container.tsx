@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import classes from './admin-page-page-content-container.module.scss';
 import AddNewIcon from '@/components/icons/vinaup-add-new-icon.svg';
 import PagesTable from '@/components/tables/pages-table/pages-table';
-import { createPageAction } from '@/actions/page-action';
+import { createPageActionPrivate } from '@/actions/page-action';
 import { Route } from 'next';
 import { IPageResponse } from '@/interfaces/page-interface';
 import { IUserResponse } from '@/interfaces/user-interface';
@@ -30,7 +30,7 @@ export default function AdminPagePageContentContainer({
     const newTitle = 'Untitled';
     const endpoint = await generateUniqueEndpoint(newTitle, 'landing');
 
-    const response = await createPageAction({
+    const response = await createPageActionPrivate({
       title: newTitle,
       endpoint: endpoint,
       destinations: [],

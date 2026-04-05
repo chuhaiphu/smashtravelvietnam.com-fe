@@ -5,43 +5,43 @@ import { ICreateUser, IUpdatePassword, IUserResponse } from '@/interfaces/user-i
 import { revalidatePath } from 'next/cache';
 import { executeApi } from '@/actions/_base';
 import {
-  createUserApi,
-  getUserByIdApi,
-  updatePasswordApi,
-  getAllUsersApi,
+  createUserApiPrivate,
+  getUserByIdApiPrivate,
+  updatePasswordApiPrivate,
+  getAllUsersApiPrivate,
 } from '@/apis/user-apis';
 
-export async function createUserAction(
+export async function createUserActionPrivate(
   input: ICreateUser
 ): Promise<ActionResponse<IUserResponse>> {
   const result = await executeApi(
-    async () => createUserApi(input)
+    async () => createUserApiPrivate(input)
   );
   revalidatePath('/', 'layout');
   return result;
 }
 
-export async function getUserByIdAction(
+export async function getUserByIdActionPrivate(
   id: string
 ): Promise<IUserResponse | undefined> {
   const result = await executeApi(
-    async () => getUserByIdApi(id)
+    async () => getUserByIdApiPrivate(id)
   );
   return result.data;
 }
 
-export async function getAllUsersAction(): Promise<IUserResponse[] | undefined> {
+export async function getAllUsersActionPrivate(): Promise<IUserResponse[] | undefined> {
   const result = await executeApi(
-    async () => getAllUsersApi()
+    async () => getAllUsersApiPrivate()
   );
   return result.data;
 }
 
-export async function updateUserPasswordAction(
+export async function updateUserPasswordActionPrivate(
   input: IUpdatePassword
 ): Promise<ActionResponse<IUserResponse>> {
   const result = await executeApi(
-    async () => updatePasswordApi(input)
+    async () => updatePasswordApiPrivate(input)
   );
   revalidatePath('/adminup/user/[id]', 'page');
   return result;

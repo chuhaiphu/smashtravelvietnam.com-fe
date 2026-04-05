@@ -17,11 +17,11 @@ import classes from './admin-section-ui-detail-page-content-container.module.scs
 import { JSONEditor } from '@/components/editors/json-editor/json-editor';
 import { useState, useCallback } from 'react';
 import {
-  createSectionUIAction,
-  updateSectionUIAction,
-  deleteSectionUIAction,
+  createSectionUIActionPrivate,
+  updateSectionUIActionPrivate,
+  deleteSectionUIActionPrivate,
 } from '@/actions/section-ui-action';
-import { getSectionUICredentialsByCodeAction } from '@/actions/section-ui-action';
+import { getSectionUICredentialsByCodeActionPrivate } from '@/actions/section-ui-action';
 import { ISectionUICredentialsResponse } from '@/interfaces/section-ui-credentials-interface';
 import { IDynamicSectionUIResponse } from '@/interfaces/dynamic-section-ui-interface';
 import { useDebouncedCallback } from 'use-debounce';
@@ -67,7 +67,7 @@ export default function AdminSectionUIDetailPageContentContainer({
     }
 
     setIsValidating(true);
-    const response = await getSectionUICredentialsByCodeAction(templateCode.trim());
+    const response = await getSectionUICredentialsByCodeActionPrivate(templateCode.trim());
 
     if (response.success && response.data) {
       setValidatedCredentials(response.data);
@@ -104,7 +104,7 @@ export default function AdminSectionUIDetailPageContentContainer({
     if (!validatedCredentials || !dynamicSectionUI) return;
 
     setIsLoading(true);
-    const response = await updateSectionUIAction(dynamicSectionUI.id, {
+    const response = await updateSectionUIActionPrivate(dynamicSectionUI.id, {
       sectionUICredentialsId: validatedCredentials.id,
       properties: validatedCredentials.propertyFormat,
     });
@@ -162,7 +162,7 @@ export default function AdminSectionUIDetailPageContentContainer({
     }
 
     setIsLoading(true);
-    const response = await createSectionUIAction({
+    const response = await createSectionUIActionPrivate({
       position: posNum,
       sectionUICredentialsId: validatedCredentials.id,
       properties: validatedCredentials.propertyFormat,
@@ -196,7 +196,7 @@ export default function AdminSectionUIDetailPageContentContainer({
 
     try {
       const parsed = newJson.trim() ? JSON.parse(newJson) : null;
-      await updateSectionUIAction(dynamicSectionUI.id, { properties: parsed });
+      await updateSectionUIActionPrivate(dynamicSectionUI.id, { properties: parsed });
       notifications.show({
         message: 'Properties saved',
         color: 'green',
@@ -229,7 +229,7 @@ export default function AdminSectionUIDetailPageContentContainer({
     }
 
     setIsLoading(true);
-    const response = await updateSectionUIAction(dynamicSectionUI.id, {
+    const response = await updateSectionUIActionPrivate(dynamicSectionUI.id, {
       position: posNum,
     });
 
@@ -266,7 +266,7 @@ export default function AdminSectionUIDetailPageContentContainer({
     if (!confirm('Are you sure you want to delete this item?')) return;
 
     setIsLoading(true);
-    const response = await deleteSectionUIAction(dynamicSectionUI.id);
+    const response = await deleteSectionUIActionPrivate(dynamicSectionUI.id);
 
     if (response.success) {
       notifications.show({

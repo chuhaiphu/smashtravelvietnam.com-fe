@@ -1,5 +1,5 @@
 import { ICreateBlog, IBlogResponse, IUpdateBlog } from "@/interfaces/blog-interface";
-import { api, apiPublic } from "./_base";
+import { apiPrivate, apiPublic } from "./_base";
 
 export interface BlogFilterParams {
   visibility?: string;
@@ -15,62 +15,62 @@ function buildQueryString(filter?: BlogFilterParams): string {
 
 // ==================== PUBLIC ROUTES ====================
 
-export async function getAllPublicBlogsApi(filter?: BlogFilterParams) {
+export async function getAllBlogsApiPublic(filter?: BlogFilterParams) {
   const queryString = buildQueryString(filter);
   return apiPublic<IBlogResponse[]>(`/blogs${queryString}`, {
     method: 'GET',
   });
 }
 
-export async function getBlogByEndpointApi(endpoint: string) {
+export async function getBlogByEndpointApiPublic(endpoint: string) {
   return apiPublic<IBlogResponse>(`/blogs/${endpoint}`, {
     method: 'GET',
   });
 }
 
-export async function incrementBlogViewApi(id: string) {
-  return api<{ recorded: boolean }>(`/blogs/${id}/view`, {
+export async function incrementBlogViewApiPublic(id: string) {
+  return apiPublic<{ recorded: boolean }>(`/blogs/${id}/view`, {
     method: 'POST',
   });
 }
 
-export async function toggleBlogLikeApi(id: string) {
-  return api<{ liked: boolean }>(`/blogs/${id}/like`, {
+export async function toggleBlogLikeApiPublic(id: string) {
+  return apiPublic<{ liked: boolean }>(`/blogs/${id}/like`, {
     method: 'POST',
   });
 }
 
 // ==================== ADMIN ROUTES ====================
 
-export async function createBlogApi(data: ICreateBlog) {
-  return api<IBlogResponse>('/blogs/admin', {
+export async function createBlogApiPrivate(data: ICreateBlog) {
+  return apiPrivate<IBlogResponse>('/blogs/admin', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
-export async function getAllBlogsAdminApi(filter?: BlogFilterParams) {
+export async function getAllBlogsAdminApiPrivate(filter?: BlogFilterParams) {
   const queryString = buildQueryString(filter);
-  return api<IBlogResponse[]>(`/blogs/admin/list${queryString}`, {
+  return apiPrivate<IBlogResponse[]>(`/blogs/admin/list${queryString}`, {
     method: 'GET',
   });
 }
 
-export async function getBlogByIdApi(id: string) {
-  return api<IBlogResponse>(`/blogs/admin/${id}`, {
+export async function getBlogByIdApiPrivate(id: string) {
+  return apiPrivate<IBlogResponse>(`/blogs/admin/${id}`, {
     method: 'GET',
   });
 }
 
-export async function updateBlogApi(id: string, data: IUpdateBlog) {
-  return api<IBlogResponse>(`/blogs/admin/${id}`, {
+export async function updateBlogApiPrivate(id: string, data: IUpdateBlog) {
+  return apiPrivate<IBlogResponse>(`/blogs/admin/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data),
   });
 }
 
-export async function deleteBlogApi(id: string) {
-  return api<void>(`/blogs/admin/${id}`, {
+export async function deleteBlogApiPrivate(id: string) {
+  return apiPrivate<void>(`/blogs/admin/${id}`, {
     method: 'DELETE',
   });
 }

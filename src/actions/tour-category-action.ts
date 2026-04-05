@@ -5,21 +5,21 @@ import { ActionResponse } from '@/interfaces/_base-interface';
 import { ICreateTourCategory, ITourCategoryResponse, IUpdateTourCategory } from '@/interfaces/tour-category-interface';
 import { executeApi } from '@/actions/_base';
 import {
-  createTourCategoryApi,
-  getTourCategoryByIdApi,
-  getTourCategoryByEndpointApi,
-  getAllTourCategoriesAdminApi,
-  getAllPublicTourCategoriesApi,
-  getAvailableSortOrdersApi,
-  updateTourCategoryApi,
-  deleteTourCategoryApi,
+  createTourCategoryApiPrivate,
+  getTourCategoryByIdApiPrivate,
+  getTourCategoryByEndpointApiPublic,
+  getAllTourCategoriesAdminApiPrivate,
+  getAllTourCategoriesApiPublic,
+  getAvailableSortOrdersApiPrivate,
+  updateTourCategoryApiPrivate,
+  deleteTourCategoryApiPrivate,
 } from '@/apis/tour-category-apis';
 
-export async function createTourCategoryAction(
+export async function createTourCategoryActionPrivate(
   input: ICreateTourCategory
 ): Promise<ActionResponse<ITourCategoryResponse>> {
   const result = await executeApi(
-    async () => createTourCategoryApi(input)
+    async () => createTourCategoryApiPrivate(input)
   );
   if (result.success) {
     updateTag('tour-categories');
@@ -27,54 +27,54 @@ export async function createTourCategoryAction(
   return result;
 }
 
-export async function getTourCategoryByIdAction(
+export async function getTourCategoryByIdActionPrivate(
   id: string
 ): Promise<ActionResponse<ITourCategoryResponse>> {
   return executeApi(
-    async () => getTourCategoryByIdApi(id)
+    async () => getTourCategoryByIdApiPrivate(id)
   );
 }
 
-export async function getTourCategoryByEndpointAction(
+export async function getTourCategoryByEndpointActionPublic(
   endpoint: string
 ): Promise<ActionResponse<ITourCategoryResponse>> {
   'use cache';
   cacheLife('hours');
   cacheTag('tour-categories', `tour-category:${endpoint}`);
   return executeApi(
-    async () => getTourCategoryByEndpointApi(endpoint)
+    async () => getTourCategoryByEndpointApiPublic(endpoint)
   );
 }
 
-export async function getAllTourCategoriesAction(): Promise<ActionResponse<ITourCategoryResponse[]>> {
+export async function getAllTourCategoriesActionPrivate(): Promise<ActionResponse<ITourCategoryResponse[]>> {
   return executeApi(
-    async () => getAllTourCategoriesAdminApi()
+    async () => getAllTourCategoriesAdminApiPrivate()
   );
 }
 
-export async function getAllTourCategoriesPublicAction(): Promise<ActionResponse<ITourCategoryResponse[]>> {
+export async function getAllTourCategoriesActionPublic(): Promise<ActionResponse<ITourCategoryResponse[]>> {
   'use cache';
   cacheLife('hours');
   cacheTag('tour-categories');
   return executeApi(
-    async () => getAllPublicTourCategoriesApi()
+    async () => getAllTourCategoriesApiPublic()
   );
 }
 
-export async function getAvailableSortOrdersAction(
+export async function getAvailableSortOrdersActionPrivate(
   parentId: string
 ): Promise<ActionResponse<number[]>> {
   return executeApi(
-    async () => getAvailableSortOrdersApi(parentId)
+    async () => getAvailableSortOrdersApiPrivate(parentId)
   );
 }
 
-export async function updateTourCategoryAction(
+export async function updateTourCategoryActionPrivate(
   id: string,
   input: IUpdateTourCategory
 ): Promise<ActionResponse<ITourCategoryResponse>> {
   const result = await executeApi(
-    async () => updateTourCategoryApi(id, input)
+    async () => updateTourCategoryApiPrivate(id, input)
   );
   if (result.success) {
     updateTag('tour-categories');
@@ -85,11 +85,11 @@ export async function updateTourCategoryAction(
   return result;
 }
 
-export async function deleteTourCategoryAction(
+export async function deleteTourCategoryActionPrivate(
   id: string
 ): Promise<ActionResponse<void>> {
   const result = await executeApi(
-    async () => deleteTourCategoryApi(id)
+    async () => deleteTourCategoryApiPrivate(id)
   );
   if (result.success) {
     updateTag('tour-categories');

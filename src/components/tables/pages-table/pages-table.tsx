@@ -14,7 +14,7 @@ import { DatePicker } from '@mantine/dates';
 import EntitiesTable from '../entities-table/entities-table';
 import { PageTypeDisplayMap, StatusDisplayMap } from '@/constants';
 import { useRouter } from 'next/navigation';
-import { deletePageAction } from '@/actions/page-action';
+import { deletePageActionPrivate } from '@/actions/page-action';
 import { notifications } from '@mantine/notifications';
 
 interface PagesTableProps {
@@ -36,7 +36,7 @@ export default function PagesTable({
 
     setIsDeleting(true);
     try {
-      const result = await deletePageAction(selectedPageId);
+      const result = await deletePageActionPrivate(selectedPageId);
       if (result.success) {
         notifications.show({
           message: 'Page has been successfully deleted',

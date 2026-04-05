@@ -2,23 +2,23 @@
 
 import { ICreateCustomTourRequest, ICustomTourRequestResponse } from '@/interfaces/custom-tour-request-interface';
 import { ActionResponse } from '@/interfaces/_base-interface';
-import { createTourCategoryCustomTourRequestAction } from './tour-category-custom-tour-request-action';
+import { createTourCategoryCustomTourRequestActionPrivate } from './tour-category-custom-tour-request-action';
 import { revalidatePath } from 'next/cache';
 import { executeApi } from '@/actions/_base';
 import {
-  getAllCustomTourRequestsAdminApi,
-  createCustomTourRequestApi,
-  deleteCustomTourRequestApi,
+  getAllCustomTourRequestsAdminApiPrivate,
+  createCustomTourRequestApiPublic,
+  deleteCustomTourRequestApiPrivate,
 } from '@/apis/custom-tour-request-apis';
 
-export async function getAllCustomTourRequestsAction(): Promise<ActionResponse<ICustomTourRequestResponse[]>> {
+export async function getAllCustomTourRequestsActionPrivate(): Promise<ActionResponse<ICustomTourRequestResponse[]>> {
   const result = await executeApi(
-    async () => getAllCustomTourRequestsAdminApi()
+    async () => getAllCustomTourRequestsAdminApiPrivate()
   );
   return result;
 }
 
-export async function submitCustomTourRequestAction(formData: FormData): Promise<ActionResponse<void>> {
+export async function submitCustomTourRequestActionPublic(formData: FormData): Promise<ActionResponse<void>> {
   try {
     // Extract form data
     const startDate = new Date(formData.get('startDate') as string);
@@ -66,7 +66,7 @@ export async function submitCustomTourRequestAction(formData: FormData): Promise
     };
 
     const result = await executeApi(
-      async () => createCustomTourRequestApi(customTourRequestData)
+      async () => createCustomTourRequestApiPublic(customTourRequestData)
     );
 
     if (!result.success || !result.data) {
@@ -78,7 +78,7 @@ export async function submitCustomTourRequestAction(formData: FormData): Promise
     // Create tour category custom tour request relations
     if (tourCategoryIds && tourCategoryIds.length > 0) {
       for (const tourCategoryId of tourCategoryIds) {
-        await createTourCategoryCustomTourRequestAction({
+        await createTourCategoryCustomTourRequestActionPrivate({
           customTourRequestId: customTourRequest.id,
           tourCategoryId: tourCategoryId,
         });
@@ -95,9 +95,9 @@ export async function submitCustomTourRequestAction(formData: FormData): Promise
   }
 }
 
-export async function deleteCustomTourRequestAction(id: string): Promise<ActionResponse<void>> {
+export async function deleteCustomTourRequestActionPrivate(id: string): Promise<ActionResponse<void>> {
   const result = await executeApi(
-    async () => deleteCustomTourRequestApi(id)
+    async () => deleteCustomTourRequestApiPrivate(id)
   );
   revalidatePath('/adminup', 'layout');
   return result;

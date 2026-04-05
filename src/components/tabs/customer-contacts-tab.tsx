@@ -7,7 +7,7 @@ import EntitiesTable from '@/components/tables/entities-table/entities-table';
 import { EntitiesTableColumnProps } from '@/components/tables/entities-table/_props';
 import { ICustomerContactResponse } from '@/interfaces/customer-contact-interface';
 import { SlOptionsVertical } from 'react-icons/sl';
-import { deleteCustomerContactAction } from '@/actions/customer-contact-action';
+import { deleteCustomerContactActionPrivate } from '@/actions/customer-contact-action';
 import { notifications } from '@mantine/notifications';
 import { GrTrash } from 'react-icons/gr';
 import classes from './customer-contacts-tab.module.scss';
@@ -46,7 +46,7 @@ export default function CustomerContactsTab({ customerContacts }: CustomerContac
 
     setIsDeleting(true);
     try {
-      const result = await deleteCustomerContactAction(contactToDelete);
+      const result = await deleteCustomerContactActionPrivate(contactToDelete);
       if (result.success) {
         notifications.show({
           title: 'Success',

@@ -1,13 +1,13 @@
 import { redirect } from 'next/navigation';
-import { getAppConfigAction } from '@/actions/app-config-action';
-import { getMeAction } from '@/actions/auth-action';
+import { getAppConfigActionPublic } from '@/actions/app-config-action';
+import { getMeActionPrivate } from '@/actions/auth-action';
 
 export async function MaintenanceGuard() {
-  const appConfigResponse = await getAppConfigAction();
+  const appConfigResponse = await getAppConfigActionPublic();
   const isMaintenanceMode = appConfigResponse.success ? appConfigResponse.data?.maintenanceMode : false;
 
   if (isMaintenanceMode) {
-    const meResult = await getMeAction();
+    const meResult = await getMeActionPrivate();
     const userRole = meResult.success ? meResult.data?.role : null;
     const isAdmin = userRole === 'supadmin' || userRole === 'admin';
 

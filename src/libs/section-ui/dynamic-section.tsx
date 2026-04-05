@@ -1,4 +1,4 @@
-import { getSectionUIByPositionAction } from '@/actions/section-ui-action';
+import { getSectionUIByPositionActionPublic } from '@/actions/section-ui-action';
 import { SECTION_REGISTRY } from './section-registry';
 
 interface DynamicSectionProps {
@@ -6,7 +6,7 @@ interface DynamicSectionProps {
 }
 
 export default async function DynamicSection({ position }: DynamicSectionProps) {
-  const response = await getSectionUIByPositionAction(position);
+  const response = await getSectionUIByPositionActionPublic(position);
 
   if (!response.success || !response.data) {
     return null;

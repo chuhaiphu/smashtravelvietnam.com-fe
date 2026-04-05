@@ -5,22 +5,22 @@ import { ActionResponse } from '@/interfaces/_base-interface';
 import { ICreateTour, ITourResponse, IUpdateTour } from '@/interfaces/tour-interface';
 import { executeApi } from '@/actions/_base';
 import {
-  createTourApi,
-  getTourByIdApi,
-  getTourByEndpointApi,
-  getAllToursAdminApi,
-  getAllPublicToursApi,
-  updateTourApi,
-  deleteTourApi,
-  incrementTourViewApi,
-  toggleTourLikeApi,
+  createTourApiPrivate,
+  getTourByIdApiPrivate,
+  getTourByEndpointApiPublic,
+  getAllToursAdminApiPrivate,
+  getAllToursApiPublic,
+  updateTourApiPrivate,
+  deleteTourApiPrivate,
+  incrementTourViewApiPublic,
+  toggleTourLikeApiPublic,
 } from '@/apis/tour-apis';
 
-export async function createTourAction(
+export async function createTourActionPrivate(
   input: ICreateTour
 ): Promise<ActionResponse<ITourResponse>> {
   const result = await executeApi(
-    async () => createTourApi(input)
+    async () => createTourApiPrivate(input)
   );
   if (result.success) {
     updateTag('tours');
@@ -28,55 +28,55 @@ export async function createTourAction(
   return result;
 }
 
-export async function getTourByIdAction(
+export async function getTourByIdActionPrivate(
   id: string
 ): Promise<ActionResponse<ITourResponse>> {
   return executeApi(
-    async () => getTourByIdApi(id)
+    async () => getTourByIdApiPrivate(id)
   );
 }
 
-export async function getTourByEndpointAction(
+export async function getTourByEndpointActionPublic(
   endpoint: string
 ): Promise<ActionResponse<ITourResponse>> {
   'use cache';
   cacheLife('hours');
   cacheTag('tours', `tour:${endpoint}`);
   return executeApi(
-    async () => getTourByEndpointApi(endpoint)
+    async () => getTourByEndpointApiPublic(endpoint)
   );
 }
 
-export async function getAllToursAction(): Promise<ActionResponse<ITourResponse[]>> {
+export async function getAllToursActionPrivate(): Promise<ActionResponse<ITourResponse[]>> {
   return executeApi(
-    async () => getAllToursAdminApi()
+    async () => getAllToursAdminApiPrivate()
   );
 }
 
-export async function getAllPublicToursAction(): Promise<ActionResponse<ITourResponse[]>> {
+export async function getAllToursActionPublic(): Promise<ActionResponse<ITourResponse[]>> {
   'use cache';
   cacheLife('hours');
   cacheTag('tours');
   return executeApi(
-    async () => getAllPublicToursApi({ visibility: 'PUBLIC' })
+    async () => getAllToursApiPublic({ visibility: 'PUBLIC' })
   );
 }
 
-export async function getAllPublicToursPinnedToHomeAction(): Promise<ActionResponse<ITourResponse[]>> {
+export async function getAllToursPinnedToHomeActionPublic(): Promise<ActionResponse<ITourResponse[]>> {
   'use cache';
   cacheLife('hours');
   cacheTag('tours');
   return executeApi(
-    async () => getAllPublicToursApi({ visibility: 'PUBLIC', pinnedToHome: true })
+    async () => getAllToursApiPublic({ visibility: 'PUBLIC', pinnedToHome: true })
   );
 }
 
-export async function updateTourAction(
+export async function updateTourActionPrivate(
   id: string,
   input: IUpdateTour
 ): Promise<ActionResponse<ITourResponse>> {
   const result = await executeApi(
-    async () => updateTourApi(id, input)
+    async () => updateTourApiPrivate(id, input)
   );
   if (result.success) {
     updateTag('tours');
@@ -87,11 +87,11 @@ export async function updateTourAction(
   return result;
 }
 
-export async function deleteTourAction(
+export async function deleteTourActionPrivate(
   id: string
 ): Promise<ActionResponse<void>> {
   const result = await executeApi(
-    async () => deleteTourApi(id)
+    async () => deleteTourApiPrivate(id)
   );
   if (result.success) {
     updateTag('tours');
@@ -99,11 +99,11 @@ export async function deleteTourAction(
   return result;
 }
 
-export async function incrementTourViewAction(
+export async function incrementTourViewActionPublic(
   tourId: string
 ): Promise<ActionResponse<boolean>> {
   const result = await executeApi(
-    async () => incrementTourViewApi(tourId)
+    async () => incrementTourViewApiPublic(tourId)
   );
   return {
     success: result.success,
@@ -112,11 +112,11 @@ export async function incrementTourViewAction(
   };
 }
 
-export async function incrementTourLikeAction(
+export async function incrementTourLikeActionPublic(
   tourId: string
 ): Promise<ActionResponse<boolean>> {
   const result = await executeApi(
-    async () => toggleTourLikeApi(tourId)
+    async () => toggleTourLikeApiPublic(tourId)
   );
   return {
     success: result.success,

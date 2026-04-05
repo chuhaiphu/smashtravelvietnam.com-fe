@@ -1,6 +1,6 @@
 import {
-  getAllPublicBlogsAction,
-  getBlogByEndpointAction,
+  getAllBlogsActionPublic,
+  getBlogByEndpointActionPublic,
 } from '@/actions/blog-action';
 import { Grid, GridCol, Group, Paper, Stack, Text } from '@mantine/core';
 import LocationIcon from '@/components/icons/vinaup-location-icon';
@@ -24,7 +24,7 @@ export async function generateMetadata({
   params: Promise<{ endpoint: string }>;
 }): Promise<Metadata> {
   const { endpoint } = await params;
-  const blogResponse = await getBlogByEndpointAction(endpoint);
+  const blogResponse = await getBlogByEndpointActionPublic(endpoint);
 
   if (!blogResponse.success || !blogResponse.data) {
     return {
@@ -52,7 +52,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const blogsResponse = await getAllPublicBlogsAction();
+  const blogsResponse = await getAllBlogsActionPublic();
   return blogsResponse.success && blogsResponse.data
     ? blogsResponse.data.map((blog) => ({
         endpoint: blog.endpoint,
@@ -66,7 +66,7 @@ export default async function BlogDetailPage({
   params: Promise<{ endpoint: string }>;
 }) {
   const { endpoint } = await params;
-  const blogResponse = await getBlogByEndpointAction(endpoint);
+  const blogResponse = await getBlogByEndpointActionPublic(endpoint);
 
   if (!blogResponse.success || !blogResponse.data) {
     notFound();

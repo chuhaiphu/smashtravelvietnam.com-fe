@@ -10,7 +10,7 @@ import {
 } from '@mantine/core';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Suspense, useState } from 'react';
-import { localSignInAction } from '@/actions/auth-action';
+import { localSignInActionPrivate } from '@/actions/auth-action';
 import { notifications } from '@mantine/notifications';
 import { Route } from 'next';
 
@@ -31,7 +31,7 @@ function LoginForm() {
     setLoading(true);
     setError(null);
 
-    const result = await localSignInAction({
+    const result = await localSignInActionPrivate({
       email: formData.email,
       password: formData.password,
     });

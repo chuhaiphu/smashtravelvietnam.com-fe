@@ -1,16 +1,16 @@
 import { ICreateTourCategory, ITourCategoryResponse, IUpdateTourCategory } from "@/interfaces/tour-category-interface";
-import { api } from "./_base";
+import { api, apiPublic } from "./_base";
 
 // ==================== PUBLIC ROUTES ====================
 
 export async function getAllPublicTourCategoriesApi() {
-  return api<ITourCategoryResponse[]>('/tour-categories', {
+  return apiPublic<ITourCategoryResponse[]>('/tour-categories', {
     method: 'GET',
   });
 }
 
 export async function getTourCategoryByEndpointApi(endpoint: string) {
-  return api<ITourCategoryResponse>(`/tour-categories/${endpoint}`, {
+  return apiPublic<ITourCategoryResponse>(`/tour-categories/${endpoint}`, {
     method: 'GET',
   });
 }

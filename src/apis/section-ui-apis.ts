@@ -8,7 +8,7 @@ import {
   IDynamicSectionUIResponse,
   IUpdateDynamicSectionUI,
 } from '@/interfaces/dynamic-section-ui-interface';
-import { api } from './_base';
+import { api, apiPublic } from './_base';
 
 // ==================== SECTION UI CREDENTIALS ROUTES ====================
 
@@ -69,19 +69,19 @@ export async function createSectionUIApi(data: ICreateDynamicSectionUI) {
 }
 
 export async function getAllSectionUIsApi() {
-  return api<IDynamicSectionUIResponse[]>('/section-ui/sections', {
+  return apiPublic<IDynamicSectionUIResponse[]>('/section-ui/sections', {
     method: 'GET',
   });
 }
 
 export async function getUsedSectionUIPositionsApi() {
-  return api<number[]>('/section-ui/sections/positions/used', {
+  return apiPublic<number[]>('/section-ui/sections/positions/used', {
     method: 'GET',
   });
 }
 
 export async function getSectionUIByPositionApi(position: number) {
-  return api<IDynamicSectionUIResponse>(
+  return apiPublic<IDynamicSectionUIResponse>(
     `/section-ui/sections/position/${position}`,
     {
       method: 'GET',
@@ -90,7 +90,7 @@ export async function getSectionUIByPositionApi(position: number) {
 }
 
 export async function getSectionUIByIdApi(id: string) {
-  return api<IDynamicSectionUIResponse>(`/section-ui/sections/${id}`, {
+  return apiPublic<IDynamicSectionUIResponse>(`/section-ui/sections/${id}`, {
     method: 'GET',
   });
 }

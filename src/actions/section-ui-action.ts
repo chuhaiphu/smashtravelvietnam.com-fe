@@ -1,5 +1,6 @@
 'use server';
 
+import { updateTag, cacheLife, cacheTag } from 'next/cache';
 import { ActionResponse } from '@/interfaces/_base-interface';
 import {
   ICreateSectionUICredentials,
@@ -11,7 +12,6 @@ import {
   IDynamicSectionUIResponse,
   IUpdateDynamicSectionUI,
 } from '@/interfaces/dynamic-section-ui-interface';
-import { revalidatePath } from 'next/cache';
 import { executeApi } from '@/actions/_base';
 import {
   createSectionUICredentialsApi,
@@ -35,7 +35,9 @@ export async function createSectionUICredentialsAction(
   input: ICreateSectionUICredentials
 ): Promise<ActionResponse<ISectionUICredentialsResponse>> {
   const result = await executeApi(async () => createSectionUICredentialsApi(input));
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('section-ui');
+  }
   return result;
 }
 
@@ -64,7 +66,9 @@ export async function updateSectionUICredentialsAction(
   const result = await executeApi(async () =>
     updateSectionUICredentialsApi(id, input)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('section-ui');
+  }
   return result;
 }
 
@@ -72,7 +76,9 @@ export async function deleteSectionUICredentialsAction(
   id: string
 ): Promise<ActionResponse<void>> {
   const result = await executeApi(async () => deleteSectionUICredentialsApi(id));
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('section-ui');
+  }
   return result;
 }
 
@@ -82,7 +88,9 @@ export async function createSectionUIAction(
   input: ICreateDynamicSectionUI
 ): Promise<ActionResponse<IDynamicSectionUIResponse>> {
   const result = await executeApi(async () => createSectionUIApi(input));
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('section-ui');
+  }
   return result;
 }
 
@@ -101,6 +109,9 @@ export async function getUsedSectionUIPositionsAction(): Promise<
 export async function getSectionUIByPositionAction(
   position: number
 ): Promise<ActionResponse<IDynamicSectionUIResponse>> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('section-ui');
   return executeApi(async () => getSectionUIByPositionApi(position));
 }
 
@@ -115,7 +126,9 @@ export async function updateSectionUIAction(
   input: IUpdateDynamicSectionUI
 ): Promise<ActionResponse<IDynamicSectionUIResponse>> {
   const result = await executeApi(async () => updateSectionUIApi(id, input));
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('section-ui');
+  }
   return result;
 }
 
@@ -123,6 +136,8 @@ export async function deleteSectionUIAction(
   id: string
 ): Promise<ActionResponse<void>> {
   const result = await executeApi(async () => deleteSectionUIApi(id));
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('section-ui');
+  }
   return result;
 }

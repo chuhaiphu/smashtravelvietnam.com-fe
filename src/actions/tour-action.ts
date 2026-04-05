@@ -1,8 +1,8 @@
 'use server';
 
+import { updateTag, cacheLife, cacheTag } from 'next/cache';
 import { ActionResponse } from '@/interfaces/_base-interface';
 import { ICreateTour, ITourResponse, IUpdateTour } from '@/interfaces/tour-interface';
-import { revalidatePath } from 'next/cache';
 import { executeApi } from '@/actions/_base';
 import {
   createTourApi,
@@ -22,7 +22,9 @@ export async function createTourAction(
   const result = await executeApi(
     async () => createTourApi(input)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('tours');
+  }
   return result;
 }
 
@@ -37,6 +39,9 @@ export async function getTourByIdAction(
 export async function getTourByEndpointAction(
   endpoint: string
 ): Promise<ActionResponse<ITourResponse>> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('tours', `tour:${endpoint}`);
   return executeApi(
     async () => getTourByEndpointApi(endpoint)
   );
@@ -49,12 +54,18 @@ export async function getAllToursAction(): Promise<ActionResponse<ITourResponse[
 }
 
 export async function getAllPublicToursAction(): Promise<ActionResponse<ITourResponse[]>> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('tours');
   return executeApi(
     async () => getAllPublicToursApi({ visibility: 'PUBLIC' })
   );
 }
 
 export async function getAllPublicToursPinnedToHomeAction(): Promise<ActionResponse<ITourResponse[]>> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('tours');
   return executeApi(
     async () => getAllPublicToursApi({ visibility: 'PUBLIC', pinnedToHome: true })
   );
@@ -67,7 +78,12 @@ export async function updateTourAction(
   const result = await executeApi(
     async () => updateTourApi(id, input)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('tours');
+    if (input.endpoint) {
+      updateTag(`tour:${input.endpoint}`);
+    }
+  }
   return result;
 }
 
@@ -77,7 +93,9 @@ export async function deleteTourAction(
   const result = await executeApi(
     async () => deleteTourApi(id)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('tours');
+  }
   return result;
 }
 

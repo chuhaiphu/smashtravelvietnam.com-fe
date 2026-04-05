@@ -1,8 +1,8 @@
 'use server';
 
+import { updateTag, cacheLife, cacheTag } from 'next/cache';
 import { ActionResponse } from '@/interfaces/_base-interface';
 import { ICreateBlogCategory, IBlogCategoryResponse, IUpdateBlogCategory } from '@/interfaces/blog-category-interface';
-import { revalidatePath } from 'next/cache';
 import { executeApi } from '@/actions/_base';
 import {
   createBlogCategoryApi,
@@ -20,7 +20,9 @@ export async function createBlogCategoryAction(
   const result = await executeApi(
     async () => createBlogCategoryApi(input)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('blog-categories');
+  }
   return result;
 }
 
@@ -35,6 +37,9 @@ export async function getBlogCategoryByIdAction(
 export async function getBlogCategoryByEndpointAction(
   endpoint: string
 ): Promise<ActionResponse<IBlogCategoryResponse>> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('blog-categories', `blog-category:${endpoint}`);
   return executeApi(
     async () => getBlogCategoryByEndpointApi(endpoint)
   );
@@ -61,7 +66,12 @@ export async function updateBlogCategoryAction(
   const result = await executeApi(
     async () => updateBlogCategoryApi(id, input)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('blog-categories');
+    if (input.endpoint) {
+      updateTag(`blog-category:${input.endpoint}`);
+    }
+  }
   return result;
 }
 
@@ -71,6 +81,8 @@ export async function deleteBlogCategoryAction(
   const result = await executeApi(
     async () => deleteBlogCategoryApi(id)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('blog-categories');
+  }
   return result;
 }

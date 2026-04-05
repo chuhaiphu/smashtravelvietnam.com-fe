@@ -1,8 +1,9 @@
+import MantineConfigProviderContainer from './mantine-config-provider-container';
 
-import MantineConfigProviderContainer from "./mantine-config-provider-container";
-
-export function MantineConfigProvider({ children }: Readonly<{ children: React.ReactNode }>) {
+export function MantineConfigProvider({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <MantineConfigProviderContainer>{children}</MantineConfigProviderContainer>
-  )
+  );
 }

@@ -9,6 +9,32 @@ if (!SMASH_API_URL) {
   throw new Error('Missing SMASH_API_URL env variable');
 }
 
+export async function apiPublic<T>(
+  endpoint: string,
+  options: RequestInit = {}
+): Promise<HttpResponse<T>> {
+  const url = `${SMASH_API_URL}${endpoint}`;
+  const headers: HeadersInit = {};
+  if (!(options.body instanceof FormData)) {
+    (headers as Record<string, string>)['Content-Type'] = 'application/json';
+  }
+  const config: RequestInit = { ...options, headers };
+  try {
+    const response = await fetch(url, config);
+    const httpResponse: HttpResponse<T> = await response.json();
+    return httpResponse;
+  } catch (error) {
+    if (error instanceof ApiError) {
+      throw error;
+    }
+    throw new ApiError(
+      error instanceof Error ? error.message : 'Unexpected error occurred',
+      'UNKNOWN',
+      520
+    );
+  }
+}
+
 export async function api<T>(
   endpoint: string,
   options: RequestInit = {}

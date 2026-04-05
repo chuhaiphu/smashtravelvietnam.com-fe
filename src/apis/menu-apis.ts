@@ -1,10 +1,10 @@
 import { ICreateMenu, IMenuResponse, IUpdateMenu } from "@/interfaces/menu-interface";
-import { api } from "./_base";
+import { api, apiPublic } from "./_base";
 
 // ==================== PUBLIC ROUTES ====================
 
 export async function getRootMenusApi() {
-  return api<IMenuResponse[]>('/menus', {
+  return apiPublic<IMenuResponse[]>('/menus', {
     method: 'GET',
   });
 }
@@ -19,7 +19,7 @@ export async function createMenuApi(data: ICreateMenu) {
 }
 
 export async function getAllPublicMenusApi() {
-  return api<IMenuResponse[]>('/menus/list', {
+  return apiPublic<IMenuResponse[]>('/menus/list', {
     method: 'GET',
   });
 }

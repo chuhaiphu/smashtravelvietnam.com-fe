@@ -1,5 +1,5 @@
 import { ICreateTour, ITourResponse, IUpdateTour } from "@/interfaces/tour-interface";
-import { api } from "./_base";
+import { api, apiPublic } from "./_base";
 
 export interface TourFilterParams {
   visibility?: string;
@@ -19,13 +19,13 @@ function buildQueryString(filter?: TourFilterParams): string {
 
 export async function getAllPublicToursApi(filter?: TourFilterParams) {
   const queryString = buildQueryString(filter);
-  return api<ITourResponse[]>(`/tours${queryString}`, {
+  return apiPublic<ITourResponse[]>(`/tours${queryString}`, {
     method: 'GET',
   });
 }
 
 export async function getTourByEndpointApi(endpoint: string) {
-  return api<ITourResponse>(`/tours/${endpoint}`, {
+  return apiPublic<ITourResponse>(`/tours/${endpoint}`, {
     method: 'GET',
   });
 }

@@ -1,8 +1,8 @@
 'use server';
 
+import { updateTag, cacheLife, cacheTag } from 'next/cache';
 import { ActionResponse } from '@/interfaces/_base-interface';
 import { ICreateMenu, IMenuResponse, IUpdateMenu } from '@/interfaces/menu-interface';
-import { revalidatePath } from 'next/cache';
 import { executeApi } from '@/actions/_base';
 import {
   createMenuApi,
@@ -20,7 +20,9 @@ export async function createMenuAction(
   const result = await executeApi(
     async () => createMenuApi(input)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('menu');
+  }
   return result;
 }
 
@@ -39,6 +41,9 @@ export async function getAllMenusAction(): Promise<ActionResponse<IMenuResponse[
 }
 
 export async function getAllPublicMenusAction(): Promise<ActionResponse<IMenuResponse[]>> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('menu');
   return executeApi(
     async () => getAllPublicMenusApi()
   );
@@ -59,7 +64,9 @@ export async function updateMenuAction(
   const result = await executeApi(
     async () => updateMenuApi(id, input)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('menu');
+  }
   return result;
 }
 
@@ -69,6 +76,8 @@ export async function deleteMenuAction(
   const result = await executeApi(
     async () => deleteMenuApi(id)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('menu');
+  }
   return result;
 }

@@ -5,9 +5,7 @@ import { Container } from '@mantine/core';
 import { getAppConfigAction } from '@/actions/app-config-action';
 import { Metadata } from 'next';
 import DynamicSection from '@/libs/section-ui/dynamic-section';
-
-// Force dynamic rendering because MaintenanceGuard uses getServerSession() and redirect()
-export const dynamic = 'force-dynamic';
+import { Suspense } from 'react';
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
@@ -73,14 +71,15 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function LandingLayout({ children }: { children: React.ReactNode }) {
   return (
-    <MaintenanceGuard>
-      <div className={classes.landingLayout}>
-        <Container size="xl" classNames={{ root: classes.landingContainer }}>
-          <LandingHeader />
-        </Container>
-        {children}
-        <DynamicSection position={15} />
-      </div >
-    </MaintenanceGuard>
+    <div className={classes.landingLayout}>
+      <Suspense fallback={null}>
+        <MaintenanceGuard />
+      </Suspense>
+      <Container size="xl" classNames={{ root: classes.landingContainer }}>
+        <LandingHeader />
+      </Container>
+      {children}
+      <DynamicSection position={15} />
+    </div>
   );
 }

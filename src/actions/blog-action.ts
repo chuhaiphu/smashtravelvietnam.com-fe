@@ -1,8 +1,8 @@
 'use server';
 
+import { updateTag, cacheLife, cacheTag } from 'next/cache';
 import { ActionResponse } from '@/interfaces/_base-interface';
 import { ICreateBlog, IBlogResponse, IUpdateBlog } from '@/interfaces/blog-interface';
-import { revalidatePath } from 'next/cache';
 import { executeApi } from '@/actions/_base';
 import {
   createBlogApi,
@@ -22,7 +22,9 @@ export async function createBlogAction(
   const result = await executeApi(
     async () => createBlogApi(input)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('blogs');
+  }
   return result;
 }
 
@@ -37,6 +39,9 @@ export async function getBlogByIdAction(
 export async function getBlogByEndpointAction(
   endpoint: string
 ): Promise<ActionResponse<IBlogResponse>> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('blogs', `blog:${endpoint}`);
   return executeApi(
     async () => getBlogByEndpointApi(endpoint)
   );
@@ -49,6 +54,9 @@ export async function getAllBlogsAction(): Promise<ActionResponse<IBlogResponse[
 }
 
 export async function getAllPublicBlogsAction(): Promise<ActionResponse<IBlogResponse[]>> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('blogs');
   return executeApi(
     async () => getAllPublicBlogsApi({ visibility: 'PUBLIC' })
   );
@@ -61,7 +69,12 @@ export async function updateBlogAction(
   const result = await executeApi(
     async () => updateBlogApi(id, input)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('blogs');
+    if (input.endpoint) {
+      updateTag(`blog:${input.endpoint}`);
+    }
+  }
   return result;
 }
 
@@ -71,7 +84,9 @@ export async function deleteBlogAction(
   const result = await executeApi(
     async () => deleteBlogApi(id)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('blogs');
+  }
   return result;
 }
 

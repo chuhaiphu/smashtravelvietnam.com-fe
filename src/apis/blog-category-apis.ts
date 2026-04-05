@@ -1,16 +1,16 @@
 import { ICreateBlogCategory, IBlogCategoryResponse, IUpdateBlogCategory } from "@/interfaces/blog-category-interface";
-import { api } from "./_base";
+import { api, apiPublic } from "./_base";
 
 // ==================== PUBLIC ROUTES ====================
 
 export async function getAllPublicBlogCategoriesApi() {
-  return api<IBlogCategoryResponse[]>('/blog-categories', {
+  return apiPublic<IBlogCategoryResponse[]>('/blog-categories', {
     method: 'GET',
   });
 }
 
 export async function getBlogCategoryByEndpointApi(endpoint: string) {
-  return api<IBlogCategoryResponse>(`/blog-categories/${endpoint}`, {
+  return apiPublic<IBlogCategoryResponse>(`/blog-categories/${endpoint}`, {
     method: 'GET',
   });
 }

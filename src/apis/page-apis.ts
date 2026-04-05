@@ -1,10 +1,10 @@
 import { ICreatePage, IPageResponse, IUpdatePage } from "@/interfaces/page-interface";
-import { api } from "./_base";
+import { api, apiPublic } from "./_base";
 
 // ==================== PUBLIC ROUTES ====================
 
 export async function getPageByEndpointApi(endpoint: string) {
-  return api<IPageResponse>(`/pages/${endpoint}`, {
+  return apiPublic<IPageResponse>(`/pages/${endpoint}`, {
     method: 'GET',
   });
 }

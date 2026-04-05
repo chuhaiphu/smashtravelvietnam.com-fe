@@ -1,5 +1,5 @@
 import { ICreateBlog, IBlogResponse, IUpdateBlog } from "@/interfaces/blog-interface";
-import { api } from "./_base";
+import { api, apiPublic } from "./_base";
 
 export interface BlogFilterParams {
   visibility?: string;
@@ -17,13 +17,13 @@ function buildQueryString(filter?: BlogFilterParams): string {
 
 export async function getAllPublicBlogsApi(filter?: BlogFilterParams) {
   const queryString = buildQueryString(filter);
-  return api<IBlogResponse[]>(`/blogs${queryString}`, {
+  return apiPublic<IBlogResponse[]>(`/blogs${queryString}`, {
     method: 'GET',
   });
 }
 
 export async function getBlogByEndpointApi(endpoint: string) {
-  return api<IBlogResponse>(`/blogs/${endpoint}`, {
+  return apiPublic<IBlogResponse>(`/blogs/${endpoint}`, {
     method: 'GET',
   });
 }

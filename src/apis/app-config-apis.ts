@@ -1,10 +1,10 @@
 import { IAppConfigResponse, IUpdateAppConfig } from "@/interfaces/app-config-interface";
-import { api } from "./_base";
+import { api, apiPublic } from "./_base";
 
 // ==================== PUBLIC ROUTES ====================
 
 export async function getPublicAppConfigApi() {
-  return api<IAppConfigResponse>('/app-config', {
+  return apiPublic<IAppConfigResponse>('/app-config', {
     method: 'GET',
   });
 }

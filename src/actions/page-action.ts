@@ -1,8 +1,8 @@
 'use server';
 
+import { updateTag, cacheLife, cacheTag } from 'next/cache';
 import { ActionResponse } from '@/interfaces/_base-interface';
 import { ICreatePage, IPageResponse, IUpdatePage } from '@/interfaces/page-interface';
-import { revalidatePath } from 'next/cache';
 import { executeApi } from '@/actions/_base';
 import {
   createPageApi,
@@ -19,7 +19,9 @@ export async function createPageAction(
   const result = await executeApi(
     async () => createPageApi(input)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('pages');
+  }
   return result;
 }
 
@@ -34,6 +36,9 @@ export async function getPageByIdAction(
 export async function getPageByEndpointAction(
   endpoint: string
 ): Promise<ActionResponse<IPageResponse>> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('pages', `page:${endpoint}`);
   return executeApi(
     async () => getPageByEndpointApi(endpoint)
   );
@@ -66,7 +71,12 @@ export async function updatePageAction(
   const result = await executeApi(
     async () => updatePageApi(id, input)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('pages');
+    if (input.endpoint) {
+      updateTag(`page:${input.endpoint}`);
+    }
+  }
   return result;
 }
 
@@ -76,6 +86,8 @@ export async function deletePageAction(
   const result = await executeApi(
     async () => deletePageApi(id)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('pages');
+  }
   return result;
 }

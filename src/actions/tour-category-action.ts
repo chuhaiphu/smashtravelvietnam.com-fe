@@ -1,8 +1,8 @@
 'use server';
 
+import { updateTag, cacheLife, cacheTag } from 'next/cache';
 import { ActionResponse } from '@/interfaces/_base-interface';
 import { ICreateTourCategory, ITourCategoryResponse, IUpdateTourCategory } from '@/interfaces/tour-category-interface';
-import { revalidatePath } from 'next/cache';
 import { executeApi } from '@/actions/_base';
 import {
   createTourCategoryApi,
@@ -21,7 +21,9 @@ export async function createTourCategoryAction(
   const result = await executeApi(
     async () => createTourCategoryApi(input)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('tour-categories');
+  }
   return result;
 }
 
@@ -36,6 +38,9 @@ export async function getTourCategoryByIdAction(
 export async function getTourCategoryByEndpointAction(
   endpoint: string
 ): Promise<ActionResponse<ITourCategoryResponse>> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('tour-categories', `tour-category:${endpoint}`);
   return executeApi(
     async () => getTourCategoryByEndpointApi(endpoint)
   );
@@ -48,6 +53,9 @@ export async function getAllTourCategoriesAction(): Promise<ActionResponse<ITour
 }
 
 export async function getAllTourCategoriesPublicAction(): Promise<ActionResponse<ITourCategoryResponse[]>> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('tour-categories');
   return executeApi(
     async () => getAllPublicTourCategoriesApi()
   );
@@ -68,7 +76,12 @@ export async function updateTourCategoryAction(
   const result = await executeApi(
     async () => updateTourCategoryApi(id, input)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('tour-categories');
+    if (input.endpoint) {
+      updateTag(`tour-category:${input.endpoint}`);
+    }
+  }
   return result;
 }
 
@@ -78,6 +91,8 @@ export async function deleteTourCategoryAction(
   const result = await executeApi(
     async () => deleteTourCategoryApi(id)
   );
-  revalidatePath('/', 'layout');
+  if (result.success) {
+    updateTag('tour-categories');
+  }
   return result;
 }

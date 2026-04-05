@@ -1,4 +1,7 @@
-import { getBlogByEndpointAction } from '@/actions/blog-action';
+import {
+  getAllPublicBlogsAction,
+  getBlogByEndpointAction,
+} from '@/actions/blog-action';
 import { Grid, GridCol, Group, Paper, Stack, Text } from '@mantine/core';
 import LocationIcon from '@/components/icons/vinaup-location-icon';
 import classes from './page.module.scss';
@@ -46,6 +49,15 @@ export async function generateMetadata({
       canonical: `https://smashtravelvietnam.com/blogs/${endpoint}`,
     },
   };
+}
+
+export async function generateStaticParams() {
+  const blogsResponse = await getAllPublicBlogsAction();
+  return blogsResponse.success && blogsResponse.data
+    ? blogsResponse.data.map((blog) => ({
+        endpoint: blog.endpoint,
+      }))
+    : [];
 }
 
 export default async function BlogDetailPage({

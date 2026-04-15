@@ -17,7 +17,7 @@ export default function StaticOurLocationsGrid() {
               <ImageCard
                 imageUrl={'/images/ha-noi-sample.jpg'}
                 title="Ha Noi"
-                height={500}
+                height={480}
                 borderRadius="1rem"
               />
             </GridCol>
@@ -25,7 +25,7 @@ export default function StaticOurLocationsGrid() {
               <ImageCard
                 imageUrl={'/images/khanh-hoa-sample.jpg'}
                 title="Khanh Hoa"
-                height={500}
+                height={480}
                 borderRadius="1rem"
               />
             </GridCol>

@@ -44,9 +44,9 @@ export default async function LandingPage() {
         <Group align="center" justify="space-between">
           <Stack gap={6}>
             <h2 className={classes.sectionTitle}>Vietnam Landtours</h2>
-            <h3 className={classes.sectionSubTitle}>
+            <Text className={classes.sectionSubTitle}>
               Many tours are available to serve you.
-            </h3>
+            </Text>
           </Stack>
           {/* <TabBar /> */}
           <Link className={classes.allToursLink} href="/tours">
@@ -58,23 +58,23 @@ export default async function LandingPage() {
         </Suspense>
         <Stack gap={6} mb={'xl'} mt={56}>
           <h2 className={classes.sectionTitle}>Our locations for you</h2>
-          <h3 className={classes.sectionSubTitle}>
+          <Text className={classes.sectionSubTitle}>
             Vietnam has many beautiful landscapes
-          </h3>
+          </Text>
         </Stack>
         <StaticOurLocationsGrid />
       </Container>
       <Container size="xl" classNames={{ root: classes.landingContainer }}>
         <Stack gap={6} mb={'xl'}>
           <h2 className={classes.sectionTitle}>Our services</h2>
-          <h3 className={classes.sectionSubTitle}>
+          <Text className={classes.sectionSubTitle}>
             Beside choosing your favorite destinations and tour packages
-          </h3>
+          </Text>
         </Stack>
         <StaticOurServicesGrid />
         <Stack gap={6} mb={'xl'}>
           <h2 className={classes.sectionTitle}>We have the best partners</h2>
-          <h3 className={classes.sectionSubTitle}>We have the best partners</h3>
+          <Text className={classes.sectionSubTitle}>We have the best partners</Text>
         </Stack>
       </Container>
       <AutoScrollCarousel />

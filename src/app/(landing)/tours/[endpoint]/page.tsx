@@ -234,7 +234,7 @@ export default async function TourDetailPage({
           <Stack gap={'sm'} pl={'sm'} pr={'sm'} pt={'sm'}>
             <Text
               c={'#00E1FF'}
-              component="h2"
+              component="h1"
               classNames={{
                 root: classes.tourTitle,
               }}

@@ -202,7 +202,7 @@ export default async function BlogDetailPage({
           <Stack gap={'sm'}>
             <Text
               c={'#00E1FF'}
-              component="h2"
+              component="h1"
               classNames={{
                 root: classes.blogTitle,
               }}

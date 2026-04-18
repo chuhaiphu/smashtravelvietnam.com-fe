@@ -13,15 +13,15 @@ import { TreeManager } from '@/utils/tree-manager';
 import HomeIcon from '@/components/icons/vinaup-home-icon';
 import React, { useMemo } from 'react';
 
-interface LandingDrawerContainerProps {
+interface LandingDrawerContentProps {
   menusData: IMenuResponse[];
   tourCategoriesData: ITourCategoryResponse[];
 }
 
-export default function LandingDrawerContainer({
+export default function LandingDrawerContent({
   menusData,
   tourCategoriesData,
-}: LandingDrawerContainerProps) {
+}: LandingDrawerContentProps) {
   const [opened, { open, close }] = useDisclosure(false);
 
   const menuTreeManager = useMemo(() => {

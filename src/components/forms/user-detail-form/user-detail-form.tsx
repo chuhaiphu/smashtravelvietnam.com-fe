@@ -59,7 +59,7 @@ export default function UserDetailForm({ userId }: UserDetailFormProps) {
           color: 'red',
         });
       }
-    } catch (error) {
+    } catch {
       notifications.show({
         title: 'Error',
         message: 'An unexpected error occurred',

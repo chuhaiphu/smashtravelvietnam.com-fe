@@ -17,10 +17,12 @@ import {
   UnstyledButton,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import classes from './admin-tour-detail-page-content-container.module.scss';
+import classes from './admin-tour-detail-page-content.module.scss';
 import { TextEditor } from '@/components/editors/text-editor/text-editor';
 import UploadImageSection from '@/components/primitives/upload-image-section/upload-image-section';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { use, useEffect, useMemo, useRef, useState } from 'react';
+import { redirect } from 'next/navigation';
+import { ActionResponse } from '@/interfaces/_base-interface';
 import {
   createTourActionPrivate,
   deleteTourActionPrivate,
@@ -53,17 +55,17 @@ import { TreeManager } from '@/utils/tree-manager';
 import { Route } from 'next';
 import { IUserResponse } from '@/interfaces/user-interface';
 
-interface AdminTourDetailPageContentContainerProps {
+interface AdminTourDetailPageContentInnerProps {
   currentTourData: ITourResponse;
   tourCategoriesData: ITourCategoryResponse[];
   userData: IUserResponse;
 }
 
-export default function AdminTourDetailPageContentContainer({
+function AdminTourDetailPageContentInner({
   currentTourData,
   tourCategoriesData,
   userData,
-}: AdminTourDetailPageContentContainerProps) {
+}: AdminTourDetailPageContentInnerProps) {
   const [additionalImageUrls, setAdditionalImageUrls] = useState<string[]>(
     currentTourData.additionalImageUrls
   );
@@ -1321,5 +1323,37 @@ export default function AdminTourDetailPageContentContainer({
         </Stack>
       </Modal>
     </div>
+  );
+}
+
+interface AdminTourDetailPageContentProps {
+  currentTourPromise: Promise<ActionResponse<ITourResponse>>;
+  tourCategoriesPromise: Promise<ActionResponse<ITourCategoryResponse[]>>;
+  userDataPromise: Promise<ActionResponse<IUserResponse>>;
+}
+
+export default function AdminTourDetailPageContent({
+  currentTourPromise,
+  tourCategoriesPromise,
+  userDataPromise,
+}: AdminTourDetailPageContentProps) {
+  const meResult = use(userDataPromise);
+  const currentTourResult = use(currentTourPromise);
+  const tourCategoriesResult = use(tourCategoriesPromise);
+
+  if (!meResult.success || !meResult.data) {
+    redirect('/login');
+  }
+
+  if (!currentTourResult.success || !currentTourResult.data) {
+    return <div>Tour not found</div>;
+  }
+
+  return (
+    <AdminTourDetailPageContentInner
+      currentTourData={currentTourResult.data}
+      tourCategoriesData={tourCategoriesResult.data ?? []}
+      userData={meResult.data}
+    />
   );
 }

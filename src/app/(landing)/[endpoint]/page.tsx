@@ -1,4 +1,4 @@
-import DynamicPageContent from "@/components/mains/dynamic-page-content/dynamic-page-content";
+import LandingDynamicRouteContent from "@/components/mains/landing-page/landing-dynamic-route-content";
 import { Loader } from "@mantine/core";
 import { Suspense } from "react";
 
@@ -11,7 +11,7 @@ export default async function DynamicEndpointPage({
 }) {
   return (
     <Suspense fallback={<Loader size={64} />}>
-      <DynamicPageContent params={params} searchParams={searchParams} />
+      <LandingDynamicRouteContent params={params} searchParams={searchParams} />
     </Suspense>
   );
 }

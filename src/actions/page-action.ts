@@ -12,6 +12,7 @@ import {
   createPageApiPrivate,
   getPageByIdApiPrivate,
   getPageByEndpointApiPublic,
+  getAllPagesApiPublic,
   getAllPagesAdminApiPrivate,
   updatePageApiPrivate,
   deletePageApiPrivate,
@@ -36,10 +37,21 @@ export async function getPageByIdActionPrivate(
 export async function getPageByEndpointActionPublic(
   endpoint: string
 ): Promise<ActionResponse<IPageResponse>> {
+  // Landing / CMS: cache per endpoint; invalidate with updateTag('pages', `page:${endpoint}`)
   'use cache';
   cacheLife('hours');
   cacheTag('pages', `page:${endpoint}`);
   return executeApi(async () => getPageByEndpointApiPublic(endpoint));
+}
+
+/** Public list of CMS pages (for sibling links / nav). */
+export async function getAllPagesPublicActionPublic(): Promise<
+  ActionResponse<IPageResponse[]>
+> {
+  'use cache';
+  cacheLife('hours');
+  cacheTag('pages');
+  return executeApi(async () => getAllPagesApiPublic());
 }
 
 export async function getAllPagesAdminActionPrivate(): Promise<

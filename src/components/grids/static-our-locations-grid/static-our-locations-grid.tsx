@@ -3,7 +3,8 @@ import classes from './static-our-locations-grid.module.scss';
 import ImageCard from '@/components/primitives/image-card/image-card';
 import ExploreDestinationsButton from './explore-destinations-button';
 
-export default function StaticOurLocationsGrid() {
+export default async function StaticOurLocationsGrid() {
+  'use cache'
   return (
     <Grid
       classNames={{

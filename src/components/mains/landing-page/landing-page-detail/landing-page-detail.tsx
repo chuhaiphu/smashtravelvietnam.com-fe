@@ -13,12 +13,18 @@ import { RiCheckDoubleFill } from 'react-icons/ri';
 import { SERVICE_ITEMS } from '@/constants';
 import ContactForm from '@/components/forms/contact-form/contact-form';
 import { submitCustomerContactActionPublic } from '@/actions/customer-contact-action';
+import Link from 'next/link';
+import { Route } from 'next';
 
 interface LandingPageDetailProps {
   page: IPageResponse;
+  allPages?: IPageResponse[];
 }
 
-export default function LandingPageDetail({ page }: LandingPageDetailProps) {
+export default function LandingPageDetail({
+  page,
+  allPages = [],
+}: LandingPageDetailProps) {
   const additionalImageSlides: CarouselSlide[] = page.additionalImageUrls.map(
     (url) => ({
       imageUrl: url,
@@ -100,6 +106,23 @@ export default function LandingPageDetail({ page }: LandingPageDetailProps) {
     <div className={classes.pageDetailContainer}>
       <Stack gap={'sm'} mb={'lg'}>
         <h1 className={classes.sectionTitle}>{page.title}</h1>
+        {allPages.filter((p) => p.endpoint !== page.endpoint).length > 0 && (
+          <Group gap="md" wrap="wrap">
+            {allPages
+              .filter((p) => p.endpoint !== page.endpoint)
+              .map((p) => (
+                <Link
+                  key={p.id}
+                  href={`/${p.endpoint}` as Route}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <Text fz={15} c={'white'} td="underline">
+                    {p.title}
+                  </Text>
+                </Link>
+              ))}
+          </Group>
+        )}
         {page.destinations.length > 0 && (
           <Group gap={4}>
             <LocationIcon size={20} />

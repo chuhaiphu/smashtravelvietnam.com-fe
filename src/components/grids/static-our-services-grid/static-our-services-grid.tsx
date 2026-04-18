@@ -2,7 +2,8 @@ import { Grid, GridCol } from '@mantine/core';
 import ImageCard from '@/components/primitives/image-card/image-card';
 import { SERVICE_ITEMS } from '@/constants';
 
-export default function StaticOurServicesGrid() {
+export default async function StaticOurServicesGrid() {
+  'use cache'
   return (
     <Grid mb="3.5rem" gutter="lg">
       {SERVICE_ITEMS.map((item, index) => (

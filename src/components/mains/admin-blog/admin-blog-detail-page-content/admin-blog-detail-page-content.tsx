@@ -17,10 +17,12 @@ import {
   UnstyledButton,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import classes from './admin-blog-detail-page-content-container.module.scss';
+import classes from './admin-blog-detail-page-content.module.scss';
 import { TextEditor } from '@/components/editors/text-editor/text-editor';
 import UploadImageSection from '@/components/primitives/upload-image-section/upload-image-section';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { use, useEffect, useMemo, useRef, useState } from 'react';
+import { redirect } from 'next/navigation';
+import { ActionResponse } from '@/interfaces/_base-interface';
 import {
   createBlogActionPrivate,
   deleteBlogActionPrivate,
@@ -51,17 +53,17 @@ import { Route } from 'next';
 import { IUserResponse } from '@/interfaces/user-interface';
 import dayjs from 'dayjs';
 
-interface AdminBlogDetailPageContentContainerProps {
+interface AdminBlogDetailPageContentInnerProps {
   currentBlogData: IBlogResponse;
   blogCategoriesData: IBlogCategoryResponse[];
   userData: IUserResponse;
 }
 
-export default function AdminBlogDetailPageContentContainer({
+function AdminBlogDetailPageContentInner({
   currentBlogData,
   blogCategoriesData,
   userData,
-}: AdminBlogDetailPageContentContainerProps) {
+}: AdminBlogDetailPageContentInnerProps) {
   const [additionalImageUrls, setAdditionalImageUrls] = useState<string[]>(
     currentBlogData.additionalImageUrls
   );
@@ -1022,5 +1024,37 @@ export default function AdminBlogDetailPageContentContainer({
         </Stack>
       </Modal>
     </div>
+  );
+}
+
+interface AdminBlogDetailPageContentProps {
+  currentBlogPromise: Promise<ActionResponse<IBlogResponse>>;
+  blogCategoriesPromise: Promise<ActionResponse<IBlogCategoryResponse[]>>;
+  userDataPromise: Promise<ActionResponse<IUserResponse>>;
+}
+
+export default function AdminBlogDetailPageContent({
+  currentBlogPromise,
+  blogCategoriesPromise,
+  userDataPromise,
+}: AdminBlogDetailPageContentProps) {
+  const meResult = use(userDataPromise);
+  const currentBlogResult = use(currentBlogPromise);
+  const blogCategoriesResult = use(blogCategoriesPromise);
+
+  if (!meResult.success || !meResult.data) {
+    redirect('/login');
+  }
+
+  if (!currentBlogResult.success || !currentBlogResult.data) {
+    return <div>Blog not found</div>;
+  }
+
+  return (
+    <AdminBlogDetailPageContentInner
+      currentBlogData={currentBlogResult.data}
+      blogCategoriesData={blogCategoriesResult.data ?? []}
+      userData={meResult.data}
+    />
   );
 }

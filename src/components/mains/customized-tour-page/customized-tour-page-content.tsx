@@ -24,20 +24,20 @@ import {
 } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useState, useMemo, useRef } from 'react';
-import classes from './customize-tour-page-container.module.scss';
+import classes from './customized-tour-page-content.module.scss';
 import dayjs from 'dayjs';
 import type { ITourCategoryResponse } from '@/interfaces/tour-category-interface';
 import { TreeManager } from '@/utils/tree-manager';
 import { IoChevronDownOutline } from 'react-icons/io5';
 import ReCaptchaEnterprise, { ReCaptchaEnterpriseHandle } from '@/components/primitives/recaptcha-enterprise/recaptcha-enterprise';
 
-interface CustomizedTourPageContainerProps {
+interface CustomizedTourPageContentProps {
   tourCategoriesData: ITourCategoryResponse[];
 }
 
-export default function CustomizedTourPageContainer({
+export default function CustomizedTourPageContent({
   tourCategoriesData,
-}: CustomizedTourPageContainerProps) {
+}: CustomizedTourPageContentProps) {
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const recaptchaRef = useRef<ReCaptchaEnterpriseHandle>(null);
 

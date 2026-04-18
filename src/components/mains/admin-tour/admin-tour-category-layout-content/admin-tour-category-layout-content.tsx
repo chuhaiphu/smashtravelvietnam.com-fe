@@ -12,21 +12,22 @@ import { useRouter } from 'next/navigation';
 import { Route } from 'next';
 import AddNewIcon from '@/components/icons/vinaup-add-new-icon.svg';
 import { generateUniqueEndpoint } from '@/utils/function-helpers';
-import { useState } from 'react';
+import { use, useState } from 'react';
 import { ITourCategoryResponse } from '@/interfaces/tour-category-interface';
 import { createTourCategoryActionPrivate } from '@/actions/tour-category-action';
 import TourCategoryNav from '@/components/sidebars/tour-category-nav/tour-category-nav';
-import classes from './admin-tour-category-layout-content-container.module.scss';
+import classes from './admin-tour-category-layout-content.module.scss';
+import { ActionResponse } from '@/interfaces/_base-interface';
 
-interface AdminTourCategoryLayoutContentContainerProps {
+interface AdminTourCategoryLayoutContentInnerProps {
   tourCategoriesData: ITourCategoryResponse[];
   children: React.ReactNode;
 }
 
-export default function AdminTourCategoryLayoutContentContainer({
+function AdminTourCategoryLayoutContentInner({
   tourCategoriesData,
   children,
-}: AdminTourCategoryLayoutContentContainerProps) {
+}: AdminTourCategoryLayoutContentInnerProps) {
   const router = useRouter();
   const [isCreating, setIsCreating] = useState(false);
 
@@ -51,7 +52,7 @@ export default function AdminTourCategoryLayoutContentContainer({
   };
 
   return (
-    <div>
+    <div className={classes.adminTourCategoryLayoutRoot}>
       <Group className={classes.pageHeader} justify="space-between">
         <Text size="xl">Tour Category</Text>
         <Group gap="sm">
@@ -76,5 +77,24 @@ export default function AdminTourCategoryLayoutContentContainer({
         </GridCol>
       </Grid>
     </div>
+  );
+}
+
+interface AdminTourCategoryLayoutContentProps {
+  tourCategoriesPromise: Promise<ActionResponse<ITourCategoryResponse[]>>;
+  children: React.ReactNode;
+}
+
+export default function AdminTourCategoryLayoutContent({
+  tourCategoriesPromise,
+  children,
+}: AdminTourCategoryLayoutContentProps) {
+  const tourCategoriesResult = use(tourCategoriesPromise);
+  const tourCategoriesData = tourCategoriesResult.data ?? [];
+
+  return (
+    <AdminTourCategoryLayoutContentInner tourCategoriesData={tourCategoriesData}>
+      {children}
+    </AdminTourCategoryLayoutContentInner>
   );
 }

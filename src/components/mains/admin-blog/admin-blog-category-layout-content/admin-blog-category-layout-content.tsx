@@ -12,21 +12,22 @@ import { useRouter } from 'next/navigation';
 import { Route } from 'next';
 import AddNewIcon from '@/components/icons/vinaup-add-new-icon.svg';
 import { generateUniqueEndpoint } from '@/utils/function-helpers';
-import { useState } from 'react';
+import { use, useState } from 'react';
 import { IBlogCategoryResponse } from '@/interfaces/blog-category-interface';
 import { createBlogCategoryActionPrivate } from '@/actions/blog-category-action';
 import BlogCategoryNav from '@/components/sidebars/blog-category-nav/blog-category-nav';
-import classes from './admin-blog-category-layout-content-container.module.scss';
+import classes from './admin-blog-category-layout-content.module.scss';
+import { ActionResponse } from '@/interfaces/_base-interface';
 
-interface AdminBlogCategoryLayoutContentContainerProps {
+interface AdminBlogCategoryLayoutContentInnerProps {
   blogCategoriesData: IBlogCategoryResponse[];
   children: React.ReactNode;
 }
 
-export default function AdminBlogCategoryLayoutContentContainer({
+function AdminBlogCategoryLayoutContentInner({
   blogCategoriesData,
   children,
-}: AdminBlogCategoryLayoutContentContainerProps) {
+}: AdminBlogCategoryLayoutContentInnerProps) {
   const router = useRouter();
   const [isCreating, setIsCreating] = useState(false);
 
@@ -50,7 +51,7 @@ export default function AdminBlogCategoryLayoutContentContainer({
   };
 
   return (
-    <div>
+    <div className={classes.adminBlogCategoryLayoutRoot}>
       <Group className={classes.pageHeader} justify="space-between">
         <Text size="xl">Blog Category</Text>
         <Group gap="sm">
@@ -75,5 +76,24 @@ export default function AdminBlogCategoryLayoutContentContainer({
         </GridCol>
       </Grid>
     </div>
+  );
+}
+
+interface AdminBlogCategoryLayoutContentProps {
+  blogCategoriesPromise: Promise<ActionResponse<IBlogCategoryResponse[]>>;
+  children: React.ReactNode;
+}
+
+export default function AdminBlogCategoryLayoutContent({
+  blogCategoriesPromise,
+  children,
+}: AdminBlogCategoryLayoutContentProps) {
+  const blogCategoriesResult = use(blogCategoriesPromise);
+  const blogCategoriesData = blogCategoriesResult.data ?? [];
+
+  return (
+    <AdminBlogCategoryLayoutContentInner blogCategoriesData={blogCategoriesData}>
+      {children}
+    </AdminBlogCategoryLayoutContentInner>
   );
 }

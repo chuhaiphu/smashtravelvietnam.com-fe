@@ -1,40 +1,38 @@
-import { getTourCategoryToursByTourCategoryIdActionPublic } from '@/actions/tour-category-tour-action';
-import TourGrid from '@/components/grids/tour-grid/tour-grid';
-import { ITourCategoryResponse } from '@/interfaces/tour-category-interface';
-import { ITourResponse } from '@/interfaces/tour-interface';
+import { getBlogCategoryBlogsByBlogCategoryIdActionPublic } from '@/actions/blog-category-blog-action';
+import BlogGrid from '@/components/grids/blog-grid/blog-grid';
+import { IBlogCategoryResponse } from '@/interfaces/blog-category-interface';
+import { IBlogResponse } from '@/interfaces/blog-interface';
 import { Stack } from '@mantine/core';
 import VideoSection from '@/components/primitives/video-section/video-section';
-import classes from './landing-tour-category.module.scss';
+import classes from './landing-blog-category-page.module.scss';
 
-interface LandingTourCategoryProps {
-  category: ITourCategoryResponse;
+interface LandingBlogCategoryPageProps {
+  category: IBlogCategoryResponse;
   queryParams: {
     q?: string;
-    type?: string;
     destinations?: string;
   };
 }
 
-export default async function LandingTourCategory({
+export default async function LandingBlogCategoryPage({
   category,
   queryParams,
-}: LandingTourCategoryProps) {
-  // Get all tours in this category
-  const tourCategoryToursResponse =
-    await getTourCategoryToursByTourCategoryIdActionPublic(category.id);
-
-  // Extract tours and filter only public ones
-  const toursFromTourCategory: ITourResponse[] =
-    tourCategoryToursResponse.success && tourCategoryToursResponse.data
-      ? tourCategoryToursResponse.data
-          .map((tct) => tct.tour)
+}: LandingBlogCategoryPageProps) {
+  // Get all blogs in this category
+  const blogCategoryBlogsResponse =
+    await getBlogCategoryBlogsByBlogCategoryIdActionPublic(category.id);
+  // Extract blogs and filter only public ones
+  const blogsFromBlogCategory: IBlogResponse[] =
+    blogCategoryBlogsResponse.success && blogCategoryBlogsResponse.data
+      ? blogCategoryBlogsResponse.data
+          .map((bcb) => bcb.blog)
           .filter(
-            (tour): tour is ITourResponse =>
-              tour !== undefined && tour.visibility === 'public'
+            (blog): blog is IBlogResponse =>
+              blog !== undefined && blog.visibility === 'public'
           )
       : [];
 
-  const sortedTours = toursFromTourCategory
+  const sortedBlogs = blogsFromBlogCategory
     .sort(
       (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
     )
@@ -83,13 +81,12 @@ export default async function LandingTourCategory({
           category.title
         )}
       {renderHTMLDescription(category.description)}
-      <TourGrid
+      <BlogGrid
         queryParams={{
           q: queryParams.q,
-          type: queryParams.type,
           destinations: queryParams.destinations,
         }}
-        toursData={sortedTours}
+        blogsData={sortedBlogs}
       />
       {category.videoPosition === 'bottom' &&
         renderVideoSection(

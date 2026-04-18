@@ -14,10 +14,11 @@ import {
   TextInput,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import classes from './admin-tour-category-detail-page-content-container.module.scss';
+import classes from './admin-tour-category-detail-page-content.module.scss';
 import { TextEditor } from '@/components/editors/text-editor/text-editor';
 import UploadImageSection from '@/components/primitives/upload-image-section/upload-image-section';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { use, useEffect, useMemo, useRef, useState } from 'react';
+import { ActionResponse } from '@/interfaces/_base-interface';
 import {
   deleteTourCategoryActionPrivate,
   updateTourCategoryActionPrivate,
@@ -26,7 +27,6 @@ import { ITourCategoryResponse } from '@/interfaces/tour-category-interface';
 import { useDebouncedCallback } from 'use-debounce';
 import {
   generateUniqueEndpoint,
-  validateImageFile,
 } from '@/utils/function-helpers';
 import { FaCaretDown } from 'react-icons/fa6';
 import { GrTrash } from 'react-icons/gr';
@@ -36,17 +36,17 @@ import PenIcon from '@/components/icons/vinaup-pen-icon.svg';
 import { TreeManager } from '@/utils/tree-manager';
 import { useRouter } from 'next/navigation';
 
-interface AdminTourCategoryDetailPageContentContainerProps {
+interface AdminTourCategoryDetailPageContentInnerProps {
   currentTourCategory: ITourCategoryResponse;
   tourCategoriesData: ITourCategoryResponse[];
   availableSortOrdersData: number[];
 }
 
-export default function AdminTourCategoryDetailPageContentContainer({
+function AdminTourCategoryDetailPageContentInner({
   currentTourCategory,
   tourCategoriesData,
   availableSortOrdersData,
-}: AdminTourCategoryDetailPageContentContainerProps) {
+}: AdminTourCategoryDetailPageContentInnerProps) {
   const [title, setTitle] = useState<string>(currentTourCategory.title);
   const [description, setDescription] = useState<string>(
     currentTourCategory.description || ''
@@ -201,7 +201,6 @@ export default function AdminTourCategoryDetailPageContentContainer({
 
   const handleRemoveVideoThumbnail = async () => {
     setVideoThumbnailLoading(true);
-    const oldUrl = videoThumbnailUrl;
     setVideoThumbnailUrl('');
     await updateTourCategoryActionPrivate(currentTourCategory.id, {
       videoThumbnailUrl: '',
@@ -229,7 +228,6 @@ export default function AdminTourCategoryDetailPageContentContainer({
 
   const handleRemoveMainImage = async () => {
     setMainImageLoading(true);
-    const oldUrl = mainImageUrl;
     setMainImageUrl('');
     await updateTourCategoryActionPrivate(currentTourCategory.id, { mainImageUrl: '' });
     setMainImageLoading(false);
@@ -557,5 +555,37 @@ export default function AdminTourCategoryDetailPageContentContainer({
         </Stack>
       </Modal>
     </div>
+  );
+}
+
+interface TourCategoryDetailBundle {
+  currentTourCategoryResponse: ActionResponse<ITourCategoryResponse>;
+  tourCategoriesResponse: ActionResponse<ITourCategoryResponse[]>;
+  availableSortOrdersResponse: ActionResponse<number[]>;
+}
+
+interface AdminTourCategoryDetailPageContentProps {
+  detailDataPromise: Promise<TourCategoryDetailBundle>;
+}
+
+export default function AdminTourCategoryDetailPageContent({
+  detailDataPromise,
+}: AdminTourCategoryDetailPageContentProps) {
+  const {
+    currentTourCategoryResponse,
+    tourCategoriesResponse,
+    availableSortOrdersResponse,
+  } = use(detailDataPromise);
+
+  if (!currentTourCategoryResponse.success || !currentTourCategoryResponse.data) {
+    return <div>Category not found</div>;
+  }
+
+  return (
+    <AdminTourCategoryDetailPageContentInner
+      currentTourCategory={currentTourCategoryResponse.data}
+      tourCategoriesData={tourCategoriesResponse.data ?? []}
+      availableSortOrdersData={availableSortOrdersResponse.data ?? []}
+    />
   );
 }

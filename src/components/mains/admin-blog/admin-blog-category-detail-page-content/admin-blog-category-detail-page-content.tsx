@@ -14,10 +14,11 @@ import {
   TextInput,
 } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import classes from './admin-blog-category-detail-page-content-container.module.scss';
+import classes from './admin-blog-category-detail-page-content.module.scss';
 import { TextEditor } from '@/components/editors/text-editor/text-editor';
 import UploadImageSection from '@/components/primitives/upload-image-section/upload-image-section';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { use, useEffect, useMemo, useRef, useState } from 'react';
+import { ActionResponse } from '@/interfaces/_base-interface';
 import {
   deleteBlogCategoryActionPrivate,
   updateBlogCategoryActionPrivate,
@@ -33,17 +34,17 @@ import PenIcon from '@/components/icons/vinaup-pen-icon.svg';
 import { TreeManager } from '@/utils/tree-manager';
 import { useRouter } from 'next/navigation';
 
-interface AdminBlogCategoryDetailPageContentContainerProps {
+interface AdminBlogCategoryDetailPageContentInnerProps {
   currentBlogCategory: IBlogCategoryResponse;
   blogCategoriesData: IBlogCategoryResponse[];
   availableSortOrdersData: number[];
 }
 
-export default function AdminBlogCategoryDetailPageContentContainer({
+function AdminBlogCategoryDetailPageContentInner({
   currentBlogCategory,
   blogCategoriesData,
   availableSortOrdersData,
-}: AdminBlogCategoryDetailPageContentContainerProps) {
+}: AdminBlogCategoryDetailPageContentInnerProps) {
   const [title, setTitle] = useState<string>(currentBlogCategory.title);
   const [description, setDescription] = useState<string>(
     currentBlogCategory.description || ''
@@ -552,5 +553,37 @@ export default function AdminBlogCategoryDetailPageContentContainer({
         </Stack>
       </Modal>
     </div>
+  );
+}
+
+interface BlogCategoryDetailBundle {
+  currentBlogCategoryResponse: ActionResponse<IBlogCategoryResponse>;
+  blogCategoriesResponse: ActionResponse<IBlogCategoryResponse[]>;
+  availableSortOrdersResponse: ActionResponse<number[]>;
+}
+
+interface AdminBlogCategoryDetailPageContentProps {
+  detailDataPromise: Promise<BlogCategoryDetailBundle>;
+}
+
+export default function AdminBlogCategoryDetailPageContent({
+  detailDataPromise,
+}: AdminBlogCategoryDetailPageContentProps) {
+  const {
+    currentBlogCategoryResponse,
+    blogCategoriesResponse,
+    availableSortOrdersResponse,
+  } = use(detailDataPromise);
+
+  if (!currentBlogCategoryResponse.success || !currentBlogCategoryResponse.data) {
+    return <div>Category not found</div>;
+  }
+
+  return (
+    <AdminBlogCategoryDetailPageContentInner
+      currentBlogCategory={currentBlogCategoryResponse.data}
+      blogCategoriesData={blogCategoriesResponse.data ?? []}
+      availableSortOrdersData={availableSortOrdersResponse.data ?? []}
+    />
   );
 }

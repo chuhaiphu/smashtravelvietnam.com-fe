@@ -1,12 +1,19 @@
-import AdminPagePageContent from "@/components/mains/admin-page-page/admin-page-page-content/admin-page-page-content";
-import { Loader } from "@mantine/core";
-import { Suspense } from "react";
+import AdminPagePageContent from '@/components/mains/admin-page-page/admin-page-page-content/admin-page-page-content';
+import { getAllPagesAdminActionPrivate } from '@/actions/page-action';
+import { getMeActionPrivate } from '@/actions/auth-action';
+import { Loader } from '@mantine/core';
+import { Suspense } from 'react';
 
-export default async function AdminPagePage() {
+export default function AdminPagePage() {
+  const pagesDataPromise = getAllPagesAdminActionPrivate();
+  const userDataPromise = getMeActionPrivate();
+
   return (
     <Suspense fallback={<Loader size={48} />}>
-      <AdminPagePageContent />
+      <AdminPagePageContent
+        pagesDataPromise={pagesDataPromise}
+        userDataPromise={userDataPromise}
+      />
     </Suspense>
   );
 }
-

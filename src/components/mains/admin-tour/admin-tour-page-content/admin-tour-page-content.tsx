@@ -9,19 +9,18 @@ import { Route } from 'next';
 import { ITourResponse } from '@/interfaces/tour-interface';
 import { IUserResponse } from '@/interfaces/user-interface';
 import { generateUniqueEndpoint } from '@/utils/function-helpers';
-import { useState } from 'react';
+import { use, useState } from 'react';
 import { notifications } from '@mantine/notifications';
-import classes from './admin-tour-page-content-container.module.scss';
+import classes from './admin-tour-page-content.module.scss';
+import { redirect } from 'next/navigation';
+import { ActionResponse } from '@/interfaces/_base-interface';
 
-interface AdminTourPageContentContainerProps {
+interface AdminTourPageContentInnerProps {
   toursData: ITourResponse[];
   userData: IUserResponse;
 }
 
-export default function AdminTourPageContentContainer({
-  toursData,
-  userData,
-}: AdminTourPageContentContainerProps) {
+function AdminTourPageContentInner({ toursData, userData }: AdminTourPageContentInnerProps) {
   const router = useRouter();
   const [isCreating, setIsCreating] = useState(false);
 
@@ -74,5 +73,28 @@ export default function AdminTourPageContentContainer({
         <ToursTable toursData={toursData} />
       </div>
     </div>
+  );
+}
+
+interface AdminTourPageContentProps {
+  toursDataPromise: Promise<ActionResponse<ITourResponse[]>>;
+  userDataPromise: Promise<ActionResponse<IUserResponse>>;
+}
+
+export default function AdminTourPageContent({
+  toursDataPromise,
+  userDataPromise,
+}: AdminTourPageContentProps) {
+  const meResult = use(userDataPromise);
+  const toursResult = use(toursDataPromise);
+
+  if (!meResult.success || !meResult.data) {
+    redirect('/login');
+  }
+
+  const toursData = toursResult.data ?? [];
+
+  return (
+    <AdminTourPageContentInner toursData={toursData} userData={meResult.data} />
   );
 }

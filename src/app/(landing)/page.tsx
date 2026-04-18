@@ -1,14 +1,14 @@
 import SearchBar from '@/components/primitives/search-bar/search-bar';
 import classes from './page.module.scss';
 import { Container, Group, Loader, Stack, Text } from '@mantine/core';
-import { AutoScrollCarousel } from '@/components/primitives/auto-scroll-carousel/auto-scroll-carousel';
+import { AutoScrollCarousel } from '@/components/sections/auto-scroll-carousel/auto-scroll-carousel';
 import StaticOurServicesGrid from '@/components/grids/static-our-services-grid/static-our-services-grid';
 import Link from 'next/link';
 import TourGrid from '@/components/grids/tour-grid/tour-grid';
 import { getAllToursPinnedToHomeActionPublic } from '@/actions/tour-action';
 import { Suspense } from 'react';
 import DynamicSection from '@/libs/section-ui/dynamic-section';
-import StaticOurLocationsGrid from '@/components/grids/grid-items-container/static-our-locations-grid';
+import StaticOurLocationsGrid from '@/components/grids/static-our-locations-grid/static-our-locations-grid';
 
 async function LandingPageTourContent() {
   const toursResponse = await getAllToursPinnedToHomeActionPublic();

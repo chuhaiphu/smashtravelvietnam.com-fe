@@ -1,4 +1,4 @@
-import AdminBlogCategoryLayoutContent from "@/components/mains/admin-blog-category-layout-content/admin-blog-category-layout-content";
+import AdminBlogCategoryLayoutContent from "@/components/mains/admin-blog/admin-blog-category-layout-content/admin-blog-category-layout-content";
 import { Loader } from "@mantine/core";
 import { Suspense } from "react";
 

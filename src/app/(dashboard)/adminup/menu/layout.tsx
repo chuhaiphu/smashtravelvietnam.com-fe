@@ -1,4 +1,4 @@
-import AdminMenuLayoutContent from "@/components/mains/admin-menu-layout-content/admin-menu-layout-content";
+import AdminMenuLayoutContent from "@/components/mains/admin-menu/admin-menu-layout-content/admin-menu-layout-content";
 import { Loader } from "@mantine/core";
 import { Suspense } from "react";
 

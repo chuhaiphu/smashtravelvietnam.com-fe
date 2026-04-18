@@ -1,4 +1,4 @@
-import AdminPagePageContent from "@/components/mains/admin-page-page-content/admin-page-page-content";
+import AdminPagePageContent from "@/components/mains/admin-page-page/admin-page-page-content/admin-page-page-content";
 import { Loader } from "@mantine/core";
 import { Suspense } from "react";
 

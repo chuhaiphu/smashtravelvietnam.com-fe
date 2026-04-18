@@ -1,29 +1,40 @@
 'use client';
 
 import { ActionIcon, Group, Text, UnstyledButton } from '@mantine/core';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import AddNewIcon from '@/components/icons/vinaup-add-new-icon.svg';
 import BlogsTable from '@/components/tables/blogs-table/blogs-table';
 import { createBlogActionPrivate } from '@/actions/blog-action';
 import { Route } from 'next';
 import { IBlogResponse } from '@/interfaces/blog-interface';
 import { IUserResponse } from '@/interfaces/user-interface';
+import { ActionResponse } from '@/interfaces/_base-interface';
 import { generateUniqueEndpoint } from '@/utils/function-helpers';
-import { useState } from 'react';
+import { use, useState } from 'react';
 import { notifications } from '@mantine/notifications';
-import classes from './admin-blog-page-content-container.module.scss';
+import classes from './admin-blog-page-content.module.scss';
 
-interface AdminBlogPageContentContainerProps {
-  blogsData: IBlogResponse[];
-  userData: IUserResponse;
+interface AdminBlogPageContentProps {
+  blogsDataPromise: Promise<ActionResponse<IBlogResponse[]>>;
+  userDataPromise: Promise<ActionResponse<IUserResponse>>;
 }
 
-export default function AdminBlogPageContentContainer({
-  blogsData,
-  userData,
-}: AdminBlogPageContentContainerProps) {
+export default function AdminBlogPageContent({
+  blogsDataPromise,
+  userDataPromise,
+}: AdminBlogPageContentProps) {
   const router = useRouter();
   const [isCreating, setIsCreating] = useState(false);
+
+  const blogsResult = use(blogsDataPromise);
+  const userResult = use(userDataPromise);
+
+  if (!userResult.success || !userResult.data) {
+    redirect('/login');
+  }
+
+  const blogsData = blogsResult.data ?? [];
+  const userData = userResult.data;
 
   const handleAddNewBlog = async () => {
     setIsCreating(true);

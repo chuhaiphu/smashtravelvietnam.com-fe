@@ -1,4 +1,4 @@
-import AdminSettingOverviewPageContent from "@/components/mains/admin-setting-overview-page-content/admin-setting-overview-page-content";
+import AdminSettingOverviewPageContent from "@/components/mains/admin-settings/admin-setting-overview-page-content/admin-setting-overview-page-content";
 import { Loader } from "@mantine/core";
 import { Suspense } from "react";
 

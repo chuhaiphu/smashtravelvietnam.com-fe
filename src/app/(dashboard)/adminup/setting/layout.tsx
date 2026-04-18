@@ -1,4 +1,4 @@
-import AdminSettingLayoutContent from "@/components/mains/admin-setting-layout-content/admin-setting-layout-content";
+import AdminSettingLayoutContent from "@/components/mains/admin-settings/admin-setting-layout-content/admin-setting-layout-content";
 
 export default async function AdminSettingLayout({ children }: { children: React.ReactNode }) {
   return (

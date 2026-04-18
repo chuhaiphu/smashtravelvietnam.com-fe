@@ -1,4 +1,4 @@
-import SmtpPageContent from "@/components/mains/admin-setting-email-smtp-layout-content/smtp-page-content/smtp-page-content";
+import SmtpPageContent from "@/components/mains/admin-settings/admin-setting-email-smtp-layout-content/smtp-page-content/smtp-page-content";
 import { Loader } from "@mantine/core";
 import { Suspense } from "react";
 

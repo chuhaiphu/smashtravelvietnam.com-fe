@@ -56,7 +56,7 @@ export async function getBlogCategoryBlogByIdActionPublic(
   id: string
 ): Promise<ActionResponse<IBlogCategoryBlogResponse>> {
   'use cache';
-  cacheLife('hours');
+  cacheLife('default');
   cacheTag('blog-category-blogs');
   return executeApi(
     async () => getBlogCategoryBlogByIdApiPublic(id)
@@ -67,7 +67,7 @@ export async function getBlogCategoryBlogsByBlogIdActionPublic(
   blogId: string
 ): Promise<ActionResponse<IBlogCategoryBlogResponse[]>> {
   'use cache';
-  cacheLife('hours');
+  cacheLife('default');
   cacheTag('blog-category-blogs', `blog-category-blogs:blog:${blogId}`);
   return executeApi(
     async () => getBlogCategoryBlogsByBlogIdApiPublic(blogId)
@@ -78,7 +78,7 @@ export async function getBlogCategoryBlogsByBlogCategoryIdActionPublic(
   blogCategoryId: string
 ): Promise<ActionResponse<IBlogCategoryBlogResponse[]>> {
   'use cache';
-  cacheLife('hours');
+  cacheLife('default');
   cacheTag('blog-category-blogs', `blog-category-blogs:category:${blogCategoryId}`);
   return executeApi(
     async () => getBlogCategoryBlogsByBlogCategoryIdApiPublic(blogCategoryId)
@@ -87,7 +87,7 @@ export async function getBlogCategoryBlogsByBlogCategoryIdActionPublic(
 
 export async function getAllBlogCategoryBlogsActionPublic(): Promise<ActionResponse<IBlogCategoryBlogResponse[]>> {
   'use cache';
-  cacheLife('hours');
+  cacheLife('default');
   cacheTag('blog-category-blogs');
   return executeApi(
     async () => getAllBlogCategoryBlogsApiPublic()

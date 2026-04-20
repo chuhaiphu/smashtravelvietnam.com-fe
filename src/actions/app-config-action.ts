@@ -11,7 +11,7 @@ import {
 
 export async function getAppConfigActionPublic(): Promise<ActionResponse<IAppConfigResponse>> {
   'use cache';
-  cacheLife('hours');
+  cacheLife('default');
   cacheTag('app-config');
   return executeApi(
     async () => getAppConfigApiPublic()

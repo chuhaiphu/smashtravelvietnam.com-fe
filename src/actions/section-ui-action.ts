@@ -110,7 +110,7 @@ export async function getSectionUIByPositionActionPublic(
   position: number
 ): Promise<ActionResponse<IDynamicSectionUIResponse>> {
   'use cache';
-  cacheLife('hours');
+  cacheLife('default');
   cacheTag('section-ui');
   return executeApi(async () => getSectionUIByPositionApiPublic(position));
 }

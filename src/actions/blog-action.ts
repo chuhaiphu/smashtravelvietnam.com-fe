@@ -40,7 +40,7 @@ export async function getBlogByEndpointActionPublic(
   endpoint: string
 ): Promise<ActionResponse<IBlogResponse>> {
   'use cache';
-  cacheLife('hours');
+  cacheLife('default');
   cacheTag('blogs', `blog:${endpoint}`);
   return executeApi(
     async () => getBlogByEndpointApiPublic(endpoint)
@@ -55,7 +55,7 @@ export async function getAllBlogsActionPrivate(): Promise<ActionResponse<IBlogRe
 
 export async function getAllBlogsActionPublic(): Promise<ActionResponse<IBlogResponse[]>> {
   'use cache';
-  cacheLife('hours');
+  cacheLife('default');
   cacheTag('blogs');
   return executeApi(
     async () => getAllBlogsApiPublic({ visibility: 'public' })
@@ -96,6 +96,9 @@ export async function incrementBlogViewActionPublic(
   const result = await executeApi(
     async () => incrementBlogViewApiPublic(blogId)
   );
+  if (result.success) {
+    updateTag('blogs');
+  }
   return {
     success: result.success,
     data: result.data?.recorded ?? false,
@@ -109,6 +112,9 @@ export async function incrementBlogLikeActionPublic(
   const result = await executeApi(
     async () => toggleBlogLikeApiPublic(blogId)
   );
+  if (result.success) {
+    updateTag('blogs');
+  }
   return {
     success: result.success,
     data: result.data?.liked ?? false,

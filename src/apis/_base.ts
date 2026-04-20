@@ -2,6 +2,7 @@ import { HttpResponse } from '@/interfaces/_base-interface';
 import { ApiError } from '@/utils/api-error';
 import { parseSetCookie } from '@/utils/function-helpers';
 import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
 const SMASH_API_URL = process.env.SMASH_API_URL;
 
@@ -85,6 +86,11 @@ export async function apiPrivate<T>(
         expires: parsedCookie.options.expires,
       });
     }
+
+    if (response.status === 401) {
+      redirect('/login?invalid=1');
+    }
+
     const httpResponse: HttpResponse<T> = await response.json();
     return httpResponse;
   } catch (error) {

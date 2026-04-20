@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { ActionIcon, Button, Group, Modal, Pagination, Popover, Stack } from '@mantine/core';
 import { TbEdit } from 'react-icons/tb';
@@ -18,13 +18,13 @@ import { deleteTourActionPrivate } from '@/actions/tour-action';
 import { notifications } from '@mantine/notifications';
 
 interface ToursTableProps {
-  toursData: ITourResponse[];
+  toursDataPromise: Promise<ITourResponse[]>;
 }
 
 const ITEMS_PER_PAGE = 20;
 
 export default function ToursTable({
-  toursData,
+  toursDataPromise,
 }: ToursTableProps) {
   const router = useRouter();
   const [page, setPage] = useState(1);
@@ -34,6 +34,7 @@ export default function ToursTable({
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedTourId, setSelectedTourId] = useState<string | null>(null);
 
+  const toursData = use(toursDataPromise);
   const totalPages = Math.ceil(toursData.length / ITEMS_PER_PAGE) || 1;
   useEffect(() => {
     setPage((p) => (p > totalPages ? totalPages : p));

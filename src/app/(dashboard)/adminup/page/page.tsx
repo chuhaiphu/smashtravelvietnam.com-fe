@@ -1,19 +1,31 @@
-import AdminPagePageContent from '@/components/mains/admin-page-page/admin-page-page-content/admin-page-page-content';
+import { Group, Loader, Text } from '@mantine/core';
+import { Suspense } from 'react';
+import { redirect } from 'next/navigation';
+import PagesTable from '@/components/tables/pages-table/pages-table';
+import CreatePageAction from '@/components/mains/admin-page-page/create-page-action/create-page-action';
 import { getAllPagesAdminActionPrivate } from '@/actions/page-action';
 import { getMeActionPrivate } from '@/actions/auth-action';
-import { Loader } from '@mantine/core';
-import { Suspense } from 'react';
+import classes from './page.module.scss';
 
-export default function AdminPagePage() {
-  const pagesDataPromise = getAllPagesAdminActionPrivate();
-  const userDataPromise = getMeActionPrivate();
+export default async function AdminPagePage() {
+  const userResult = await getMeActionPrivate();
+  if (!userResult.success || !userResult.data) {
+    redirect('/login');
+  }
+
+  const pagesDataPromise = getAllPagesAdminActionPrivate().then(
+    (res) => res.data ?? []
+  );
 
   return (
-    <Suspense fallback={<Loader size={48} />}>
-      <AdminPagePageContent
-        pagesDataPromise={pagesDataPromise}
-        userDataPromise={userDataPromise}
-      />
-    </Suspense>
+    <div className={classes.adminPagePageRoot}>
+      <Group className={classes.pageHeader} justify="space-between">
+        <Text size="xl">Page</Text>
+        <CreatePageAction userId={userResult.data.id} />
+      </Group>
+      <Suspense fallback={<Loader size={48} />}>
+        <PagesTable pagesDataPromise={pagesDataPromise} />
+      </Suspense>
+    </div>
   );
 }

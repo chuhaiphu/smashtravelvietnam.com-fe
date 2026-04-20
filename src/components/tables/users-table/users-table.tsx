@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import dayjs from 'dayjs';
 import { ActionIcon, Button, Group, Modal, Popover, Stack, Text } from '@mantine/core';
 import { SlOptionsVertical } from 'react-icons/sl';
@@ -15,7 +15,7 @@ import { resetPasswordForUserActionPrivate } from '@/actions/auth-action';
 import { notifications } from '@mantine/notifications';
 
 interface UsersTableProps {
-  usersData: IUserResponse[];
+  usersDataPromise: Promise<IUserResponse[]>;
   currentUserId: string;
 }
 
@@ -26,9 +26,10 @@ const RoleDisplayMap: Record<string, string> = {
 };
 
 export default function UsersTable({
-  usersData,
+  usersDataPromise,
   currentUserId,
 }: UsersTableProps) {
+  const usersData = use(usersDataPromise);
   const [datePickerOpened, setDatePickerOpened] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | string | null>(null);
   const [resetPasswordModalOpened, setResetPasswordModalOpened] = useState(false);

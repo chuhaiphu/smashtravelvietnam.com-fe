@@ -42,7 +42,7 @@ export async function getAllMenusActionPrivate(): Promise<ActionResponse<IMenuRe
 
 export async function getAllMenusActionPublic(): Promise<ActionResponse<IMenuResponse[]>> {
   'use cache';
-  cacheLife('hours');
+  cacheLife('default');
   cacheTag('menu');
   return executeApi(
     async () => getAllMenusApiPublic()

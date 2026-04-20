@@ -40,7 +40,7 @@ export async function getTourByEndpointActionPublic(
   endpoint: string
 ): Promise<ActionResponse<ITourResponse>> {
   'use cache';
-  cacheLife('hours');
+  cacheLife('default');
   cacheTag('tours', `tour:${endpoint}`);
   return executeApi(
     async () => getTourByEndpointApiPublic(endpoint)
@@ -55,7 +55,7 @@ export async function getAllToursActionPrivate(): Promise<ActionResponse<ITourRe
 
 export async function getAllToursActionPublic(): Promise<ActionResponse<ITourResponse[]>> {
   'use cache';
-  cacheLife('hours');
+  cacheLife('default');
   cacheTag('tours');
   return executeApi(
     async () => getAllToursApiPublic({ visibility: 'public' })
@@ -64,7 +64,7 @@ export async function getAllToursActionPublic(): Promise<ActionResponse<ITourRes
 
 export async function getAllToursPinnedToHomeActionPublic(): Promise<ActionResponse<ITourResponse[]>> {
   'use cache';
-  cacheLife('hours');
+  cacheLife('default');
   cacheTag('tours');
   return executeApi(
     async () => getAllToursApiPublic({ visibility: 'public', pinnedToHome: true })
@@ -105,6 +105,9 @@ export async function incrementTourViewActionPublic(
   const result = await executeApi(
     async () => incrementTourViewApiPublic(tourId)
   );
+  if (result.success) {
+    updateTag('tours');
+  }
   return {
     success: result.success,
     data: result.data?.recorded ?? false,
@@ -118,6 +121,9 @@ export async function incrementTourLikeActionPublic(
   const result = await executeApi(
     async () => toggleTourLikeApiPublic(tourId)
   );
+  if (result.success) {
+    updateTag('tours');
+  }
   return {
     success: result.success,
     data: result.data?.liked ?? false,

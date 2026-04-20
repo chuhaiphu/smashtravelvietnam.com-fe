@@ -39,7 +39,7 @@ export async function getPageByEndpointActionPublic(
 ): Promise<ActionResponse<IPageResponse>> {
   // Landing / CMS: cache per endpoint; invalidate with updateTag('pages', `page:${endpoint}`)
   'use cache';
-  cacheLife('hours');
+  cacheLife('default');
   cacheTag('pages', `page:${endpoint}`);
   return executeApi(async () => getPageByEndpointApiPublic(endpoint));
 }
@@ -49,7 +49,7 @@ export async function getAllPagesPublicActionPublic(): Promise<
   ActionResponse<IPageResponse[]>
 > {
   'use cache';
-  cacheLife('hours');
+  cacheLife('default');
   cacheTag('pages');
   return executeApi(async () => getAllPagesApiPublic());
 }

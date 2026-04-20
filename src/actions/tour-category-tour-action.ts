@@ -56,7 +56,7 @@ export async function getTourCategoryTourByIdActionPublic(
   id: string
 ): Promise<ActionResponse<ITourCategoryTourResponse>> {
   'use cache';
-  cacheLife('hours');
+  cacheLife('default');
   cacheTag('tour-category-tours');
   return executeApi(
     async () => getTourCategoryTourByIdApiPublic(id)
@@ -67,7 +67,7 @@ export async function getTourCategoryToursByTourIdActionPublic(
   tourId: string
 ): Promise<ActionResponse<ITourCategoryTourResponse[]>> {
   'use cache';
-  cacheLife('hours');
+  cacheLife('default');
   cacheTag('tour-category-tours', `tour-category-tours:tour:${tourId}`);
   return executeApi(
     async () => getTourCategoryToursByTourIdApiPublic(tourId)
@@ -78,7 +78,7 @@ export async function getTourCategoryToursByTourCategoryIdActionPublic(
   tourCategoryId: string
 ): Promise<ActionResponse<ITourCategoryTourResponse[]>> {
   'use cache';
-  cacheLife('hours');
+  cacheLife('default');
   cacheTag('tour-category-tours', `tour-category-tours:category:${tourCategoryId}`);
   return executeApi(
     async () => getTourCategoryToursByTourCategoryIdApiPublic(tourCategoryId)
@@ -87,7 +87,7 @@ export async function getTourCategoryToursByTourCategoryIdActionPublic(
 
 export async function getAllTourCategoryToursActionPublic(): Promise<ActionResponse<ITourCategoryTourResponse[]>> {
   'use cache';
-  cacheLife('hours');
+  cacheLife('default');
   cacheTag('tour-category-tours');
   return executeApi(
     async () => getAllTourCategoryToursApiPublic()

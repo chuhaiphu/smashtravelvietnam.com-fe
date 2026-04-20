@@ -15,7 +15,7 @@ import {
 import { notifications } from '@mantine/notifications';
 import classes from './admin-section-ui-detail-page-content.module.scss';
 import { JSONEditor } from '@/components/editors/json-editor/json-editor';
-import { useState, useCallback } from 'react';
+import { use, useState, useCallback } from 'react';
 import {
   createSectionUIActionPrivate,
   updateSectionUIActionPrivate,
@@ -28,14 +28,16 @@ import { useDebouncedCallback } from 'use-debounce';
 import { useDisclosure } from '@mantine/hooks';
 
 interface AdminSectionUIDetailPageContentProps {
-  existingDynamicSectionUIs: IDynamicSectionUIResponse[];
-  usedPositions: number[];
+  existingDynamicSectionUIsPromise: Promise<IDynamicSectionUIResponse[]>;
+  usedPositionsPromise: Promise<number[]>;
 }
 
 export default function AdminSectionUIDetailPageContent({
-  existingDynamicSectionUIs,
-  usedPositions,
+  existingDynamicSectionUIsPromise,
+  usedPositionsPromise,
 }: AdminSectionUIDetailPageContentProps) {
+  const existingDynamicSectionUIs = use(existingDynamicSectionUIsPromise);
+  const usedPositions = use(usedPositionsPromise);
   const [mode, setMode] = useState<'list' | 'create' | 'edit'>('list');
   const [dynamicSectionUI, setDynamicSectionUI] =
     useState<IDynamicSectionUIResponse | null>(null);

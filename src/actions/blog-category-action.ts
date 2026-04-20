@@ -38,7 +38,7 @@ export async function getBlogCategoryByEndpointActionPublic(
   endpoint: string
 ): Promise<ActionResponse<IBlogCategoryResponse>> {
   'use cache';
-  cacheLife('hours');
+  cacheLife('default');
   cacheTag('blog-categories', `blog-category:${endpoint}`);
   return executeApi(
     async () => getBlogCategoryByEndpointApiPublic(endpoint)
